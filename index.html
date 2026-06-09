@@ -2203,7 +2203,7 @@
             <span class="score-num"><span id="scoreJudy">0</span><span class="pts">pts</span></span>
           </div>
           <div class="score-today" id="scoreJudyToday">今日 0/0</div>
-          <div class="score-foot">完成一项 +1 · 全部完成 +3</div>
+          <div class="score-foot">按完成度 0-10 分 · 全勤 +3</div>
         </div>
       </div>
 
@@ -3233,8 +3233,11 @@ function getDailyItems(person, day) {
 function computeDayPoints(items) {
   if (!items || items.length === 0) return 0;
   const done = items.filter(i => i.done).length;
-  let pts = done;
-  if (items.length >= 3 && done === items.length) pts += 3;
+  const total = items.length;
+  // Base: completion percentage scaled to 0–10
+  let pts = Math.round((done / total) * 10);
+  // Perfect day bonus: +3 if all done (and at least 1 task)
+  if (total >= 1 && done === total) pts += 3;
   return pts;
 }
 function computeMonthPoints(person) {
