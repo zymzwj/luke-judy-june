@@ -854,6 +854,260 @@
   .dur-popup .dur-btn.primary { background: var(--ink); color: white; border-color: var(--ink); }
   .dur-popup .dur-btn.danger { color: #c14848; }
 
+  /* ========== JUDY'S BIRTHDAY SURPRISES ========== */
+  .birthday-splash {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #fce7f3 0%, #ede4f2 50%, #f7ecd6 100%);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 300;
+    overflow: hidden;
+  }
+  .birthday-splash.show { display: flex; }
+  .birthday-splash::before, .birthday-splash::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(201, 123, 143, 0.15) 0, transparent 8%),
+      radial-gradient(circle at 80% 30%, rgba(141, 110, 158, 0.15) 0, transparent 10%),
+      radial-gradient(circle at 30% 70%, rgba(200, 149, 77, 0.12) 0, transparent 8%),
+      radial-gradient(circle at 70% 80%, rgba(106, 146, 181, 0.12) 0, transparent 10%);
+    pointer-events: none;
+  }
+  .bd-splash-content {
+    text-align: center;
+    z-index: 2;
+    padding: 40px 30px;
+    max-width: 90%;
+    animation: bdContentIn 0.9s cubic-bezier(.22,.61,.36,1);
+  }
+  @keyframes bdContentIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .bd-cake-anim {
+    font-size: 96px;
+    line-height: 1;
+    margin-bottom: 12px;
+    display: inline-block;
+    animation: bdBounce 2.2s ease-in-out infinite;
+  }
+  @keyframes bdBounce {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-12px) rotate(3deg); }
+  }
+  .bd-title {
+    font-family: var(--serif);
+    font-size: 56px;
+    font-weight: 600;
+    color: var(--rose);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+    line-height: 1.1;
+  }
+  .bd-name {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 32px;
+    color: var(--plum);
+    margin-bottom: 18px;
+  }
+  .bd-subtitle {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 18px;
+    color: var(--ink-soft);
+    margin-bottom: 36px;
+    line-height: 1.5;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .bd-enter-btn {
+    background: var(--rose);
+    color: white;
+    border: none;
+    padding: 14px 36px;
+    border-radius: 24px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: 1px;
+    box-shadow: 0 8px 24px -6px rgba(201, 123, 143, 0.4);
+    transition: all 0.2s;
+  }
+  .bd-enter-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -8px rgba(201, 123, 143, 0.5); }
+
+  /* Floating confetti container */
+  .bd-floating {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 25;
+  }
+  .bd-particle {
+    position: absolute;
+    bottom: -40px;
+    font-size: 22px;
+    opacity: 0;
+    animation: bdRise linear infinite;
+  }
+  @keyframes bdRise {
+    0% { transform: translateY(0) translateX(0) rotate(0); opacity: 0; }
+    10% { opacity: 0.85; }
+    50% { transform: translateY(-50vh) translateX(20px) rotate(180deg); opacity: 0.9; }
+    90% { opacity: 0.7; }
+    100% { transform: translateY(-110vh) translateX(-10px) rotate(360deg); opacity: 0; }
+  }
+
+  /* Birthday letter card */
+  .bd-letter-section { padding-top: 4px; }
+  .bd-letter-card {
+    background: linear-gradient(135deg, #fff 0%, #fce7f3 100%);
+    border: 1px solid var(--rose-soft);
+    border-radius: 18px;
+    padding: 26px 30px 22px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 12px 36px -12px rgba(201, 123, 143, 0.25);
+  }
+  .bd-letter-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--rose), var(--plum), var(--gold), var(--rose));
+    background-size: 200% 100%;
+    animation: bdShimmer 4s linear infinite;
+  }
+  @keyframes bdShimmer {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+  .bd-letter-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .bd-letter-head .bd-icon {
+    font-size: 26px;
+  }
+  .bd-letter-head .bd-from {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--rose);
+    flex: 1;
+  }
+  .bd-letter-head .bd-from .from-small {
+    display: block;
+    font-family: var(--sans);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .bd-letter-head .bd-edit-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 0.5px;
+  }
+  .bd-letter-head .bd-edit-btn:hover { background: var(--bg-warm); }
+  .bd-letter-body {
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1.85;
+    color: var(--ink);
+    white-space: pre-wrap;
+    word-break: break-word;
+    min-height: 80px;
+    padding: 4px 0;
+  }
+  .bd-letter-body.empty {
+    color: var(--muted);
+    font-style: italic;
+  }
+  .bd-letter-edit {
+    width: 100%;
+    min-height: 200px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1.85;
+    color: var(--ink);
+    background: white;
+    resize: vertical;
+    outline: none;
+  }
+  .bd-letter-edit:focus { border-color: var(--rose); }
+  .bd-letter-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .bd-letter-sign {
+    text-align: right;
+    margin-top: 16px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--rose);
+  }
+
+  /* Crown on Judy's avatar */
+  .pixel-avatars.birthday .pixel-avatar:nth-child(1)::before {
+    content: "👑";
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 28px;
+    line-height: 1;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    animation: bdBounce 2.6s ease-in-out infinite;
+    z-index: 2;
+  }
+  .pixel-avatar { position: relative; }
+
+  /* Special birthday badge above hero */
+  .bd-banner {
+    background: linear-gradient(90deg, var(--rose), var(--plum));
+    color: white;
+    text-align: center;
+    padding: 12px 16px;
+    border-radius: 14px;
+    margin-bottom: 16px;
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    display: none;
+    box-shadow: 0 6px 18px -6px rgba(201, 123, 143, 0.4);
+    animation: bdBannerPulse 3s ease-in-out infinite;
+  }
+  @keyframes bdBannerPulse {
+    0%, 100% { box-shadow: 0 6px 18px -6px rgba(201, 123, 143, 0.4); }
+    50% { box-shadow: 0 8px 28px -6px rgba(201, 123, 143, 0.55); }
+  }
+  body.birthday-mode .bd-banner { display: block; }
+
   /* ========== SPIRITUAL GROWTH ========== */
   .spirit-grid {
     display: grid;
@@ -2646,6 +2900,20 @@
 </head>
 <body>
 
+<!-- BIRTHDAY SPLASH (only shown on Judy's birthday, once per day per device) -->
+<div class="birthday-splash" id="birthdaySplash">
+  <div class="bd-splash-content">
+    <div class="bd-cake-anim">🎂</div>
+    <h1 class="bd-title">生日快乐</h1>
+    <p class="bd-name">欣欣 💕</p>
+    <p class="bd-subtitle">愿你今天像被星星和棉花糖一起拥抱的小公主<br/>愿你这一年，每一天都被爱、被祝福</p>
+    <button class="bd-enter-btn" id="bdEnterBtn">推开门进入今天 ✨</button>
+  </div>
+</div>
+
+<!-- FLOATING BIRTHDAY CONFETTI -->
+<div class="bd-floating" id="bdFloating"></div>
+
 <!-- SIGN-IN GATE -->
 <div class="signin-overlay" id="signinOverlay">
   <div class="signin-card">
@@ -2703,10 +2971,35 @@
     </div>
   </div>
 
+  <!-- BIRTHDAY BANNER (shown only on Judy's birthday) -->
+  <div class="bd-banner">🎂 今天是欣欣的生日 — Happy Birthday Judy 💕</div>
+
   <!-- DAILY VERSE -->
   <div class="quote-card section" id="quoteCard">
     <div class="quote-text" id="quoteText">"两个人总比一个人好，因为二人劳碌同得美好的果效。"</div>
     <div class="quote-cite" id="quoteCite">— 传道书 4:9</div>
+  </div>
+
+  <!-- BIRTHDAY LETTER FROM LUKE (shown only on Judy's birthday) -->
+  <div class="section bd-letter-section" id="bdLetterSection" style="display:none;">
+    <div class="bd-letter-card">
+      <div class="bd-letter-head">
+        <span class="bd-icon">💌</span>
+        <div class="bd-from">Luke 写给欣欣<span class="from-small">A Birthday Letter</span></div>
+        <button class="bd-edit-btn" id="bdEditBtn">✏️ 编辑</button>
+      </div>
+      <div class="bd-letter-body" id="bdLetterBody"></div>
+      <textarea class="bd-letter-edit" id="bdLetterEdit" style="display:none;" placeholder="亲爱的欣欣...
+
+把这一年想对她说的话写在这里。可以是感谢、是祝福、是承诺、是想到她就想笑的小事。这封信会一直留着，明年这一天再打开，会笑会哭。
+
+—— Luke"></textarea>
+      <div class="bd-letter-actions" id="bdLetterActions" style="display:none;">
+        <button class="btn" id="bdLetterCancel">取消</button>
+        <button class="btn primary" id="bdLetterSave">保存</button>
+      </div>
+      <div class="bd-letter-sign" id="bdLetterSign" style="display:none;">— 永远爱你的 Luke 💕</div>
+    </div>
   </div>
 
   <!-- MAIN LAYOUT: sidebar + content -->
@@ -3301,6 +3594,7 @@ let prayers = []; // [{ id, text, addedAt, answered, answeredAt, answerNote }]
 let devotionNotes = {}; // { "2026-06-08": "..." }
 let memories = []; // [{ id, text, photo, createdAt }]
 let weeklyRetros = {}; // { "W1": { good, hard, gratitude, loveLuke, loveJudy, next } }
+let birthdayLetter = ""; // Luke's letter to Judy
 let activeFilters = new Set(["yuxin","date","luke","special","growth"]);
 
 // ===== FIRESTORE SYNC =====
@@ -3403,6 +3697,10 @@ async function saveWeeklyRetro(weekId, obj) {
     if (obj && Object.keys(obj).length > 0) await updateDoc(docRef, { [`weeklyRetros.${weekId}`]: obj });
     else await updateDoc(docRef, { [`weeklyRetros.${weekId}`]: deleteField() });
   } catch(e) { console.error("retro save", e); throw e; }
+}
+async function saveBirthdayLetter(text) {
+  try { await setDoc(docRef, { birthdayLetter: text }, { merge: true }); }
+  catch(e) { console.error("letter save", e); throw e; }
 }
 
 // ===== PHOTO CAROUSEL =====
@@ -5657,6 +5955,120 @@ function openBonusManager() {
 }
 document.getElementById("addBonusBtn").addEventListener("click", openBonusManager);
 
+// ===== JUDY'S BIRTHDAY MODE =====
+function isJudyBirthdayToday() {
+  const t = new Date();
+  return t.getMonth() === 5 && t.getDate() === 22; // June 22
+}
+
+function spawnBirthdayParticles() {
+  const container = document.getElementById("bdFloating");
+  if (!container) return;
+  container.innerHTML = "";
+  const emojis = ["🎂", "🎉", "💕", "✨", "🌷", "🎈", "💖", "🌸"];
+  const count = 22;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement("div");
+    p.className = "bd-particle";
+    p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    p.style.left = (Math.random() * 100) + "%";
+    p.style.fontSize = (16 + Math.random() * 18) + "px";
+    p.style.animationDuration = (10 + Math.random() * 10) + "s";
+    p.style.animationDelay = (-Math.random() * 20) + "s";
+    container.appendChild(p);
+  }
+}
+
+function applyBirthdayMode() {
+  const birthday = isJudyBirthdayToday();
+  document.body.classList.toggle("birthday-mode", birthday);
+  document.getElementById("bdFloating").style.display = birthday ? "block" : "none";
+  document.getElementById("pixelAvatars").classList.toggle("birthday", birthday);
+
+  // Override the daily verse with a birthday-themed one
+  if (birthday) {
+    const textEl = document.getElementById("quoteText");
+    const citeEl = document.getElementById("quoteCite");
+    if (textEl) textEl.textContent = `"我的肺腑是你所造的，我在母腹中，你已覆庇我。我要称谢你，因我受造，奇妙可畏。"`;
+    if (citeEl) citeEl.textContent = `— 诗篇 139:13-14 · 为欣欣 🎂`;
+  }
+
+  // Birthday letter card
+  const letterSection = document.getElementById("bdLetterSection");
+  if (birthday) {
+    letterSection.style.display = "block";
+    renderBirthdayLetter();
+    spawnBirthdayParticles();
+    maybeShowBirthdaySplash();
+  } else {
+    letterSection.style.display = "none";
+  }
+}
+
+function renderBirthdayLetter() {
+  const body = document.getElementById("bdLetterBody");
+  const sign = document.getElementById("bdLetterSign");
+  if (birthdayLetter && birthdayLetter.trim()) {
+    body.textContent = birthdayLetter;
+    body.classList.remove("empty");
+    sign.style.display = "block";
+  } else {
+    body.textContent = "（Luke 正在写一封信... 等他写好这里就会出现）";
+    body.classList.add("empty");
+    sign.style.display = "none";
+  }
+}
+
+// Edit mode handlers
+document.getElementById("bdEditBtn").addEventListener("click", () => {
+  document.getElementById("bdLetterBody").style.display = "none";
+  document.getElementById("bdLetterSign").style.display = "none";
+  document.getElementById("bdLetterEdit").style.display = "block";
+  document.getElementById("bdLetterEdit").value = birthdayLetter || "";
+  document.getElementById("bdLetterActions").style.display = "flex";
+  document.getElementById("bdEditBtn").style.display = "none";
+  setTimeout(() => document.getElementById("bdLetterEdit").focus(), 50);
+});
+document.getElementById("bdLetterCancel").addEventListener("click", () => {
+  document.getElementById("bdLetterEdit").style.display = "none";
+  document.getElementById("bdLetterActions").style.display = "none";
+  document.getElementById("bdEditBtn").style.display = "inline-block";
+  document.getElementById("bdLetterBody").style.display = "block";
+  renderBirthdayLetter();
+});
+document.getElementById("bdLetterSave").addEventListener("click", async () => {
+  const text = document.getElementById("bdLetterEdit").value;
+  birthdayLetter = text;
+  document.getElementById("bdLetterEdit").style.display = "none";
+  document.getElementById("bdLetterActions").style.display = "none";
+  document.getElementById("bdEditBtn").style.display = "inline-block";
+  document.getElementById("bdLetterBody").style.display = "block";
+  renderBirthdayLetter();
+  await saveBirthdayLetter(text);
+});
+
+// Splash (shown once per day per device)
+function maybeShowBirthdaySplash() {
+  const t = new Date();
+  const key = `bd_splash_${t.getFullYear()}_${t.getMonth()+1}_${t.getDate()}`;
+  try {
+    if (localStorage.getItem(key)) return;
+    const splash = document.getElementById("birthdaySplash");
+    splash.classList.add("show");
+    document.getElementById("bdEnterBtn").onclick = () => {
+      splash.classList.remove("show");
+      try { localStorage.setItem(key, "1"); } catch(e) {}
+    };
+    // Auto-dismiss after 30s as fallback
+    setTimeout(() => {
+      if (splash.classList.contains("show")) {
+        splash.classList.remove("show");
+        try { localStorage.setItem(key, "1"); } catch(e) {}
+      }
+    }, 30000);
+  } catch(e) { /* localStorage might be blocked */ }
+}
+
 // ===== INIT: AUTH + REALTIME SYNC =====
 renderCalHead();
 renderDailyVerse();
@@ -5788,6 +6200,7 @@ onAuthStateChanged(auth, async user => {
         devotionNotes = data.devotionNotes || {};
         memories = Array.isArray(data.memories) ? data.memories : [];
         weeklyRetros = data.weeklyRetros || {};
+        birthdayLetter = data.birthdayLetter || "";
       } else {
         events = [...DEFAULT_EVENTS];
         habits = {}; moods = {}; photos = [];
@@ -5823,6 +6236,7 @@ onAuthStateChanged(auth, async user => {
       renderSpiritual();
       renderMemories();
       renderRetroAndReport();
+      applyBirthdayMode();
     }, err => {
       console.error("Snapshot error:", err);
       setSync("error", "同步错误: " + err.message);
