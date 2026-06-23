@@ -6589,11 +6589,13 @@ let _wasBirthdayActive = null; // track transitions
 function isJudyBirthdayToday() {
   if (_manualBirthdayOverride !== null) return _manualBirthdayOverride;
   const now = new Date();
-  // Active all of June 22 (in any timezone)
+  const Y = now.getFullYear();
+  // 2026 cycle already celebrated — auto-trigger off; use 🎂 重温生日 button to revisit
+  if (Y <= 2026) return false;
+  // Future years: auto-trigger on June 22 (and June 23 morning EDT)
   if (now.getMonth() === 5 && now.getDate() === 22) return true;
-  // Extension: also active on June 23 until 12:00 PM EDT (= 16:00 UTC)
   if (now.getMonth() === 5 && now.getDate() === 23) {
-    const endUTC = Date.UTC(now.getFullYear(), 5, 23, 16, 0, 0);
+    const endUTC = Date.UTC(Y, 5, 23, 16, 0, 0);
     return Date.now() < endUTC;
   }
   return false;
