@@ -2379,6 +2379,30 @@
   }
   .date-widget .dw-bday.urgent { color: var(--gold); }
   .date-widget .dw-bday.today { color: var(--rose); font-size: 13px; }
+  .date-widget .dw-replay {
+    margin-top: 8px;
+    width: 100%;
+    background: transparent;
+    border: 1px dashed var(--rose-soft);
+    color: var(--rose);
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: all 0.15s;
+  }
+  .date-widget .dw-replay:hover {
+    background: var(--rose-bg);
+    border-style: solid;
+  }
+  .date-widget .dw-replay.active {
+    background: var(--rose);
+    color: white;
+    border-color: var(--rose);
+  }
 
   /* ========== PLANNERS ========== */
   .planner-grid {
@@ -3498,6 +3522,7 @@
         <div class="dw-bar"><div class="dw-bar-fill" id="dwBarFill" style="width:0%"></div></div>
         <div class="dw-bar-label" id="dwBarLabel">六月进度 0%</div>
         <div class="dw-bday" id="dwBday">🎂 距 Judy 生日 — 天</div>
+        <button class="dw-replay" id="dwReplayBtn" type="button">🎂 重温生日</button>
       </div>
 
       <!-- Scoring -->
@@ -6557,7 +6582,12 @@ function openBonusManager() {
 document.getElementById("addBonusBtn").addEventListener("click", openBonusManager);
 
 // ===== JUDY'S BIRTHDAY MODE =====
+// Manual override: null = automatic, true = force on, false = force off (this session only)
+let _manualBirthdayOverride = null;
+let _wasBirthdayActive = null; // track transitions
+
 function isJudyBirthdayToday() {
+  if (_manualBirthdayOverride !== null) return _manualBirthdayOverride;
   const now = new Date();
   // Active all of June 22 (in any timezone)
   if (now.getMonth() === 5 && now.getDate() === 22) return true;
@@ -6567,6 +6597,16 @@ function isJudyBirthdayToday() {
     return Date.now() < endUTC;
   }
   return false;
+}
+
+function toggleBirthdayReplay() {
+  const currentlyOn = isJudyBirthdayToday();
+  _manualBirthdayOverride = !currentlyOn;
+  applyBirthdayMode();
+  // If just turned on, show splash + try music
+  if (_manualBirthdayOverride === true) {
+    maybeShowBirthdaySplash();
+  }
 }
 
 function spawnBirthdayParticles() {
@@ -6589,28 +6629,43 @@ function spawnBirthdayParticles() {
 
 function applyBirthdayMode() {
   const birthday = isJudyBirthdayToday();
+  const transitionedOn = (_wasBirthdayActive === false || _wasBirthdayActive === null) && birthday;
+  const transitionedOff = _wasBirthdayActive === true && !birthday;
+  _wasBirthdayActive = birthday;
+
   document.body.classList.toggle("birthday-mode", birthday);
   document.getElementById("bdFloating").style.display = birthday ? "block" : "none";
   document.getElementById("pixelAvatars").classList.toggle("birthday", birthday);
   document.getElementById("bdMusicCtrl").classList.toggle("show", birthday);
 
-  // Override the daily verse with a birthday-themed one
+  // Birthday letter card
+  const letterSection = document.getElementById("bdLetterSection");
+  letterSection.style.display = birthday ? "block" : "none";
+
   if (birthday) {
+    // Override the daily verse with a birthday-themed one
     const textEl = document.getElementById("quoteText");
     const citeEl = document.getElementById("quoteCite");
     if (textEl) textEl.textContent = `"我的肺腑是你所造的，我在母腹中，你已覆庇我。我要称谢你，因我受造，奇妙可畏。"`;
     if (citeEl) citeEl.textContent = `— 诗篇 139:13-14 · 为欣欣 🎂`;
-  }
-
-  // Birthday letter card
-  const letterSection = document.getElementById("bdLetterSection");
-  if (birthday) {
-    letterSection.style.display = "block";
     renderBirthdayLetter();
     spawnBirthdayParticles();
-    maybeShowBirthdaySplash();
-  } else {
-    letterSection.style.display = "none";
+    // Only auto-show splash on real birthday day, not on every snapshot during manual replay
+    if (_manualBirthdayOverride === null) {
+      maybeShowBirthdaySplash();
+    }
+  } else if (transitionedOff) {
+    // Clean teardown when birthday ends or is manually turned off
+    if (bdAudio && !bdAudio.paused) bdAudio.pause();
+    renderDailyVerse(); // restore the daily rotating verse
+    document.getElementById("birthdaySplash").classList.remove("show");
+  }
+
+  // Update replay button label/state
+  const btn = document.getElementById("dwReplayBtn");
+  if (btn) {
+    btn.classList.toggle("active", birthday);
+    btn.textContent = birthday ? "🌷 退出生日模式" : "🎂 重温生日";
   }
 }
 
@@ -6691,6 +6746,10 @@ bdMusicCtrl.addEventListener("click", () => {
 });
 bdAudio.addEventListener("play", updateMusicUI);
 bdAudio.addEventListener("pause", updateMusicUI);
+
+// Replay button: bind once on load
+const dwReplayBtn = document.getElementById("dwReplayBtn");
+if (dwReplayBtn) dwReplayBtn.addEventListener("click", toggleBirthdayReplay);
 
 // Splash (shown EVERY visit during the birthday window — Luke's wish)
 function maybeShowBirthdaySplash() {
