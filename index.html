@@ -854,6 +854,147 @@
   .dur-popup .dur-btn.primary { background: var(--ink); color: white; border-color: var(--ink); }
   .dur-popup .dur-btn.danger { color: #c14848; }
 
+  /* 24-hour time wheel */
+  .wheel-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 14px;
+  }
+  @media (max-width: 800px) { .wheel-grid { grid-template-columns: 1fr; } }
+  .wheel-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 16px 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .wheel-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .wheel-card.luke::before { background: var(--sky); }
+  .wheel-card.judy::before { background: var(--rose); }
+  .wheel-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .wheel-name {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .wheel-name.luke { color: var(--sky); }
+  .wheel-name.judy { color: var(--rose); }
+  .wheel-total {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--ink-soft);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .wheel-canvas-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 240px;
+    margin: 0 auto 12px;
+    aspect-ratio: 1;
+  }
+  .wheel-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: none;
+  }
+  .wheel-center .wc-hours {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .wheel-center .wc-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+  .wheel-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 10px;
+    max-height: 160px;
+    overflow-y: auto;
+  }
+  .wheel-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 6px;
+    border-radius: 6px;
+    font-size: 12px;
+  }
+  .wheel-legend-item:hover { background: var(--bg-warm); }
+  .wheel-legend-item .wl-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .wheel-legend-item .wl-name { flex: 1; color: var(--ink); }
+  .wheel-legend-item .wl-time {
+    font-size: 11px;
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+  .wheel-legend-item .wl-del {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 0 4px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .wheel-legend-item:hover .wl-del { opacity: 1; }
+  .wheel-legend-item .wl-del:hover { color: #c14848; }
+  .wheel-empty {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+    padding: 16px 0;
+  }
+  .wheel-add {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: var(--sans);
+    background: transparent;
+    outline: none;
+    color: var(--ink);
+  }
+  .wheel-add:focus {
+    border-style: solid;
+    border-color: var(--ink-soft);
+    background: white;
+  }
+  .wheel-add::placeholder { color: var(--muted); font-style: italic; }
+
   /* Time chart section */
   .chart-card {
     background: var(--card);
@@ -2204,6 +2345,9 @@
           </div>
           <div class="score-today" id="scoreJudyToday">今日 0/0</div>
           <div class="score-foot">按完成度 0-10 分 · 全勤 +3</div>
+          <div style="text-align:center;margin-top:6px;">
+            <button id="addBonusBtn" style="background:transparent;border:none;font-family:inherit;font-size:10px;color:var(--muted);cursor:pointer;letter-spacing:1px;font-weight:600;padding:4px 8px;border-radius:6px;">🎁 加 / 看奖励</button>
+          </div>
         </div>
       </div>
 
@@ -2248,6 +2392,44 @@
       </div>
       <div class="med-grid" id="medGrid"></div>
       <div class="med-footer" id="medFooter">点击格子可手动补打卡或撤销</div>
+    </div>
+  </div>
+
+  <!-- 24-HOUR TIME WHEELS -->
+  <div class="section">
+    <h2 class="section-title">⏳ 今日 24 小时 <span class="en">Time Wheel</span></h2>
+    <p class="section-desc">写下今天每件事花了多少时间（不必都在今日清单里）。支持 "打游戏 1h" / "学习 2.5h" / "工作 8h30m" 这种自然写法。</p>
+    <div class="wheel-grid">
+      <div class="wheel-card luke">
+        <div class="wheel-head">
+          <span class="wheel-name luke">Luke</span>
+          <span class="wheel-total" id="lukeWheelTotal">已记录 0h / 24h</span>
+        </div>
+        <div class="wheel-canvas-wrap">
+          <canvas id="lukeWheelChart"></canvas>
+          <div class="wheel-center">
+            <div class="wc-hours" id="lukeWheelHours">0h</div>
+            <div class="wc-label">已记录</div>
+          </div>
+        </div>
+        <div class="wheel-legend" id="lukeWheelLegend"></div>
+        <input class="wheel-add" id="lukeWheelAdd" placeholder="例: 打游戏 1h · 工作 8h30m · 睡觉 7" />
+      </div>
+      <div class="wheel-card judy">
+        <div class="wheel-head">
+          <span class="wheel-name judy">Judy</span>
+          <span class="wheel-total" id="judyWheelTotal">已记录 0h / 24h</span>
+        </div>
+        <div class="wheel-canvas-wrap">
+          <canvas id="judyWheelChart"></canvas>
+          <div class="wheel-center">
+            <div class="wc-hours" id="judyWheelHours">0h</div>
+            <div class="wc-label">已记录</div>
+          </div>
+        </div>
+        <div class="wheel-legend" id="judyWheelLegend"></div>
+        <input class="wheel-add" id="judyWheelAdd" placeholder="例: 学习 2.5h · 散步 30m · 看剧 1h" />
+      </div>
     </div>
   </div>
 
@@ -2606,6 +2788,9 @@ let weeklyPlans = {}; // { "W1": "...", "W2": "...", ... }
 let dailyPlans = {};
 let dateMessages = {}; // { "2026-06-01": "shared message" }
 let meds = { startDate: "", taken: {} }; // { startDate: "2026-06-04", taken: { "1": true, ... } }
+let bonuses = []; // [{ id, person, pts, reason, at }]
+let seedsApplied = {}; // { judyBirthdayBonus: true }
+let timeLogs = {}; // { "luke-2026-06-08": [{ activity, mins }], ... }
 let activeFilters = new Set(["yuxin","date","luke","special","growth"]);
 
 // ===== FIRESTORE SYNC =====
@@ -2672,6 +2857,16 @@ async function setMedDayTaken(dayNum, taken) {
     if (taken) await updateDoc(docRef, { [`meds.taken.${dayNum}`]: true });
     else await updateDoc(docRef, { [`meds.taken.${dayNum}`]: deleteField() });
   } catch(e) { console.error("med save", e); throw e; }
+}
+async function saveBonuses(arr) {
+  try { await setDoc(docRef, { bonuses: arr }, { merge: true }); }
+  catch(e) { console.error("bonuses save", e); throw e; }
+}
+async function saveTimeLogsKey(key, arr) {
+  try {
+    if (arr && arr.length > 0) await updateDoc(docRef, { [`timeLogs.${key}`]: arr });
+    else await updateDoc(docRef, { [`timeLogs.${key}`]: deleteField() });
+  } catch(e) { console.error("timeLogs save", e); throw e; }
 }
 
 // ===== PHOTO CAROUSEL =====
@@ -3639,9 +3834,17 @@ function avatarSVG(person, state) {
 // Avatars are static <img> tags rendered in HTML — no dynamic rendering needed.
 function renderAvatars() { /* no-op */ }
 
+function sumBonuses(person) {
+  return bonuses.filter(b => b.person === person).reduce((s, b) => s + (b.pts || 0), 0);
+}
+
 function renderScores() {
-  const lukeM = computeMonthPoints("luke");
-  const judyM = computeMonthPoints("judy");
+  const lukeBase = computeMonthPoints("luke");
+  const judyBase = computeMonthPoints("judy");
+  const lukeBonus = sumBonuses("luke");
+  const judyBonus = sumBonuses("judy");
+  const lukeM = lukeBase + lukeBonus;
+  const judyM = judyBase + judyBonus;
   const lukeT = computeDayPoints(getDailyItems("luke", currentJuneDay()));
   const judyT = computeDayPoints(getDailyItems("judy", currentJuneDay()));
   const lukeItems = getDailyItems("luke", currentJuneDay());
@@ -3651,10 +3854,12 @@ function renderScores() {
   document.getElementById("scoreJudy").textContent = judyM;
   const lukeToday = document.getElementById("scoreLukeToday");
   const judyToday = document.getElementById("scoreJudyToday");
-  lukeToday.textContent = `今日 ${lukeItems.filter(i=>i.done).length}/${lukeItems.length} · ${lukeT > 0 ? '+'+lukeT+' pt' : '0 pt'}`;
-  lukeToday.className = "score-today" + (lukeT > 0 ? " plus" : "");
-  judyToday.textContent = `今日 ${judyItems.filter(i=>i.done).length}/${judyItems.length} · ${judyT > 0 ? '+'+judyT+' pt' : '0 pt'}`;
-  judyToday.className = "score-today" + (judyT > 0 ? " plus" : "");
+  const lukeBonusStr = lukeBonus > 0 ? ` · 🎁 +${lukeBonus}` : "";
+  const judyBonusStr = judyBonus > 0 ? ` · 🎁 +${judyBonus}` : "";
+  lukeToday.innerHTML = `今日 ${lukeItems.filter(i=>i.done).length}/${lukeItems.length} · ${lukeT > 0 ? '+'+lukeT+' pt' : '0 pt'}${lukeBonusStr}`;
+  lukeToday.className = "score-today" + (lukeT > 0 || lukeBonus > 0 ? " plus" : "");
+  judyToday.innerHTML = `今日 ${judyItems.filter(i=>i.done).length}/${judyItems.length} · ${judyT > 0 ? '+'+judyT+' pt' : '0 pt'}${judyBonusStr}`;
+  judyToday.className = "score-today" + (judyT > 0 || judyBonus > 0 ? " plus" : "");
 }
 
 async function commitDayItems(person, items) {
@@ -4329,6 +4534,218 @@ function renderDailyVerse() {
   if (citeEl) citeEl.textContent = `— ${v.cite}`;
 }
 
+// ===== 24-HOUR TIME WHEEL =====
+const WHEEL_COLORS = [
+  "#6a92b5", "#c97b8f", "#8d6e9e", "#c8954d", "#87a386",
+  "#b56b8a", "#7a8db5", "#a08555", "#6b8e88", "#9c7a8e",
+  "#d4a373", "#a59cce", "#8aa68e", "#c89191"
+];
+const wheelCharts = { luke: null, judy: null };
+
+function plannerDayISO() {
+  return `2026-06-${String(plannerDay).padStart(2,"0")}`;
+}
+
+function parseTimeEntry(raw) {
+  let mins = 0;
+  let working = raw.trim();
+
+  const hMatch = working.match(/(\d+(?:\.\d+)?)\s*h\b/i);
+  const mMatch = working.match(/(\d+)\s*m(?:in)?\b/i);
+  const chHour = working.match(/(\d+(?:\.\d+)?)\s*小时/);
+  const chMin = working.match(/(\d+)\s*分(?:钟)?/);
+
+  if (hMatch) mins += parseFloat(hMatch[1]) * 60;
+  if (mMatch) mins += parseInt(mMatch[1], 10);
+  if (chHour) mins += parseFloat(chHour[1]) * 60;
+  if (chMin) mins += parseInt(chMin[1], 10);
+
+  // Strip time tokens
+  let activity = working
+    .replace(/\d+(?:\.\d+)?\s*h\b/gi, '')
+    .replace(/\d+\s*m(?:in)?\b/gi, '')
+    .replace(/\d+(?:\.\d+)?\s*小时/g, '')
+    .replace(/\d+\s*分(?:钟)?/g, '')
+    .trim();
+
+  // Fallback: if no time format found, look for a trailing number = hours
+  if (mins === 0) {
+    const m = activity.match(/(\d+(?:\.\d+)?)\s*$/);
+    if (m) {
+      mins = parseFloat(m[1]) * 60;
+      activity = activity.replace(/(\d+(?:\.\d+)?)\s*$/, '').trim();
+    }
+  }
+  return { activity, mins: Math.round(mins) };
+}
+
+function fmtHM(mins) {
+  if (!mins) return "0";
+  const h = Math.floor(mins / 60);
+  const m = mins - h * 60;
+  if (h === 0) return `${m}m`;
+  if (m === 0) return `${h}h`;
+  return `${h}h${m}m`;
+}
+
+function wheelKey(person) {
+  return `${person}-${plannerDayISO()}`;
+}
+function getWheelLogs(person) {
+  const arr = timeLogs[wheelKey(person)];
+  return Array.isArray(arr) ? arr : [];
+}
+
+function renderTimeWheels() {
+  ["luke", "judy"].forEach(renderTimeWheelPerson);
+}
+
+function renderTimeWheelPerson(person) {
+  const logs = getWheelLogs(person);
+  const totalMins = logs.reduce((s, l) => s + (l.mins || 0), 0);
+  const remaining = Math.max(0, 24 * 60 - totalMins);
+
+  document.getElementById(`${person}WheelTotal`).textContent =
+    `已记录 ${fmtHM(totalMins)} / 24h`;
+  document.getElementById(`${person}WheelHours`).textContent =
+    fmtHM(totalMins);
+
+  // Legend
+  const legend = document.getElementById(`${person}WheelLegend`);
+  if (logs.length === 0) {
+    legend.innerHTML = `<div class="wheel-empty">下面输入一条试试 — 比如 "睡觉 7h"</div>`;
+  } else {
+    legend.innerHTML = logs.map((l, i) => `
+      <div class="wheel-legend-item">
+        <span class="wl-dot" style="background:${WHEEL_COLORS[i % WHEEL_COLORS.length]}"></span>
+        <span class="wl-name">${escapeHtml(l.activity)}</span>
+        <span class="wl-time">${fmtHM(l.mins)}</span>
+        <button class="wl-del" data-person="${person}" data-idx="${i}" title="删除">×</button>
+      </div>
+    `).join("");
+  }
+
+  // Chart
+  const ctx = document.getElementById(`${person}WheelChart`);
+  if (!ctx || typeof Chart === "undefined") return;
+  const labels = logs.map(l => l.activity);
+  const data = logs.map(l => l.mins / 60);
+  const colors = logs.map((_, i) => WHEEL_COLORS[i % WHEEL_COLORS.length]);
+  if (remaining > 0) {
+    labels.push("未记录");
+    data.push(remaining / 60);
+    colors.push("#ebe2d6");
+  }
+
+  if (wheelCharts[person]) wheelCharts[person].destroy();
+  wheelCharts[person] = new Chart(ctx, {
+    type: "doughnut",
+    data: { labels, datasets: [{
+      data, backgroundColor: colors, borderColor: "#fff", borderWidth: 2
+    }]},
+    options: {
+      maintainAspectRatio: true,
+      cutout: "62%",
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: c => {
+              const h = c.parsed;
+              const totalH = h | 0;
+              const mins = Math.round((h - totalH) * 60);
+              const fmt = totalH > 0 ? (mins > 0 ? `${totalH}h${mins}m` : `${totalH}h`) : `${mins}m`;
+              return `${c.label}: ${fmt}`;
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+async function commitWheelLogs(person, logs) {
+  timeLogs[wheelKey(person)] = logs;
+  renderTimeWheelPerson(person);
+  await saveTimeLogsKey(wheelKey(person), logs);
+}
+
+function bindWheelPerson(person) {
+  const addEl = document.getElementById(`${person}WheelAdd`);
+  addEl.addEventListener("keydown", async e => {
+    if (e.key !== "Enter") return;
+    const raw = addEl.value.trim();
+    if (!raw) return;
+    const parsed = parseTimeEntry(raw);
+    if (!parsed.activity || parsed.mins <= 0) {
+      alert("没识别出来。试试格式: 打游戏 1h / 学习 2.5h / 工作 8h30m");
+      return;
+    }
+    const logs = [...getWheelLogs(person), { activity: parsed.activity, mins: parsed.mins }];
+    addEl.value = "";
+    await commitWheelLogs(person, logs);
+  });
+  document.getElementById(`${person}WheelLegend`).addEventListener("click", async e => {
+    const del = e.target.closest(".wl-del");
+    if (!del) return;
+    const idx = parseInt(del.dataset.idx, 10);
+    const logs = getWheelLogs(person);
+    const next = logs.filter((_, i) => i !== idx);
+    await commitWheelLogs(person, next);
+  });
+}
+bindWheelPerson("luke");
+bindWheelPerson("judy");
+
+// Re-render wheels when planner day changes
+function refreshWheelsForDay() { renderTimeWheels(); }
+// Hook into existing day navigation
+["dayPrev", "dayNext", "dayJumpToday"].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener("click", () => setTimeout(refreshWheelsForDay, 0));
+});
+
+// ===== BONUSES UI =====
+function openBonusManager() {
+  const list = bonuses.length === 0
+    ? "（还没有奖励）"
+    : bonuses.map(b => `${b.person === "luke" ? "Luke" : "Judy"} · +${b.pts} · ${b.reason}`).join("\n");
+  const choice = prompt(
+    `当前奖励：\n${list}\n\n` +
+    `输入新奖励（格式: 人名 分数 理由）\n` +
+    `例如: Judy 50 帮我做了饭\n\n` +
+    `或者输入"删除N"删除第N条（从1开始），取消请关闭`
+  );
+  if (!choice) return;
+  const trimmed = choice.trim();
+  // Handle delete command
+  const delMatch = trimmed.match(/^删除\s*(\d+)$/);
+  if (delMatch) {
+    const idx = parseInt(delMatch[1], 10) - 1;
+    if (idx < 0 || idx >= bonuses.length) { alert("索引超出范围"); return; }
+    if (!confirm(`确认删除：${bonuses[idx].reason} (+${bonuses[idx].pts}) ?`)) return;
+    const next = bonuses.filter((_, i) => i !== idx);
+    bonuses = next;
+    renderScores();
+    saveBonuses(next);
+    return;
+  }
+  // Parse: <person> <pts> <reason...>
+  const m = trimmed.match(/^(luke|judy|Luke|Judy|路克|朱迪|欣欣)\s+(-?\d+)\s+(.+)$/);
+  if (!m) { alert("格式不对，请重试：人名 分数 理由"); return; }
+  let person = m[1].toLowerCase();
+  if (person === "路克") person = "luke";
+  if (person === "朱迪" || person === "欣欣") person = "judy";
+  const pts = parseInt(m[2], 10);
+  const reason = m[3].trim();
+  const newBonus = { id: `manual-${Date.now()}`, person, pts, reason, at: Date.now() };
+  const next = [...bonuses, newBonus];
+  bonuses = next;
+  renderScores();
+  saveBonuses(next);
+}
+document.getElementById("addBonusBtn").addEventListener("click", openBonusManager);
+
 // ===== INIT: AUTH + REALTIME SYNC =====
 renderCalHead();
 renderDailyVerse();
@@ -4453,12 +4870,32 @@ onAuthStateChanged(auth, async user => {
         dateMessages = data.dateMessages || {};
         meds = data.meds || { startDate: "", taken: {} };
         if (!meds.taken) meds.taken = {};
+        bonuses = Array.isArray(data.bonuses) ? data.bonuses : [];
+        seedsApplied = data.seedsApplied || {};
+        timeLogs = data.timeLogs || {};
       } else {
         events = [...DEFAULT_EVENTS];
         habits = {}; moods = {}; photos = [];
         weeklyPlans = {}; dailyPlans = {}; dateMessages = {};
         meds = { startDate: "", taken: {} };
-        await setDoc(docRef, { events, habits, moods, photos, weeklyPlans, dailyPlans, dateMessages, meds, createdAt: new Date().toISOString() });
+        bonuses = []; seedsApplied = {}; timeLogs = {};
+        await setDoc(docRef, { events, habits, moods, photos, weeklyPlans, dailyPlans, dateMessages, meds, bonuses, seedsApplied, timeLogs, createdAt: new Date().toISOString() });
+      }
+      // Auto-seed Judy's birthday bonus once (won't re-apply if user deletes)
+      if (!seedsApplied.judyBirthdayBonus) {
+        try {
+          const bonus = {
+            id: "judy-birthday-party-2026",
+            person: "judy",
+            pts: 100,
+            reason: "🎂 举办了一个超棒的生日 party，准备了很多",
+            at: Date.now()
+          };
+          await updateDoc(docRef, {
+            bonuses: [...bonuses, bonus],
+            "seedsApplied.judyBirthdayBonus": true
+          });
+        } catch(e) { console.warn("seed bonus failed", e); }
       }
       setSync("", "已同步");
       renderAll();
@@ -4466,6 +4903,7 @@ onAuthStateChanged(auth, async user => {
       renderCarousel();
       renderPlanners();
       renderMeds();
+      renderTimeWheels();
     }, err => {
       console.error("Snapshot error:", err);
       setSync("error", "同步错误: " + err.message);
