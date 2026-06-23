@@ -896,6 +896,436 @@
     letter-spacing: 0.3px;
   }
 
+  /* ========== INSIGHTS (mood chart + heatmap) ========== */
+  .insights-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 14px;
+  }
+  @media (max-width: 900px) { .insights-grid { grid-template-columns: 1fr; } }
+  .insight-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .insight-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+  }
+  .insight-card.mood::before { background: linear-gradient(90deg, var(--rose), var(--plum)); }
+  .insight-card.heatmap::before { background: linear-gradient(90deg, var(--sky), var(--sage)); }
+  .insight-card h4 {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .insight-card .sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    letter-spacing: 0.3px;
+  }
+  .mood-chart-wrap { position: relative; height: 180px; }
+  .heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    gap: 3px;
+    margin-bottom: 8px;
+  }
+  .heatmap-cell {
+    aspect-ratio: 1;
+    border-radius: 3px;
+    background: var(--bg-warm);
+    position: relative;
+    cursor: default;
+  }
+  .heatmap-cell.l1 { background: #fce7f3; }
+  .heatmap-cell.l2 { background: #f5d3dd; }
+  .heatmap-cell.l3 { background: #ec9eb8; }
+  .heatmap-cell.l4 { background: #d4709a; }
+  .heatmap-cell.l5 { background: #c97b8f; }
+  .heatmap-cell.today { box-shadow: 0 0 0 2px var(--gold); }
+  .heatmap-cell .hm-num {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 8px;
+    color: var(--ink-soft);
+    font-weight: 600;
+    pointer-events: none;
+  }
+  .heatmap-cell.l4 .hm-num, .heatmap-cell.l5 .hm-num { color: white; }
+  .heatmap-legend {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+  .heatmap-legend .hl-dots { display: flex; gap: 2px; }
+  .heatmap-legend .hl-dot {
+    width: 10px; height: 10px;
+    border-radius: 2px;
+  }
+
+  /* ========== SWEET INBOX ========== */
+  .inbox-card {
+    background: linear-gradient(135deg, #fff 0%, #fbe9ee 100%);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .inbox-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--rose), var(--plum), var(--rose));
+  }
+  .inbox-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .inbox-title {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .inbox-counts {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .inbox-counts .unread {
+    color: var(--rose);
+  }
+  .inbox-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .inbox-tab {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 5px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--ink-soft);
+    font-family: inherit;
+  }
+  .inbox-tab.active {
+    background: var(--ink);
+    color: white;
+    border-color: var(--ink);
+  }
+  .inbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 360px;
+    overflow-y: auto;
+    margin-bottom: 12px;
+  }
+  .inbox-msg {
+    padding: 10px 12px 8px;
+    border-radius: 10px;
+    background: white;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .inbox-msg.unread { border-color: var(--rose); background: #fef4f7; }
+  .inbox-msg.from-luke { border-left: 4px solid var(--sky); }
+  .inbox-msg.from-judy { border-left: 4px solid var(--rose); }
+  .inbox-msg .im-meta {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.3px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .inbox-msg .im-from {
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .inbox-msg.from-luke .im-from { color: var(--sky); }
+  .inbox-msg.from-judy .im-from { color: var(--rose); }
+  .inbox-msg .im-text {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink);
+    font-family: var(--serif);
+  }
+  .inbox-msg .im-del {
+    position: absolute;
+    top: 6px; right: 6px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 2px 6px;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .inbox-msg:hover .im-del { opacity: 1; }
+  .inbox-msg .im-del:hover { color: #c14848; }
+  .inbox-msg .im-mark {
+    font-size: 10px;
+    color: var(--rose);
+    cursor: pointer;
+    margin-left: 6px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .inbox-compose {
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+  }
+  .inbox-compose-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .inbox-compose select {
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 12px;
+    font-family: inherit;
+    background: white;
+  }
+  .inbox-compose textarea {
+    width: 100%;
+    min-height: 60px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: inherit;
+    line-height: 1.5;
+    outline: none;
+    resize: vertical;
+  }
+  .inbox-compose textarea:focus { border-color: var(--rose); }
+  .inbox-compose button {
+    background: var(--rose);
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    align-self: flex-end;
+  }
+  .inbox-compose button:hover { transform: translateY(-1px); }
+
+  /* ========== BUCKET LIST + MONTHLY GOALS ========== */
+  .bg-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  @media (max-width: 800px) { .bg-grid { grid-template-columns: 1fr; } }
+  .bg-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .bg-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+  }
+  .bg-card.bucket::before { background: linear-gradient(90deg, var(--gold), var(--rose)); }
+  .bg-card.goals::before { background: linear-gradient(90deg, var(--sky), var(--plum)); }
+  .bg-card h4 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .bg-card h4 .meta {
+    font-family: var(--sans);
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .bg-card .sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    font-style: italic;
+    font-family: var(--serif);
+  }
+  .bucket-list, .goals-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+    max-height: 320px;
+    overflow-y: auto;
+  }
+  .bucket-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: var(--bg-warm);
+    transition: background 0.15s;
+  }
+  .bucket-item:hover { background: var(--rose-bg); }
+  .bucket-item.done { opacity: 0.65; background: var(--sage-bg); }
+  .bucket-item .bi-chk {
+    width: 18px; height: 18px;
+    border-radius: 5px;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: white;
+    font-size: 11px; color: white;
+    transition: all 0.15s;
+  }
+  .bucket-item.done .bi-chk { background: var(--sage); border-color: var(--sage); }
+  .bucket-item.done .bi-chk::before { content: "✓"; }
+  .bucket-item .bi-text { flex: 1; font-size: 13.5px; line-height: 1.5; word-break: break-word; }
+  .bucket-item.done .bi-text { text-decoration: line-through; }
+  .bucket-item .bi-date {
+    font-size: 10px;
+    color: var(--muted);
+    margin-left: 4px;
+  }
+  .bucket-item .bi-del {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0 6px;
+    opacity: 0;
+  }
+  .bucket-item:hover .bi-del { opacity: 1; }
+  .bucket-item .bi-del:hover { color: #c14848; }
+
+  .goal-item {
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: var(--bg-warm);
+    position: relative;
+  }
+  .goal-item.done { background: var(--sage-bg); opacity: 0.8; }
+  .goal-item .gi-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .goal-item .gi-text {
+    flex: 1;
+    font-size: 13.5px;
+    font-weight: 500;
+    word-break: break-word;
+  }
+  .goal-item.done .gi-text { text-decoration: line-through; }
+  .goal-item .gi-progress {
+    font-size: 11px;
+    color: var(--ink-soft);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .goal-item .gi-bar {
+    height: 5px;
+    background: white;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 6px;
+    border: 1px solid var(--border);
+  }
+  .goal-item .gi-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sky), var(--plum));
+    border-radius: 3px;
+    transition: width 0.3s;
+  }
+  .goal-item.done .gi-fill { background: var(--sage); }
+  .goal-item .gi-actions {
+    display: flex;
+    gap: 4px;
+    font-size: 11px;
+  }
+  .goal-item .gi-btn {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    color: var(--ink-soft);
+    font-family: inherit;
+  }
+  .goal-item .gi-btn:hover { background: var(--bg-warm); }
+  .goal-item .gi-btn.minus { color: var(--muted); }
+  .goal-item .gi-btn.plus { color: var(--sky); font-weight: 600; }
+  .goal-item .gi-btn.del { color: #c14848; margin-left: auto; }
+
+  .add-row {
+    display: flex;
+    gap: 6px;
+  }
+  .add-row input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: inherit;
+    background: transparent;
+    outline: none;
+  }
+  .add-row input:focus { border-style: solid; border-color: var(--ink-soft); background: white; }
+  .add-row input.target {
+    flex: 0 0 70px;
+    text-align: center;
+  }
+  .add-row input::placeholder { color: var(--muted); font-style: italic; }
+  .bg-empty {
+    color: var(--muted);
+    font-style: italic;
+    text-align: center;
+    padding: 16px 0;
+    font-family: var(--serif);
+    font-size: 13px;
+  }
+
   /* ========== JUDY'S BIRTHDAY SURPRISES ========== */
   .birthday-splash {
     position: fixed;
@@ -3361,6 +3791,61 @@
     <div class="memory-grid" id="memoryGrid"></div>
   </div>
 
+  <!-- SWEET INBOX -->
+  <div class="section">
+    <div class="inbox-card">
+      <div class="inbox-head">
+        <span class="inbox-title">💌 甜话 / 夸夸 收件箱</span>
+        <span class="inbox-counts" id="inboxCounts">—</span>
+      </div>
+      <div class="inbox-tabs" id="inboxTabs">
+        <button class="inbox-tab active" data-filter="all">全部</button>
+        <button class="inbox-tab" data-filter="to-luke">给 Luke</button>
+        <button class="inbox-tab" data-filter="to-judy">给 Judy</button>
+        <button class="inbox-tab" data-filter="unread">未读</button>
+      </div>
+      <div class="inbox-list" id="inboxList"></div>
+      <div class="inbox-compose">
+        <div class="inbox-compose-row">
+          <select id="inboxFrom">
+            <option value="luke">Luke</option>
+            <option value="judy">Judy</option>
+          </select>
+          <span style="color:var(--muted);font-size:11px;">→</span>
+          <select id="inboxTo">
+            <option value="judy">Judy</option>
+            <option value="luke">Luke</option>
+          </select>
+        </div>
+        <textarea id="inboxText" placeholder="想到的好的、感动的、想说的，写下来留给对方..."></textarea>
+        <button id="inboxSend">💕 发送</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUCKET LIST + MONTHLY GOALS -->
+  <div class="section">
+    <div class="bg-grid">
+      <div class="bg-card bucket">
+        <h4>🌷 共同心愿清单 <span class="meta" id="bucketStat">0/0</span></h4>
+        <div class="sub">想一起去的地方、想一起做的事、想一起尝试的菜</div>
+        <div class="bucket-list" id="bucketListEl"></div>
+        <div class="add-row">
+          <input type="text" id="bucketAdd" placeholder="+ 加一条心愿... (Enter 提交)" />
+        </div>
+      </div>
+      <div class="bg-card goals">
+        <h4>🎯 六月共同目标 <span class="meta" id="goalsStat">0/0 完成</span></h4>
+        <div class="sub">独立于每日任务的月度目标（比如"一起去 3 家新餐厅"）</div>
+        <div class="goals-list" id="goalsListEl"></div>
+        <div class="add-row">
+          <input type="text" id="goalAdd" placeholder="目标..." />
+          <input type="number" id="goalTarget" class="target" placeholder="目标数" min="1" />
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- WEEKLY RETRO + MONTHLY REPORT -->
   <div class="section">
     <h2 class="section-title">📝 复盘 &amp; 月报 <span class="en">Reflection &amp; Report</span></h2>
@@ -3407,6 +3892,32 @@
         </div>
         <div class="report-stats" id="reportStats"></div>
         <div class="report-headline" id="reportHeadline"></div>
+      </div>
+    </div>
+
+    <!-- Insights: mood chart + habit heatmap -->
+    <div class="insights-grid">
+      <div class="insight-card mood">
+        <h4>📈 心情时间趋势</h4>
+        <div class="sub">每天日历上标的心情，画成 30 天折线（emoji 数字化）</div>
+        <div class="mood-chart-wrap">
+          <canvas id="moodChart"></canvas>
+        </div>
+      </div>
+      <div class="insight-card heatmap">
+        <h4>🔥 打卡热力图</h4>
+        <div class="sub">每格颜色 = 那天完成了几个打卡 / 总共可打的（9 项）</div>
+        <div class="heatmap-grid" id="heatmapGrid"></div>
+        <div class="heatmap-legend">
+          少 <span class="hl-dots">
+            <span class="hl-dot" style="background:var(--bg-warm)"></span>
+            <span class="hl-dot" style="background:#fce7f3"></span>
+            <span class="hl-dot" style="background:#f5d3dd"></span>
+            <span class="hl-dot" style="background:#ec9eb8"></span>
+            <span class="hl-dot" style="background:#d4709a"></span>
+            <span class="hl-dot" style="background:#c97b8f"></span>
+          </span> 多
+        </div>
       </div>
     </div>
   </div>
@@ -3646,6 +4157,9 @@ let devotionNotes = {}; // { "2026-06-08": "..." }
 let memories = []; // [{ id, text, photo, createdAt }]
 let weeklyRetros = {}; // { "W1": { good, hard, gratitude, loveLuke, loveJudy, next } }
 let birthdayLetter = ""; // Luke's letter to Judy
+let sweetInbox = []; // [{ id, from, to, text, ts, read }]
+let bucketList = []; // [{ id, text, completedAt }]
+let monthlyGoals = []; // [{ id, text, target, current }]
 let activeFilters = new Set(["yuxin","date","luke","special","growth"]);
 
 // ===== FIRESTORE SYNC =====
@@ -3758,6 +4272,18 @@ async function saveBirthdayLetter(text) {
   try { await setDoc(docRef, { birthdayLetter: text }, { merge: true }); }
   catch(e) { console.error("letter save", e); throw e; }
 }
+async function saveSweetInbox(arr) {
+  try { await setDoc(docRef, { sweetInbox: arr }, { merge: true }); }
+  catch(e) { console.error("inbox save", e); throw e; }
+}
+async function saveBucketList(arr) {
+  try { await setDoc(docRef, { bucketList: arr }, { merge: true }); }
+  catch(e) { console.error("bucket save", e); throw e; }
+}
+async function saveMonthlyGoals(arr) {
+  try { await setDoc(docRef, { monthlyGoals: arr }, { merge: true }); }
+  catch(e) { console.error("goals save", e); throw e; }
+}
 
 // ===== PHOTO CAROUSEL =====
 // photos array stores objects: { url, path } where path is Storage path for deletion
@@ -3849,7 +4375,36 @@ async function deleteCurrentPhoto() {
 }
 
 // Higher quality — fits 3-4 photos within Firestore 1MB doc limit
-function resizeImage(file, maxDim = 1600, quality = 0.8) {
+// Uses createImageBitmap for hardware-accelerated decoding (avoids freezing UI)
+async function resizeImage(file, maxDim = 1600, quality = 0.8) {
+  // Decode the image off main thread (modern browsers)
+  let bitmap;
+  try {
+    bitmap = await createImageBitmap(file);
+  } catch(e) {
+    // Fallback for old browsers
+    return resizeImageFallback(file, maxDim, quality);
+  }
+  let { width, height } = bitmap;
+  if (width > maxDim || height > maxDim) {
+    if (width > height) {
+      height = Math.round(height * (maxDim / width));
+      width = maxDim;
+    } else {
+      width = Math.round(width * (maxDim / height));
+      height = maxDim;
+    }
+  }
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(bitmap, 0, 0, width, height);
+  bitmap.close && bitmap.close();
+  // Encoding is the only expensive part on main thread — but quick at small sizes
+  return canvas.toDataURL("image/jpeg", quality);
+}
+function resizeImageFallback(file, maxDim, quality) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = e => {
@@ -3857,19 +4412,13 @@ function resizeImage(file, maxDim = 1600, quality = 0.8) {
       img.onload = () => {
         let { width, height } = img;
         if (width > maxDim || height > maxDim) {
-          if (width > height) {
-            height = Math.round(height * (maxDim / width));
-            width = maxDim;
-          } else {
-            width = Math.round(width * (maxDim / height));
-            height = maxDim;
-          }
+          if (width > height) { height = Math.round(height * (maxDim / width)); width = maxDim; }
+          else { width = Math.round(width * (maxDim / height)); height = maxDim; }
         }
         const canvas = document.createElement("canvas");
         canvas.width = width;
         canvas.height = height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, width, height);
+        canvas.getContext("2d").drawImage(img, 0, 0, width, height);
         resolve(canvas.toDataURL("image/jpeg", quality));
       };
       img.onerror = reject;
@@ -6155,6 +6704,323 @@ function maybeShowBirthdaySplash() {
   };
 }
 
+// ===== MOOD TREND CHART =====
+const MOOD_SCALE = {
+  "😔": 1, "🥲": 2, "😴": 2, "😤": 2,
+  "😐": 3, "🙂": 4, "😊": 5, "❤️": 5,
+  "🎉": 6, "✨": 6, "😍": 6, "🥰": 7
+};
+let moodChartObj = null;
+function renderMoodChart() {
+  if (typeof Chart === "undefined") return;
+  const ctx = document.getElementById("moodChart");
+  if (!ctx) return;
+  const labels = [], values = [], emojis = [];
+  for (let d = 1; d <= 30; d++) {
+    const dStr = `2026-06-${String(d).padStart(2,"0")}`;
+    labels.push(d);
+    const e = moods[dStr];
+    if (e && MOOD_SCALE[e] != null) {
+      values.push(MOOD_SCALE[e]);
+      emojis.push(e);
+    } else {
+      values.push(null);
+      emojis.push("");
+    }
+  }
+  if (moodChartObj) moodChartObj.destroy();
+  moodChartObj = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels,
+      datasets: [{
+        label: "心情",
+        data: values,
+        borderColor: "#c97b8f",
+        backgroundColor: "rgba(201, 123, 143, 0.12)",
+        tension: 0.35,
+        fill: true,
+        pointBackgroundColor: "#c97b8f",
+        pointBorderColor: "#fff",
+        pointBorderWidth: 1.5,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        spanGaps: true
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          ticks: { font: { size: 10 }, color: "#a89a8e" },
+          grid: { display: false }
+        },
+        y: {
+          min: 0, max: 7.5,
+          ticks: {
+            stepSize: 1,
+            callback: v => ["", "😔", "😐", "😐", "🙂", "😊", "😍", "🥰"][v] || "",
+            font: { size: 14 }
+          },
+          grid: { color: "rgba(168, 154, 142, 0.1)" }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: c => emojis[c.dataIndex] ? `${emojis[c.dataIndex]}` : "未标"
+          }
+        }
+      }
+    }
+  });
+}
+
+// ===== HABIT HEATMAP =====
+function renderHabitHeatmap() {
+  const grid = document.getElementById("heatmapGrid");
+  if (!grid) return;
+  const habitCats = ["bible-luke","bible-yx","devo-luke","devo-yx","sport-luke","sport-yx","trade","cafe","network"];
+  const todayD = currentJuneDay();
+  const ds = d => `2026-06-${String(d).padStart(2,"0")}`;
+  let html = "";
+  for (let d = 1; d <= 30; d++) {
+    let count = 0;
+    for (const c of habitCats) {
+      if (habits[`${c}-${ds(d)}`]) count++;
+    }
+    let lvl = 0;
+    if (count >= 1) lvl = 1;
+    if (count >= 3) lvl = 2;
+    if (count >= 5) lvl = 3;
+    if (count >= 7) lvl = 4;
+    if (count >= 9) lvl = 5;
+    const isToday = (d === todayD);
+    html += `<div class="heatmap-cell l${lvl} ${isToday ? 'today' : ''}" title="6/${d} · 完成 ${count}/${habitCats.length}"><span class="hm-num">${d}</span></div>`;
+  }
+  grid.innerHTML = html;
+}
+
+// ===== SWEET INBOX =====
+let inboxFilter = "all";
+function renderInbox() {
+  const list = document.getElementById("inboxList");
+  const filtered = sweetInbox.filter(m => {
+    if (inboxFilter === "all") return true;
+    if (inboxFilter === "unread") return !m.read;
+    if (inboxFilter === "to-luke") return m.to === "luke";
+    if (inboxFilter === "to-judy") return m.to === "judy";
+    return true;
+  });
+  // Sort newest first
+  const sorted = [...filtered].sort((a, b) => (b.ts || 0) - (a.ts || 0));
+  const unreadCount = sweetInbox.filter(m => !m.read).length;
+  document.getElementById("inboxCounts").innerHTML = unreadCount > 0
+    ? `共 ${sweetInbox.length} 条 · <span class="unread">${unreadCount} 未读</span>`
+    : `共 ${sweetInbox.length} 条`;
+  if (sorted.length === 0) {
+    list.innerHTML = `<div style="color:var(--muted);font-style:italic;text-align:center;padding:20px 0;font-family:var(--serif);">还没有甜话 — 在下面写一条留给对方</div>`;
+    return;
+  }
+  list.innerHTML = sorted.map(m => {
+    const d = new Date(m.ts);
+    const dateLabel = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+    const fromName = m.from === "luke" ? "Luke" : "Judy";
+    const toName = m.to === "luke" ? "Luke" : "Judy";
+    return `
+      <div class="inbox-msg from-${m.from} ${!m.read ? 'unread' : ''}">
+        <button class="im-del" data-id="${m.id}">×</button>
+        <div class="im-meta">
+          <span class="im-from">${fromName}</span> → <span>${toName}</span> · ${dateLabel}
+          ${!m.read ? `<span class="im-mark" data-id="${m.id}">标记已读</span>` : ''}
+        </div>
+        <div class="im-text">${escapeHtml(m.text)}</div>
+      </div>`;
+  }).join("");
+}
+
+document.getElementById("inboxTabs").addEventListener("click", e => {
+  const btn = e.target.closest(".inbox-tab");
+  if (!btn) return;
+  inboxFilter = btn.dataset.filter;
+  document.querySelectorAll(".inbox-tab").forEach(t => t.classList.toggle("active", t.dataset.filter === inboxFilter));
+  renderInbox();
+});
+
+document.getElementById("inboxList").addEventListener("click", async e => {
+  const del = e.target.closest(".im-del");
+  const mark = e.target.closest(".im-mark");
+  if (del) {
+    if (!confirm("删除这条？")) return;
+    const next = sweetInbox.filter(m => m.id !== del.dataset.id);
+    sweetInbox = next;
+    renderInbox();
+    await saveSweetInbox(next);
+    return;
+  }
+  if (mark) {
+    const next = sweetInbox.map(m => m.id === mark.dataset.id ? { ...m, read: true } : m);
+    sweetInbox = next;
+    renderInbox();
+    await saveSweetInbox(next);
+  }
+});
+
+document.getElementById("inboxSend").addEventListener("click", async () => {
+  const from = document.getElementById("inboxFrom").value;
+  const to = document.getElementById("inboxTo").value;
+  const text = document.getElementById("inboxText").value.trim();
+  if (!text) return;
+  if (from === to) { alert("不能发给自己 😄"); return; }
+  const m = { id: "msg-" + Date.now(), from, to, text, ts: Date.now(), read: false };
+  const next = [...sweetInbox, m];
+  sweetInbox = next;
+  document.getElementById("inboxText").value = "";
+  renderInbox();
+  await saveSweetInbox(next);
+});
+
+// Auto-sync from/to dropdowns (so when from changes, to flips)
+document.getElementById("inboxFrom").addEventListener("change", e => {
+  document.getElementById("inboxTo").value = e.target.value === "luke" ? "judy" : "luke";
+});
+
+// ===== BUCKET LIST =====
+function renderBucketList() {
+  const el = document.getElementById("bucketListEl");
+  const done = bucketList.filter(b => b.completedAt).length;
+  document.getElementById("bucketStat").textContent = `${done} / ${bucketList.length}`;
+  if (bucketList.length === 0) {
+    el.innerHTML = `<div class="bg-empty">还没有心愿 — 写下你们想一起做的第一件事</div>`;
+    return;
+  }
+  // Show pending first
+  const sorted = [...bucketList].sort((a, b) => {
+    if (!!a.completedAt !== !!b.completedAt) return a.completedAt ? 1 : -1;
+    return 0;
+  });
+  el.innerHTML = sorted.map(b => {
+    const dateLabel = b.completedAt
+      ? `<span class="bi-date">✓ ${new Date(b.completedAt).getMonth()+1}/${new Date(b.completedAt).getDate()}</span>`
+      : '';
+    return `
+      <div class="bucket-item ${b.completedAt ? 'done' : ''}">
+        <button class="bi-chk" data-id="${b.id}" title="${b.completedAt ? '撤销' : '完成'}"></button>
+        <span class="bi-text">${escapeHtml(b.text)}</span>
+        ${dateLabel}
+        <button class="bi-del" data-id="${b.id}" title="删除">×</button>
+      </div>`;
+  }).join("");
+}
+
+document.getElementById("bucketAdd").addEventListener("keydown", async e => {
+  if (e.key !== "Enter") return;
+  const text = e.target.value.trim();
+  if (!text) return;
+  const b = { id: "bk-" + Date.now(), text, completedAt: null };
+  const next = [...bucketList, b];
+  bucketList = next;
+  e.target.value = "";
+  renderBucketList();
+  await saveBucketList(next);
+});
+
+document.getElementById("bucketListEl").addEventListener("click", async e => {
+  const chk = e.target.closest(".bi-chk");
+  const del = e.target.closest(".bi-del");
+  if (chk) {
+    const id = chk.dataset.id;
+    const next = bucketList.map(b => b.id === id
+      ? { ...b, completedAt: b.completedAt ? null : Date.now() }
+      : b);
+    bucketList = next;
+    renderBucketList();
+    await saveBucketList(next);
+  } else if (del) {
+    if (!confirm("删除这条心愿？")) return;
+    const next = bucketList.filter(b => b.id !== del.dataset.id);
+    bucketList = next;
+    renderBucketList();
+    await saveBucketList(next);
+  }
+});
+
+// ===== MONTHLY GOALS =====
+function renderMonthlyGoals() {
+  const el = document.getElementById("goalsListEl");
+  const done = monthlyGoals.filter(g => (g.current || 0) >= (g.target || 1)).length;
+  document.getElementById("goalsStat").textContent = `${done} / ${monthlyGoals.length} 完成`;
+  if (monthlyGoals.length === 0) {
+    el.innerHTML = `<div class="bg-empty">还没有月度目标 — 比如"6 月一起去 3 家新餐厅"</div>`;
+    return;
+  }
+  el.innerHTML = monthlyGoals.map(g => {
+    const target = Math.max(1, g.target || 1);
+    const current = Math.max(0, Math.min(target, g.current || 0));
+    const pct = (current / target) * 100;
+    const isDone = current >= target;
+    return `
+      <div class="goal-item ${isDone ? 'done' : ''}">
+        <div class="gi-head">
+          <span class="gi-text">${escapeHtml(g.text)}</span>
+          <span class="gi-progress">${current} / ${target}</span>
+        </div>
+        <div class="gi-bar"><div class="gi-fill" style="width:${pct}%"></div></div>
+        <div class="gi-actions">
+          <button class="gi-btn minus" data-id="${g.id}" data-act="dec">−</button>
+          <button class="gi-btn plus" data-id="${g.id}" data-act="inc">+1</button>
+          <button class="gi-btn del" data-id="${g.id}" data-act="del">删</button>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+document.getElementById("goalAdd").addEventListener("keydown", async e => {
+  if (e.key !== "Enter") return;
+  await addGoal();
+});
+document.getElementById("goalTarget").addEventListener("keydown", async e => {
+  if (e.key !== "Enter") return;
+  await addGoal();
+});
+async function addGoal() {
+  const text = document.getElementById("goalAdd").value.trim();
+  const target = parseInt(document.getElementById("goalTarget").value, 10) || 1;
+  if (!text) return;
+  const g = { id: "gl-" + Date.now(), text, target, current: 0 };
+  const next = [...monthlyGoals, g];
+  monthlyGoals = next;
+  document.getElementById("goalAdd").value = "";
+  document.getElementById("goalTarget").value = "";
+  renderMonthlyGoals();
+  await saveMonthlyGoals(next);
+}
+
+document.getElementById("goalsListEl").addEventListener("click", async e => {
+  const btn = e.target.closest(".gi-btn");
+  if (!btn) return;
+  const id = btn.dataset.id;
+  const act = btn.dataset.act;
+  let next;
+  if (act === "del") {
+    if (!confirm("删除这个目标？")) return;
+    next = monthlyGoals.filter(g => g.id !== id);
+  } else {
+    next = monthlyGoals.map(g => {
+      if (g.id !== id) return g;
+      const target = Math.max(1, g.target || 1);
+      let cur = g.current || 0;
+      if (act === "inc") cur = Math.min(target, cur + 1);
+      if (act === "dec") cur = Math.max(0, cur - 1);
+      return { ...g, current: cur };
+    });
+  }
+  monthlyGoals = next;
+  renderMonthlyGoals();
+  await saveMonthlyGoals(next);
+});
+
 // ===== INIT: AUTH + REALTIME SYNC =====
 renderCalHead();
 renderDailyVerse();
@@ -6296,6 +7162,9 @@ onAuthStateChanged(auth, async user => {
         // Memories now live in subcollection — main doc field is deprecated/migrated
         weeklyRetros = data.weeklyRetros || {};
         birthdayLetter = data.birthdayLetter || "";
+        sweetInbox = Array.isArray(data.sweetInbox) ? data.sweetInbox : [];
+        bucketList = Array.isArray(data.bucketList) ? data.bucketList : [];
+        monthlyGoals = Array.isArray(data.monthlyGoals) ? data.monthlyGoals : [];
 
         // One-time migration: move memories from main doc to subcollection (avoids 1MB doc bloat)
         if (Array.isArray(data.memories) && data.memories.length > 0 && !seedsApplied.memoriesMigratedV2) {
@@ -6346,6 +7215,11 @@ onAuthStateChanged(auth, async user => {
       renderSpiritual();
       renderMemories();
       renderRetroAndReport();
+      renderMoodChart();
+      renderHabitHeatmap();
+      renderInbox();
+      renderBucketList();
+      renderMonthlyGoals();
       applyBirthdayMode();
     }, err => {
       console.error("Snapshot error:", err);
