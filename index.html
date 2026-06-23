@@ -6009,8 +6009,15 @@ document.getElementById("addBonusBtn").addEventListener("click", openBonusManage
 
 // ===== JUDY'S BIRTHDAY MODE =====
 function isJudyBirthdayToday() {
-  const t = new Date();
-  return t.getMonth() === 5 && t.getDate() === 22; // June 22
+  const now = new Date();
+  // Active all of June 22 (in any timezone)
+  if (now.getMonth() === 5 && now.getDate() === 22) return true;
+  // Extension: also active on June 23 until 12:00 PM EDT (= 16:00 UTC)
+  if (now.getMonth() === 5 && now.getDate() === 23) {
+    const endUTC = Date.UTC(now.getFullYear(), 5, 23, 16, 0, 0);
+    return Date.now() < endUTC;
+  }
+  return false;
 }
 
 function spawnBirthdayParticles() {
@@ -6136,28 +6143,16 @@ bdMusicCtrl.addEventListener("click", () => {
 bdAudio.addEventListener("play", updateMusicUI);
 bdAudio.addEventListener("pause", updateMusicUI);
 
-// Splash (shown once per day per device)
+// Splash (shown EVERY visit during the birthday window — Luke's wish)
 function maybeShowBirthdaySplash() {
-  const t = new Date();
-  const key = `bd_splash_${t.getFullYear()}_${t.getMonth()+1}_${t.getDate()}`;
-  try {
-    if (localStorage.getItem(key)) return;
-    const splash = document.getElementById("birthdaySplash");
-    splash.classList.add("show");
-    document.getElementById("bdEnterBtn").onclick = () => {
-      splash.classList.remove("show");
-      try { localStorage.setItem(key, "1"); } catch(e) {}
-      // Triggered by user click → autoplay restriction satisfied
-      if (isJudyBirthdayToday()) tryPlayMusic();
-    };
-    // Auto-dismiss after 30s as fallback
-    setTimeout(() => {
-      if (splash.classList.contains("show")) {
-        splash.classList.remove("show");
-        try { localStorage.setItem(key, "1"); } catch(e) {}
-      }
-    }, 30000);
-  } catch(e) { /* localStorage might be blocked */ }
+  const splash = document.getElementById("birthdaySplash");
+  if (splash.classList.contains("show")) return; // already showing
+  splash.classList.add("show");
+  document.getElementById("bdEnterBtn").onclick = () => {
+    splash.classList.remove("show");
+    // Triggered by user click → autoplay restriction satisfied
+    if (isJudyBirthdayToday()) tryPlayMusic();
+  };
 }
 
 // ===== INIT: AUTH + REALTIME SYNC =====
