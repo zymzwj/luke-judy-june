@@ -854,6 +854,404 @@
   .dur-popup .dur-btn.primary { background: var(--ink); color: white; border-color: var(--ink); }
   .dur-popup .dur-btn.danger { color: #c14848; }
 
+  /* ========== SPIRITUAL GROWTH ========== */
+  .spirit-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 18px;
+  }
+  @media (max-width: 800px) { .spirit-grid { grid-template-columns: 1fr; } }
+  .spirit-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .spirit-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--rose), var(--plum));
+  }
+  .spirit-card h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .spirit-card h3 .stat {
+    font-family: var(--sans);
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .spirit-card .sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    font-style: italic;
+    font-family: var(--serif);
+  }
+  .prayer-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; max-height: 280px; overflow-y: auto; }
+  .prayer-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 10px;
+    background: var(--bg-warm);
+    border-radius: 8px;
+    font-size: 13px;
+    position: relative;
+    transition: background 0.15s;
+  }
+  .prayer-item.answered { background: var(--sage-bg); opacity: 0.85; }
+  .prayer-item .pr-chk {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: white;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+    color: white;
+    transition: all 0.15s;
+  }
+  .prayer-item.answered .pr-chk {
+    background: var(--sage);
+    border-color: var(--sage);
+  }
+  .prayer-item.answered .pr-chk::before { content: "✓"; }
+  .prayer-item .pr-text { flex: 1; line-height: 1.5; word-break: break-word; }
+  .prayer-item.answered .pr-text { text-decoration: line-through; color: var(--ink-soft); }
+  .prayer-item .pr-meta {
+    font-size: 10px;
+    color: var(--muted);
+    display: block;
+    margin-top: 3px;
+    letter-spacing: 0.3px;
+  }
+  .prayer-item .pr-del {
+    background: transparent; border: none;
+    color: var(--muted); cursor: pointer;
+    padding: 0 4px; font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .prayer-item:hover .pr-del { opacity: 1; }
+  .prayer-item .pr-del:hover { color: #c14848; }
+  .prayer-add {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    background: transparent;
+    outline: none;
+    font-family: inherit;
+  }
+  .prayer-add:focus { border-style: solid; border-color: var(--ink-soft); background: white; }
+  .prayer-add::placeholder { color: var(--muted); font-style: italic; }
+
+  .devo-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .devo-nav {
+    background: var(--card);
+    border: 1px solid var(--border);
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1;
+    padding-bottom: 3px;
+  }
+  .devo-nav:hover { background: var(--bg-warm); }
+  .devo-nav:disabled { opacity: 0.4; cursor: not-allowed; }
+  .devo-date {
+    font-family: var(--serif);
+    font-size: 15px;
+    font-weight: 600;
+    flex: 1;
+    text-align: center;
+  }
+  .devo-text {
+    width: 100%;
+    min-height: 160px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.7;
+    resize: vertical;
+    outline: none;
+    background: rgba(255,255,255,0.6);
+  }
+  .devo-text:focus { border-color: var(--ink-soft); background: white; }
+  .devo-text::placeholder { color: var(--muted); font-style: italic; font-family: var(--serif); }
+  .devo-foot {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* ========== MEMORY WALL ========== */
+  .memory-add-btn {
+    background: var(--ink);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+  .memory-add-btn:hover { transform: translateY(-1px); }
+  .memory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .memory-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform 0.2s;
+    position: relative;
+  }
+  .memory-card:hover { transform: translateY(-2px); }
+  .memory-card .mem-img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--bg-warm);
+  }
+  .memory-card .mem-img.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13px;
+    aspect-ratio: 16/9;
+  }
+  .memory-card .mem-body {
+    padding: 12px 14px 14px;
+  }
+  .memory-card .mem-date {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .memory-card .mem-text {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--ink);
+    word-break: break-word;
+  }
+  .memory-card .mem-del {
+    position: absolute;
+    top: 8px; right: 8px;
+    background: rgba(255,255,255,0.9);
+    border: none;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .memory-card:hover .mem-del { opacity: 1; }
+  .memory-card .mem-del:hover { color: #c14848; }
+  .memory-empty {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--muted);
+    font-family: var(--serif);
+    font-style: italic;
+    grid-column: 1/-1;
+  }
+
+  /* Memory modal */
+  .mem-modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .mem-img-preview {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: var(--bg-warm);
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: var(--serif);
+    font-style: italic;
+    border: 2px dashed transparent;
+  }
+  .mem-img-preview.empty { border-color: var(--border); }
+  .mem-img-preview:hover { border-color: var(--ink-soft); }
+
+  /* ========== RETRO + MONTHLY REPORT ========== */
+  .retro-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 18px;
+  }
+  @media (max-width: 800px) { .retro-grid { grid-template-columns: 1fr; } }
+  .retro-card, .report-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .retro-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--rose));
+  }
+  .report-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--sky), var(--sage));
+  }
+  .retro-head, .report-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .retro-head h3, .report-head h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .retro-q {
+    margin-top: 14px;
+  }
+  .retro-q label {
+    display: block;
+    font-size: 12px;
+    color: var(--ink-soft);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    margin-bottom: 4px;
+  }
+  .retro-q textarea {
+    width: 100%;
+    min-height: 60px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.6;
+    font-family: inherit;
+    resize: vertical;
+    outline: none;
+    background: rgba(255,255,255,0.6);
+  }
+  .retro-q textarea:focus { border-color: var(--ink-soft); background: white; }
+  .retro-week-nav {
+    display: flex; gap: 6px; align-items: center;
+    font-size: 12px; color: var(--ink-soft);
+  }
+  .retro-week-nav button {
+    background: var(--card);
+    border: 1px solid var(--border);
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1; padding-bottom: 3px;
+  }
+  .retro-week-nav button:hover { background: var(--bg-warm); }
+  .retro-foot {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .report-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .report-stat {
+    background: var(--bg-warm);
+    padding: 10px 12px;
+    border-radius: 10px;
+  }
+  .report-stat .rs-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .report-stat .rs-value {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .report-stat .rs-value .small {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-left: 4px;
+  }
+  .report-headline {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+    line-height: 1.6;
+  }
+
   /* 24-hour time wheel */
   .wheel-grid {
     display: grid;
@@ -2368,6 +2766,33 @@
     <!-- ========== MAIN CONTENT ========== -->
     <div class="main-col">
 
+  <!-- SPIRITUAL GROWTH -->
+  <div class="section">
+    <h2 class="section-title">🙏 灵命成长 <span class="en">Spiritual Life</span></h2>
+    <p class="section-desc">祷告事项记录 + 每日灵修反思。一起在主里成长。</p>
+    <div class="spirit-grid">
+      <div class="spirit-card">
+        <h3>祷告记录 <span class="stat" id="prayerStat">—</span></h3>
+        <div class="sub">把心愿、感恩、代祷写下来；蒙应允时打勾，留下时间见证</div>
+        <div class="prayer-list" id="prayerList"></div>
+        <input class="prayer-add" id="prayerAdd" placeholder="+ 加一条祷告... (Enter 提交)" />
+      </div>
+      <div class="spirit-card">
+        <h3>今日灵修笔记</h3>
+        <div class="devo-head">
+          <button class="devo-nav" id="devoPrev" title="前一天">‹</button>
+          <span class="devo-date" id="devoDate">—</span>
+          <button class="devo-nav" id="devoNext" title="后一天">›</button>
+        </div>
+        <textarea class="devo-text" id="devoText" placeholder="今天读到的话、领受、感谢、安静默想..."></textarea>
+        <div class="devo-foot">
+          <span id="devoStat">0 字</span>
+          <span id="devoSave">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- JUDY MEDICATION TRACKER -->
   <div class="section">
     <div class="med-card">
@@ -2586,6 +3011,64 @@
     </div>
   </div>
 
+  <!-- MEMORY WALL -->
+  <div class="section">
+    <h2 class="section-title">💝 我们的故事 <span class="en">Memory Wall</span></h2>
+    <p class="section-desc">把值得记住的瞬间写下来，配一张照片更好。一年后回看是无价之宝。</p>
+    <button class="memory-add-btn" id="memAddBtn">+ 加一段回忆</button>
+    <div class="memory-grid" id="memoryGrid"></div>
+  </div>
+
+  <!-- WEEKLY RETRO + MONTHLY REPORT -->
+  <div class="section">
+    <h2 class="section-title">📝 复盘 &amp; 月报 <span class="en">Reflection &amp; Report</span></h2>
+    <p class="section-desc">每周日花几分钟回顾这一周，月底自动生成你俩的六月总结。</p>
+    <div class="retro-grid">
+      <div class="retro-card">
+        <div class="retro-head">
+          <h3>📝 本周复盘</h3>
+          <div class="retro-week-nav">
+            <button id="retroPrev">‹</button>
+            <span id="retroLabel">—</span>
+            <button id="retroNext">›</button>
+          </div>
+        </div>
+        <div class="retro-q">
+          <label>💝 这周最暖心的瞬间</label>
+          <textarea id="retro-good" placeholder="一段对话、一顿饭、一个拥抱..."></textarea>
+        </div>
+        <div class="retro-q">
+          <label>🥲 最大的挑战 / 没做好的</label>
+          <textarea id="retro-hard" placeholder="坦诚一些，看见就是改变的开始"></textarea>
+        </div>
+        <div class="retro-q">
+          <label>🌷 三件感恩的事</label>
+          <textarea id="retro-gratitude" placeholder="1. ...\n2. ...\n3. ..."></textarea>
+        </div>
+        <div class="retro-q">
+          <label>💕 对方做了什么让你感动</label>
+          <textarea id="retro-love" placeholder="说出来更暖"></textarea>
+        </div>
+        <div class="retro-q">
+          <label>🎯 下周一起想做的</label>
+          <textarea id="retro-next" placeholder="约会 / 一起做的事 / 想尝试的"></textarea>
+        </div>
+        <div class="retro-foot">
+          <span id="retroStat">0 字</span>
+          <span id="retroSave">—</span>
+        </div>
+      </div>
+
+      <div class="report-card">
+        <div class="report-head">
+          <h3>📊 六月月报</h3>
+        </div>
+        <div class="report-stats" id="reportStats"></div>
+        <div class="report-headline" id="reportHeadline"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- TIME CHART (end of page) -->
   <div class="section">
     <div class="chart-card">
@@ -2615,6 +3098,29 @@
 
 <!-- POSTPONE MENU -->
 <div class="postpone-menu" id="postponeMenu"></div>
+
+<!-- MEMORY MODAL -->
+<div class="modal-backdrop" id="memModal">
+  <div class="modal">
+    <h3>加一段回忆</h3>
+    <div class="mem-modal-body">
+      <input type="file" id="memPhotoInput" accept="image/*" style="display:none;" />
+      <div class="mem-img-preview empty" id="memImgPreview">点这里加照片（可选）</div>
+      <div class="form-row">
+        <label>日期</label>
+        <input type="date" id="memDate" />
+      </div>
+      <div class="form-row">
+        <label>文字</label>
+        <textarea id="memText" rows="4" placeholder="今天发生了什么值得记住的..."></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="document.getElementById('memModal').classList.remove('show');">取消</button>
+      <button class="btn primary" id="memSaveBtn">保存</button>
+    </div>
+  </div>
+</div>
 
 <!-- DURATION POPUP -->
 <div class="dur-popup" id="durPopup">
@@ -2791,6 +3297,10 @@ let meds = { startDate: "", taken: {} }; // { startDate: "2026-06-04", taken: { 
 let bonuses = []; // [{ id, person, pts, reason, at }]
 let seedsApplied = {}; // { judyBirthdayBonus: true }
 let timeLogs = {}; // { "luke-2026-06-08": [{ activity, mins }], ... }
+let prayers = []; // [{ id, text, addedAt, answered, answeredAt, answerNote }]
+let devotionNotes = {}; // { "2026-06-08": "..." }
+let memories = []; // [{ id, text, photo, createdAt }]
+let weeklyRetros = {}; // { "W1": { good, hard, gratitude, loveLuke, loveJudy, next } }
 let activeFilters = new Set(["yuxin","date","luke","special","growth"]);
 
 // ===== FIRESTORE SYNC =====
@@ -2867,6 +3377,32 @@ async function saveTimeLogsKey(key, arr) {
     if (arr && arr.length > 0) await updateDoc(docRef, { [`timeLogs.${key}`]: arr });
     else await updateDoc(docRef, { [`timeLogs.${key}`]: deleteField() });
   } catch(e) { console.error("timeLogs save", e); throw e; }
+}
+async function savePrayers(arr) {
+  try { await setDoc(docRef, { prayers: arr }, { merge: true }); }
+  catch(e) { console.error("prayers save", e); throw e; }
+}
+async function saveDevotionNote(dateStr, text) {
+  try {
+    if (text) await updateDoc(docRef, { [`devotionNotes.${dateStr}`]: text });
+    else await updateDoc(docRef, { [`devotionNotes.${dateStr}`]: deleteField() });
+  } catch(e) { console.error("devotion save", e); throw e; }
+}
+async function saveMemories(arr) {
+  try { await setDoc(docRef, { memories: arr }, { merge: true }); }
+  catch(e) {
+    console.error("memories save", e);
+    if (String(e.message || "").includes("longer than")) {
+      alert("回忆数据太大了（超过 1MB）— 删掉一些旧的或减少照片再试");
+    }
+    throw e;
+  }
+}
+async function saveWeeklyRetro(weekId, obj) {
+  try {
+    if (obj && Object.keys(obj).length > 0) await updateDoc(docRef, { [`weeklyRetros.${weekId}`]: obj });
+    else await updateDoc(docRef, { [`weeklyRetros.${weekId}`]: deleteField() });
+  } catch(e) { console.error("retro save", e); throw e; }
 }
 
 // ===== PHOTO CAROUSEL =====
@@ -4705,6 +5241,381 @@ function refreshWheelsForDay() { renderTimeWheels(); }
   if (el) el.addEventListener("click", () => setTimeout(refreshWheelsForDay, 0));
 });
 
+// ===== SPIRITUAL: PRAYERS + DEVOTION =====
+let devoDay = 1; // 1-30
+let devoSaveTimer = null;
+
+function fmtDateLabel(day) {
+  const d = new Date(2026, 5, day);
+  const dow = ["周日","周一","周二","周三","周四","周五","周六"][d.getDay()];
+  return `6月${day}日 · ${dow}`;
+}
+
+function renderSpiritual() {
+  renderPrayers();
+  renderDevotion();
+}
+
+function renderPrayers() {
+  const list = document.getElementById("prayerList");
+  const pending = prayers.filter(p => !p.answered).length;
+  const answered = prayers.filter(p => p.answered).length;
+  document.getElementById("prayerStat").textContent =
+    `${pending} 等候 · ${answered} 已应允`;
+  if (prayers.length === 0) {
+    list.innerHTML = `<div style="color:var(--muted);font-style:italic;text-align:center;padding:14px 0;font-family:var(--serif);font-size:13px;">还没有祷告事项 — 在下面输入一条吧</div>`;
+    return;
+  }
+  // Show pending first, then answered (most recent first within each)
+  const sorted = [...prayers].sort((a, b) => {
+    if (a.answered !== b.answered) return a.answered ? 1 : -1;
+    return (b.addedAt || 0) - (a.addedAt || 0);
+  });
+  list.innerHTML = sorted.map(p => {
+    const origIdx = prayers.indexOf(p);
+    const addedDate = p.addedAt ? new Date(p.addedAt) : null;
+    const ansDate = p.answeredAt ? new Date(p.answeredAt) : null;
+    let meta = addedDate ? `加于 ${addedDate.getMonth()+1}/${addedDate.getDate()}` : "";
+    if (ansDate) meta += ` · 应允于 ${ansDate.getMonth()+1}/${ansDate.getDate()}`;
+    return `
+      <div class="prayer-item ${p.answered ? 'answered' : ''}">
+        <button class="pr-chk" data-idx="${origIdx}" title="${p.answered ? '撤销已应允' : '标记为已应允'}"></button>
+        <div class="pr-text">${escapeHtml(p.text)}<span class="pr-meta">${meta}</span></div>
+        <button class="pr-del" data-idx="${origIdx}" title="删除">×</button>
+      </div>`;
+  }).join("");
+}
+
+document.getElementById("prayerAdd").addEventListener("keydown", async e => {
+  if (e.key !== "Enter") return;
+  const text = e.target.value.trim();
+  if (!text) return;
+  const newP = { id: "p-" + Date.now(), text, addedAt: Date.now(), answered: false };
+  const next = [...prayers, newP];
+  prayers = next;
+  e.target.value = "";
+  renderPrayers();
+  await savePrayers(next);
+});
+document.getElementById("prayerList").addEventListener("click", async e => {
+  const chk = e.target.closest(".pr-chk");
+  const del = e.target.closest(".pr-del");
+  if (!chk && !del) return;
+  const idx = parseInt((chk || del).dataset.idx, 10);
+  let next;
+  if (chk) {
+    next = prayers.map((p, i) => {
+      if (i !== idx) return p;
+      if (p.answered) return { ...p, answered: false, answeredAt: null };
+      return { ...p, answered: true, answeredAt: Date.now() };
+    });
+  } else {
+    if (!confirm("删除这条祷告？")) return;
+    next = prayers.filter((_, i) => i !== idx);
+  }
+  prayers = next;
+  renderPrayers();
+  await savePrayers(next);
+});
+
+function renderDevotion() {
+  const dateStr = `2026-06-${String(devoDay).padStart(2,"0")}`;
+  document.getElementById("devoDate").textContent = fmtDateLabel(devoDay);
+  const text = devotionNotes[dateStr] || "";
+  const ta = document.getElementById("devoText");
+  if (document.activeElement !== ta) ta.value = text;
+  document.getElementById("devoStat").textContent = `${text.length} 字`;
+  document.getElementById("devoPrev").disabled = devoDay <= 1;
+  document.getElementById("devoNext").disabled = devoDay >= 30;
+}
+
+document.getElementById("devoPrev").addEventListener("click", () => {
+  if (devoDay > 1) { devoDay--; renderDevotion(); }
+});
+document.getElementById("devoNext").addEventListener("click", () => {
+  if (devoDay < 30) { devoDay++; renderDevotion(); }
+});
+document.getElementById("devoText").addEventListener("input", () => {
+  const ta = document.getElementById("devoText");
+  const text = ta.value;
+  document.getElementById("devoStat").textContent = `${text.length} 字`;
+  document.getElementById("devoSave").textContent = "未保存";
+  const dateStr = `2026-06-${String(devoDay).padStart(2,"0")}`;
+  clearTimeout(devoSaveTimer);
+  devoSaveTimer = setTimeout(async () => {
+    try {
+      await saveDevotionNote(dateStr, text);
+      if (text) devotionNotes[dateStr] = text; else delete devotionNotes[dateStr];
+      const now = new Date();
+      document.getElementById("devoSave").textContent =
+        `已保存 ${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
+    } catch(e) {
+      document.getElementById("devoSave").textContent = "保存失败";
+    }
+  }, 800);
+});
+
+// Initialize devoDay to current June day
+devoDay = currentJuneDay();
+
+// ===== MEMORY WALL =====
+const memModal = document.getElementById("memModal");
+const memText = document.getElementById("memText");
+const memDate = document.getElementById("memDate");
+const memImgPreview = document.getElementById("memImgPreview");
+const memPhotoInput = document.getElementById("memPhotoInput");
+let memDraftPhoto = ""; // base64
+
+function renderMemories() {
+  const grid = document.getElementById("memoryGrid");
+  if (memories.length === 0) {
+    grid.innerHTML = `<div class="memory-empty">还没有回忆 — 点上面的按钮加第一段</div>`;
+    return;
+  }
+  const sorted = [...memories].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  grid.innerHTML = sorted.map(m => {
+    const d = m.createdAt ? new Date(m.createdAt) : new Date();
+    const dateLabel = `${d.getMonth()+1}月${d.getDate()}日 · ${["周日","周一","周二","周三","周四","周五","周六"][d.getDay()]}`;
+    return `
+      <div class="memory-card">
+        <button class="mem-del" data-id="${m.id}" title="删除">×</button>
+        ${m.photo
+          ? `<div class="mem-img" style="background-image:url('${m.photo}')"></div>`
+          : ``}
+        <div class="mem-body">
+          <div class="mem-date">${dateLabel}</div>
+          <div class="mem-text">${escapeHtml(m.text || "")}</div>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+document.getElementById("memAddBtn").addEventListener("click", () => {
+  memDraftPhoto = "";
+  memText.value = "";
+  memImgPreview.style.backgroundImage = "";
+  memImgPreview.classList.add("empty");
+  memImgPreview.textContent = "点这里加照片（可选）";
+  // default date to today (or selected day in June)
+  const t = new Date();
+  const todayISO = t.toISOString().slice(0,10);
+  memDate.value = todayISO;
+  memModal.classList.add("show");
+});
+
+memImgPreview.addEventListener("click", () => memPhotoInput.click());
+memPhotoInput.addEventListener("change", async e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  try {
+    const small = await resizeImage(f, 700, 0.6);
+    memDraftPhoto = small;
+    memImgPreview.style.backgroundImage = `url('${small}')`;
+    memImgPreview.classList.remove("empty");
+    memImgPreview.textContent = "";
+  } catch(err) {
+    alert("照片处理失败: " + err.message);
+  }
+});
+
+document.getElementById("memSaveBtn").addEventListener("click", async () => {
+  const text = memText.value.trim();
+  if (!text && !memDraftPhoto) { alert("至少要有文字或照片"); return; }
+  const dateVal = memDate.value;
+  const createdAt = dateVal ? new Date(dateVal + "T12:00").getTime() : Date.now();
+  const m = {
+    id: "m-" + Date.now(),
+    text,
+    photo: memDraftPhoto,
+    createdAt
+  };
+  const next = [...memories, m];
+  memories = next;
+  memModal.classList.remove("show");
+  renderMemories();
+  await saveMemories(next);
+});
+
+document.getElementById("memoryGrid").addEventListener("click", async e => {
+  const del = e.target.closest(".mem-del");
+  if (!del) return;
+  const id = del.dataset.id;
+  if (!confirm("删除这段回忆？")) return;
+  const next = memories.filter(m => m.id !== id);
+  memories = next;
+  renderMemories();
+  await saveMemories(next);
+});
+
+memModal.addEventListener("click", e => {
+  if (e.target.id === "memModal") memModal.classList.remove("show");
+});
+
+// ===== WEEKLY RETRO + MONTHLY REPORT =====
+let retroWeekIdx = 0;
+let retroSaveTimer = null;
+const RETRO_FIELDS = ["good", "hard", "gratitude", "love", "next"];
+
+function initRetroCursor() {
+  const d = currentJuneDay();
+  retroWeekIdx = WEEKS.findIndex(w => d >= w.startDay && d <= w.endDay);
+  if (retroWeekIdx < 0) retroWeekIdx = 0;
+}
+
+function renderRetroAndReport() {
+  renderRetro();
+  renderMonthReport();
+}
+
+function renderRetro() {
+  const w = WEEKS[retroWeekIdx];
+  document.getElementById("retroLabel").textContent =
+    `${w.label} · 6/${w.startDay}-${w.endDay}`;
+  const data = weeklyRetros[w.id] || {};
+  let totalChars = 0;
+  RETRO_FIELDS.forEach(f => {
+    const el = document.getElementById("retro-" + f);
+    if (document.activeElement !== el) el.value = data[f] || "";
+    totalChars += (data[f] || "").length;
+  });
+  document.getElementById("retroStat").textContent = `${totalChars} 字`;
+  document.getElementById("retroPrev").disabled = retroWeekIdx === 0;
+  document.getElementById("retroNext").disabled = retroWeekIdx === WEEKS.length - 1;
+}
+
+function bindRetroField(f) {
+  document.getElementById("retro-" + f).addEventListener("input", () => {
+    const w = WEEKS[retroWeekIdx];
+    const next = { ...(weeklyRetros[w.id] || {}) };
+    RETRO_FIELDS.forEach(field => {
+      const v = document.getElementById("retro-" + field).value;
+      if (v) next[field] = v; else delete next[field];
+    });
+    weeklyRetros[w.id] = next;
+    document.getElementById("retroStat").textContent =
+      `${Object.values(next).reduce((s,v) => s + (v?.length||0), 0)} 字`;
+    document.getElementById("retroSave").textContent = "未保存";
+    clearTimeout(retroSaveTimer);
+    retroSaveTimer = setTimeout(async () => {
+      try {
+        await saveWeeklyRetro(w.id, next);
+        const now = new Date();
+        document.getElementById("retroSave").textContent =
+          `已保存 ${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
+      } catch(e) { document.getElementById("retroSave").textContent = "保存失败"; }
+    }, 800);
+  });
+}
+RETRO_FIELDS.forEach(bindRetroField);
+
+document.getElementById("retroPrev").addEventListener("click", () => {
+  if (retroWeekIdx > 0) { retroWeekIdx--; renderRetro(); }
+});
+document.getElementById("retroNext").addEventListener("click", () => {
+  if (retroWeekIdx < WEEKS.length - 1) { retroWeekIdx++; renderRetro(); }
+});
+
+function renderMonthReport() {
+  // Compute stats from existing data
+  // 1) Total daily plan tasks done
+  let totalDone = 0, totalTotal = 0;
+  for (let d = 1; d <= 30; d++) {
+    for (const p of ["luke","judy"]) {
+      const items = getDailyItems(p, d);
+      totalDone += items.filter(i => i.done).length;
+      totalTotal += items.length;
+    }
+  }
+  const taskPct = totalTotal > 0 ? Math.round((totalDone / totalTotal) * 100) : 0;
+
+  // 2) Habit completion days (count of completed cells across all habit cats)
+  let habitDone = 0;
+  const habitCats = ["bible-luke","bible-yx","devo-luke","devo-yx","sport-luke","sport-yx","trade","cafe","network"];
+  for (const cat of habitCats) {
+    for (let d = 1; d <= 30; d++) {
+      const ds = `2026-06-${String(d).padStart(2,"0")}`;
+      if (habits[`${cat}-${ds}`]) habitDone++;
+    }
+  }
+
+  // 3) Total time logged (24h wheel)
+  let totalMins = 0;
+  for (const k of Object.keys(timeLogs)) {
+    if (Array.isArray(timeLogs[k])) {
+      totalMins += timeLogs[k].reduce((s, l) => s + (l.mins||0), 0);
+    }
+  }
+
+  // 4) Total memories
+  const memCount = memories.length;
+
+  // 5) Prayer stats
+  const ansCount = prayers.filter(p => p.answered).length;
+
+  // 6) Med adherence (Judy)
+  const medDone = Object.values(meds.taken || {}).filter(v => v).length;
+  const medExpected = (() => {
+    if (!meds.startDate) return 0;
+    const start = new Date(meds.startDate + "T00:00");
+    const today = todayDateObj();
+    const offset = daysBetween(start, today) + 1; // include today
+    return Math.max(0, Math.min(21, offset));
+  })();
+
+  // 7) Total score (sum of base + bonuses)
+  const lukeTotalPts = computeMonthPoints("luke") + sumBonuses("luke");
+  const judyTotalPts = computeMonthPoints("judy") + sumBonuses("judy");
+
+  // 8) Most common mood
+  const moodCounts = {};
+  for (const v of Object.values(moods || {})) {
+    moodCounts[v] = (moodCounts[v] || 0) + 1;
+  }
+  const topMood = Object.entries(moodCounts).sort((a, b) => b[1] - a[1])[0];
+  const topMoodStr = topMood ? `${topMood[0]} × ${topMood[1]}` : "—";
+
+  // 9) Memory snapshot of top activity from time wheel
+  const actTotals = {};
+  for (const arr of Object.values(timeLogs || {})) {
+    if (!Array.isArray(arr)) continue;
+    for (const l of arr) {
+      actTotals[l.activity] = (actTotals[l.activity] || 0) + (l.mins || 0);
+    }
+  }
+  const topAct = Object.entries(actTotals).sort((a, b) => b[1] - a[1])[0];
+  const topActStr = topAct ? `${topAct[0]}（${fmtHM(topAct[1])}）` : "—";
+
+  const fmtHours = m => {
+    const h = Math.floor(m / 60);
+    return h > 0 ? `${h}h` : `${m}m`;
+  };
+
+  const stats = [
+    { label: "任务完成率", value: `${taskPct}<span class="small">%</span>` },
+    { label: "Luke / Judy 积分", value: `${lukeTotalPts}<span class="small"> / </span>${judyTotalPts}` },
+    { label: "打卡次数", value: `${habitDone}<span class="small">次</span>` },
+    { label: "记录的时间", value: `${fmtHours(totalMins)}` },
+    { label: "回忆数量", value: `${memCount}<span class="small">段</span>` },
+    { label: "应允的祷告", value: `${ansCount}<span class="small">条</span>` },
+    { label: "Judy 服药", value: medExpected > 0 ? `${medDone}<span class="small"> / ${medExpected}</span>` : "—" },
+    { label: "最常心情", value: `<span style="font-size:18px;">${topMoodStr}</span>` }
+  ];
+  document.getElementById("reportStats").innerHTML = stats.map(s =>
+    `<div class="report-stat"><div class="rs-label">${s.label}</div><div class="rs-value">${s.value}</div></div>`
+  ).join("");
+
+  // Headline summary
+  let headline = "六月还在继续 — ";
+  if (totalDone > 0) headline += `已完成 ${totalDone} 件小事`;
+  if (topAct) headline += `，时间投入最多的是 ${topActStr}`;
+  if (memCount > 0) headline += `，记下了 ${memCount} 段值得记住的瞬间`;
+  if (ansCount > 0) headline += `，神应允了 ${ansCount} 条祷告 🙏`;
+  headline += "。";
+  document.getElementById("reportHeadline").textContent = headline;
+}
+
+initRetroCursor();
+
 // ===== BONUSES UI =====
 function openBonusManager() {
   const list = bonuses.length === 0
@@ -4873,13 +5784,18 @@ onAuthStateChanged(auth, async user => {
         bonuses = Array.isArray(data.bonuses) ? data.bonuses : [];
         seedsApplied = data.seedsApplied || {};
         timeLogs = data.timeLogs || {};
+        prayers = Array.isArray(data.prayers) ? data.prayers : [];
+        devotionNotes = data.devotionNotes || {};
+        memories = Array.isArray(data.memories) ? data.memories : [];
+        weeklyRetros = data.weeklyRetros || {};
       } else {
         events = [...DEFAULT_EVENTS];
         habits = {}; moods = {}; photos = [];
         weeklyPlans = {}; dailyPlans = {}; dateMessages = {};
         meds = { startDate: "", taken: {} };
         bonuses = []; seedsApplied = {}; timeLogs = {};
-        await setDoc(docRef, { events, habits, moods, photos, weeklyPlans, dailyPlans, dateMessages, meds, bonuses, seedsApplied, timeLogs, createdAt: new Date().toISOString() });
+        prayers = []; devotionNotes = {}; memories = []; weeklyRetros = {};
+        await setDoc(docRef, { events, habits, moods, photos, weeklyPlans, dailyPlans, dateMessages, meds, bonuses, seedsApplied, timeLogs, prayers, devotionNotes, memories, weeklyRetros, createdAt: new Date().toISOString() });
       }
       // Auto-seed Judy's birthday bonus once (won't re-apply if user deletes)
       if (!seedsApplied.judyBirthdayBonus) {
@@ -4904,6 +5820,9 @@ onAuthStateChanged(auth, async user => {
       renderPlanners();
       renderMeds();
       renderTimeWheels();
+      renderSpiritual();
+      renderMemories();
+      renderRetroAndReport();
     }, err => {
       console.error("Snapshot error:", err);
       setSync("error", "同步错误: " + err.message);
