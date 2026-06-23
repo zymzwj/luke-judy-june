@@ -3505,7 +3505,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, setDoc, updateDoc, onSnapshot, deleteField }
+import { getFirestore, doc, setDoc, updateDoc, onSnapshot, deleteField, collection, addDoc, deleteDoc }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // ============================================================
@@ -3536,6 +3536,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const docRef = doc(db, "couples", COUPLE_ID);
+const memoriesColRef = collection(db, "couples", COUPLE_ID, "memories");
 
 const CAT_NAMES = {
   yuxin: "Judy",
@@ -3682,15 +3683,20 @@ async function saveDevotionNote(dateStr, text) {
     else await updateDoc(docRef, { [`devotionNotes.${dateStr}`]: deleteField() });
   } catch(e) { console.error("devotion save", e); throw e; }
 }
-async function saveMemories(arr) {
-  try { await setDoc(docRef, { memories: arr }, { merge: true }); }
+// Memories stored as individual docs in a subcollection (avoids bloating main doc)
+async function addMemoryDoc(memData) {
+  try { return await addDoc(memoriesColRef, memData); }
   catch(e) {
-    console.error("memories save", e);
+    console.error("memory add", e);
     if (String(e.message || "").includes("longer than")) {
-      alert("回忆数据太大了（超过 1MB）— 删掉一些旧的或减少照片再试");
+      alert("这张照片太大了，请选小一点的或换张图");
     }
     throw e;
   }
+}
+async function deleteMemoryDoc(id) {
+  try { await deleteDoc(doc(db, "couples", COUPLE_ID, "memories", id)); }
+  catch(e) { console.error("memory delete", e); throw e; }
 }
 async function saveWeeklyRetro(weekId, obj) {
   try {
@@ -5670,7 +5676,8 @@ function renderMemories() {
     grid.innerHTML = `<div class="memory-empty">还没有回忆 — 点上面的按钮加第一段</div>`;
     return;
   }
-  const sorted = [...memories].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  // Chronological order: oldest first (story timeline)
+  const sorted = [...memories].sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
   grid.innerHTML = sorted.map(m => {
     const d = m.createdAt ? new Date(m.createdAt) : new Date();
     const dateLabel = `${d.getMonth()+1}月${d.getDate()}日 · ${["周日","周一","周二","周三","周四","周五","周六"][d.getDay()]}`;
@@ -5721,17 +5728,12 @@ document.getElementById("memSaveBtn").addEventListener("click", async () => {
   if (!text && !memDraftPhoto) { alert("至少要有文字或照片"); return; }
   const dateVal = memDate.value;
   const createdAt = dateVal ? new Date(dateVal + "T12:00").getTime() : Date.now();
-  const m = {
-    id: "m-" + Date.now(),
-    text,
-    photo: memDraftPhoto,
-    createdAt
-  };
-  const next = [...memories, m];
-  memories = next;
+  const m = { text, photo: memDraftPhoto, createdAt };
   memModal.classList.remove("show");
+  // Subcollection will trigger snapshot → re-render; do an optimistic local push first
+  memories = [...memories, { ...m, id: "tmp-" + Date.now() }];
   renderMemories();
-  await saveMemories(next);
+  await addMemoryDoc(m);
 });
 
 document.getElementById("memoryGrid").addEventListener("click", async e => {
@@ -5739,10 +5741,10 @@ document.getElementById("memoryGrid").addEventListener("click", async e => {
   if (!del) return;
   const id = del.dataset.id;
   if (!confirm("删除这段回忆？")) return;
-  const next = memories.filter(m => m.id !== id);
-  memories = next;
+  // optimistic remove
+  memories = memories.filter(m => m.id !== id);
   renderMemories();
-  await saveMemories(next);
+  await deleteMemoryDoc(id);
 });
 
 memModal.addEventListener("click", e => {
@@ -6166,6 +6168,7 @@ signinBtn.addEventListener("click", async () => {
 signoutBtn.addEventListener("click", () => signOut(auth));
 
 let snapshotUnsub = null;
+let memoriesUnsub = null;
 onAuthStateChanged(auth, async user => {
   if (user) {
     signinOverlay.style.display = "none";
@@ -6178,6 +6181,14 @@ onAuthStateChanged(auth, async user => {
     userAvatar.src = user.photoURL || "";
     userAvatar.style.display = user.photoURL ? "block" : "none";
     userName.textContent = user.displayName || user.email || "已登录";
+
+    // Subscribe to memories subcollection (separate from main doc so it stays small)
+    if (memoriesUnsub) memoriesUnsub();
+    memoriesUnsub = onSnapshot(memoriesColRef, snap => {
+      memories = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderMemories();
+      renderRetroAndReport();
+    }, err => console.warn("memories snapshot err", err));
 
     // Subscribe to shared doc
     if (snapshotUnsub) snapshotUnsub();
@@ -6198,7 +6209,7 @@ onAuthStateChanged(auth, async user => {
         timeLogs = data.timeLogs || {};
         prayers = Array.isArray(data.prayers) ? data.prayers : [];
         devotionNotes = data.devotionNotes || {};
-        memories = Array.isArray(data.memories) ? data.memories : [];
+        // Memories now live in subcollection — main doc field is deprecated/migrated
         weeklyRetros = data.weeklyRetros || {};
         birthdayLetter = data.birthdayLetter || "";
       } else {
@@ -6210,6 +6221,20 @@ onAuthStateChanged(auth, async user => {
         prayers = []; devotionNotes = {}; memories = []; weeklyRetros = {};
         await setDoc(docRef, { events, habits, moods, photos, weeklyPlans, dailyPlans, dateMessages, meds, bonuses, seedsApplied, timeLogs, prayers, devotionNotes, memories, weeklyRetros, createdAt: new Date().toISOString() });
       }
+      // One-time migration: move memories from main doc to subcollection (avoids 1MB doc bloat)
+      if (Array.isArray(data && data.memories) && data.memories.length > 0 && !seedsApplied.memoriesMigratedV2) {
+        try {
+          for (const mem of data.memories) {
+            const { id, ...rest } = mem;
+            try { await addDoc(memoriesColRef, rest); } catch(e) { console.warn("migrate memory", e); }
+          }
+          await updateDoc(docRef, {
+            memories: deleteField(),
+            "seedsApplied.memoriesMigratedV2": true
+          });
+        } catch(e) { console.warn("memory migration failed", e); }
+      }
+
       // Auto-seed Judy's birthday bonus once (won't re-apply if user deletes)
       if (!seedsApplied.judyBirthdayBonus) {
         try {
@@ -6243,6 +6268,7 @@ onAuthStateChanged(auth, async user => {
     });
   } else {
     if (snapshotUnsub) { snapshotUnsub(); snapshotUnsub = null; }
+    if (memoriesUnsub) { memoriesUnsub(); memoriesUnsub = null; }
     signinOverlay.style.display = "flex";
     mainContent.style.display = "none";
     userBadge.style.display = "none";
