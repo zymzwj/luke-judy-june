@@ -3586,6 +3586,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const docRef = doc(db, "couples", COUPLE_ID);
 const memoriesColRef = collection(db, "couples", COUPLE_ID, "memories");
+const heroPhotosColRef = collection(db, "couples", COUPLE_ID, "heroPhotos");
 
 const CAT_NAMES = {
   yuxin: "Judy",
@@ -6300,6 +6301,20 @@ onAuthStateChanged(auth, async user => {
         // Memories now live in subcollection — main doc field is deprecated/migrated
         weeklyRetros = data.weeklyRetros || {};
         birthdayLetter = data.birthdayLetter || "";
+
+        // One-time migration: move memories from main doc to subcollection (avoids 1MB doc bloat)
+        if (Array.isArray(data.memories) && data.memories.length > 0 && !seedsApplied.memoriesMigratedV2) {
+          try {
+            for (const mem of data.memories) {
+              const { id, ...rest } = mem;
+              try { await addDoc(memoriesColRef, rest); } catch(e) { console.warn("migrate memory", e); }
+            }
+            await updateDoc(docRef, {
+              memories: deleteField(),
+              "seedsApplied.memoriesMigratedV2": true
+            });
+          } catch(e) { console.warn("memory migration failed", e); }
+        }
       } else {
         events = [...DEFAULT_EVENTS];
         habits = {}; moods = {}; photos = [];
@@ -6308,19 +6323,6 @@ onAuthStateChanged(auth, async user => {
         bonuses = []; seedsApplied = {}; timeLogs = {};
         prayers = []; devotionNotes = {}; memories = []; weeklyRetros = {};
         await setDoc(docRef, { events, habits, moods, photos, weeklyPlans, dailyPlans, dateMessages, meds, bonuses, seedsApplied, timeLogs, prayers, devotionNotes, memories, weeklyRetros, createdAt: new Date().toISOString() });
-      }
-      // One-time migration: move memories from main doc to subcollection (avoids 1MB doc bloat)
-      if (Array.isArray(data && data.memories) && data.memories.length > 0 && !seedsApplied.memoriesMigratedV2) {
-        try {
-          for (const mem of data.memories) {
-            const { id, ...rest } = mem;
-            try { await addDoc(memoriesColRef, rest); } catch(e) { console.warn("migrate memory", e); }
-          }
-          await updateDoc(docRef, {
-            memories: deleteField(),
-            "seedsApplied.memoriesMigratedV2": true
-          });
-        } catch(e) { console.warn("memory migration failed", e); }
       }
 
       // Auto-seed Judy's birthday bonus once (won't re-apply if user deletes)
