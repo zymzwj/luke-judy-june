@@ -167,7 +167,7 @@ export default function PhotoCarousel() {
           {photos.map((photo, i) => (
             <div
               key={i}
-              className={`carousel-slide${i === idx ? " active" : ""}`}
+              className={`carousel-slide${i === idx ? " active" : ""}${i === idx ? ` ken-burns-${(i % 3) + 1}` : ""}`}
               style={{ backgroundImage: `url(${photo})` }}
             />
           ))}
