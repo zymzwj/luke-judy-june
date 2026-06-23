@@ -854,6 +854,48 @@
   .dur-popup .dur-btn.primary { background: var(--ink); color: white; border-color: var(--ink); }
   .dur-popup .dur-btn.danger { color: #c14848; }
 
+  /* Birthday music control (mini, top-right) */
+  .bd-music {
+    position: fixed;
+    top: 54px;
+    right: 16px;
+    z-index: 45;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 14px 6px 10px;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--ink);
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 500;
+    box-shadow: 0 6px 20px -8px rgba(120, 80, 60, 0.2);
+    transition: transform 0.15s;
+    user-select: none;
+  }
+  .bd-music:hover { transform: translateY(-1px); }
+  .bd-music.show { display: inline-flex; }
+  .bd-music-icon {
+    font-size: 14px;
+    line-height: 1;
+  }
+  .bd-music.playing .bd-music-icon {
+    animation: bdMusicPulse 2s ease-in-out infinite;
+  }
+  @keyframes bdMusicPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.15); opacity: 0.75; }
+  }
+  .bd-music-label {
+    font-size: 11px;
+    color: var(--ink-soft);
+    letter-spacing: 0.3px;
+  }
+
   /* ========== JUDY'S BIRTHDAY SURPRISES ========== */
   .birthday-splash {
     position: fixed;
@@ -2899,6 +2941,13 @@
 </style>
 </head>
 <body>
+
+<!-- BIRTHDAY MUSIC (only shown on Judy's birthday) -->
+<audio id="bdAudio" src="birthday-song.mp3" preload="auto" loop></audio>
+<button class="bd-music" id="bdMusicCtrl" title="点击 暂停 / 播放">
+  <span class="bd-music-icon" id="bdMusicIcon">♪</span>
+  <span class="bd-music-label" id="bdMusicLabel">为欣欣播放</span>
+</button>
 
 <!-- BIRTHDAY SPLASH (only shown on Judy's birthday, once per day per device) -->
 <div class="birthday-splash" id="birthdaySplash">
@@ -5986,6 +6035,7 @@ function applyBirthdayMode() {
   document.body.classList.toggle("birthday-mode", birthday);
   document.getElementById("bdFloating").style.display = birthday ? "block" : "none";
   document.getElementById("pixelAvatars").classList.toggle("birthday", birthday);
+  document.getElementById("bdMusicCtrl").classList.toggle("show", birthday);
 
   // Override the daily verse with a birthday-themed one
   if (birthday) {
@@ -6049,6 +6099,42 @@ document.getElementById("bdLetterSave").addEventListener("click", async () => {
   await saveBirthdayLetter(text);
 });
 
+// Birthday music
+const bdAudio = document.getElementById("bdAudio");
+const bdMusicCtrl = document.getElementById("bdMusicCtrl");
+const bdMusicIcon = document.getElementById("bdMusicIcon");
+const bdMusicLabel = document.getElementById("bdMusicLabel");
+let bdMusicReady = true;
+bdAudio.volume = 0.5;
+bdAudio.addEventListener("error", () => {
+  bdMusicReady = false;
+  bdMusicCtrl.style.display = "none"; // no song file — hide control
+});
+function updateMusicUI() {
+  const playing = !bdAudio.paused;
+  bdMusicCtrl.classList.toggle("playing", playing);
+  bdMusicIcon.textContent = playing ? "♫" : "♪";
+  bdMusicLabel.textContent = playing ? "正在为欣欣播放" : "点这里继续播放";
+}
+async function tryPlayMusic() {
+  if (!bdMusicReady) return;
+  try {
+    await bdAudio.play();
+    updateMusicUI();
+  } catch(e) {
+    // autoplay blocked — user can click the music control manually
+    console.warn("autoplay blocked", e);
+    updateMusicUI();
+  }
+}
+bdMusicCtrl.addEventListener("click", () => {
+  if (!bdMusicReady) return;
+  if (bdAudio.paused) tryPlayMusic();
+  else { bdAudio.pause(); updateMusicUI(); }
+});
+bdAudio.addEventListener("play", updateMusicUI);
+bdAudio.addEventListener("pause", updateMusicUI);
+
 // Splash (shown once per day per device)
 function maybeShowBirthdaySplash() {
   const t = new Date();
@@ -6060,6 +6146,8 @@ function maybeShowBirthdaySplash() {
     document.getElementById("bdEnterBtn").onclick = () => {
       splash.classList.remove("show");
       try { localStorage.setItem(key, "1"); } catch(e) {}
+      // Triggered by user click → autoplay restriction satisfied
+      if (isJudyBirthdayToday()) tryPlayMusic();
     };
     // Auto-dismiss after 30s as fallback
     setTimeout(() => {
