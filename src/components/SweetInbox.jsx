@@ -96,16 +96,11 @@ export default function SweetInbox() {
               <span>{m.ts ? new Date(m.ts).toLocaleString("zh-CN") : ""}</span>
             </div>
             <div className="im-text">{m.text}</div>
-            <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
-              {!m.read && (
-                <button className="im-mark" onClick={() => handleMarkRead(m.id)}>
-                  标为已读
-                </button>
-              )}
-              <button className="im-del" onClick={() => handleDelete(m.id)}>
-                删除
+            {!m.read && (
+              <button className="im-mark" onClick={() => handleMarkRead(m.id)}>
+                ✓ 已读
               </button>
-            </div>
+            )}
           </div>
         ))}
       </div>
