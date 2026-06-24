@@ -30,6 +30,7 @@ import Celebration from "./components/Celebration.jsx";
 import useTimeGradient from "./hooks/useTimeGradient.js";
 import useScrollReveal from "./hooks/useScrollReveal.js";
 import { BookIcon, HeartIcon, PenIcon, CalendarIcon, ChartIcon, CoffeeIcon } from "./components/HandIcons.jsx";
+import SectionNav from "./components/SectionNav.jsx";
 
 export default function App() {
   const { user } = useAuth();
@@ -60,6 +61,7 @@ export default function App() {
       <PixelAvatars birthday={birthdayActive} />
       <ThemeToggle />
       <Celebration />
+      <SectionNav />
 
       <div className="container" id="mainContent">
         <PhotoCarousel />
@@ -72,58 +74,58 @@ export default function App() {
 
           <div className="main-col">
             {/* Spiritual Growth */}
-            <div className="section reveal">
+            <div className="section reveal" id="sec-spiritual">
               <h2 className="section-title"><BookIcon size={28} /> 灵命成长 <span className="en">Spiritual Life</span></h2>
               <p className="section-desc">祷告事项记录 + 每日灵修反思。一起在主里成长。</p>
               <Spiritual />
             </div>
 
             {/* Medication Tracker */}
-            <div className="section reveal">
+            <div className="section reveal" id="sec-med">
               <MedTracker />
             </div>
 
             {/* Time Wheels */}
-            <div className="section reveal">
+            <div className="section reveal" id="sec-time">
               <h2 className="section-title"><ChartIcon size={28} /> 今日 24 小时 <span className="en">Time Wheel</span></h2>
               <p className="section-desc">写下今天每件事花了多少时间（不必都在今日清单里）。支持 "打游戏 1h" / "学习 2.5h" / "工作 8h30m" 这种自然写法。</p>
               <TimeWheel day={plannerDay} />
             </div>
 
             {/* Habit Tracker */}
-            <div className="section reveal">
+            <div className="section reveal" id="sec-habit">
               <h2 className="section-title">每日打卡 <span className="en">Daily Tracker</span></h2>
               <p className="section-desc">点击每个小格子标记完成。颜色代表对应的目标类别。</p>
               <HabitTracker />
             </div>
 
             {/* Weekly Plan + Daily Plan */}
-            <div className="section reveal">
+            <div className="section reveal" id="sec-plan">
               <h2 className="section-title"><PenIcon size={28} /> 本周 &amp; 今日计划 <span className="en">Plans</span></h2>
               <p className="section-desc">每周一个方向，每天具体清单。打勾的每一项 +1 分，全部完成 +3 分奖励。</p>
               <Planner onDayChange={setPlannerDay} />
             </div>
 
             {/* Calendar */}
-            <div className="section reveal">
+            <div className="section reveal" id="sec-cal">
               <h2 className="section-title"><CalendarIcon size={28} /> 六月日历 <span className="en">June Calendar</span></h2>
               <Calendar />
             </div>
 
             {/* Memory Wall */}
-            <div className="section reveal">
+            <div className="section reveal" id="sec-memory">
               <h2 className="section-title"><HeartIcon size={28} /> 我们的故事 <span className="en">Memory Wall</span></h2>
               <p className="section-desc">把值得记住的瞬间写下来，配一张照片更好。一年后回看是无价之宝。</p>
               <MemoryWall />
             </div>
 
             {/* Sweet Inbox */}
-            <div className="section reveal">
+            <div className="section reveal" id="sec-inbox">
               <SweetInbox />
             </div>
 
             {/* Bucket List + Monthly Goals */}
-            <div className="section reveal">
+            <div className="section reveal" id="sec-bucket">
               <div className="bg-grid">
                 <BucketList />
                 <MonthlyGoals />
@@ -131,7 +133,7 @@ export default function App() {
             </div>
 
             {/* Weekly Retro + Month Report + Insights */}
-            <div className="section reveal">
+            <div className="section reveal" id="sec-retro">
               <h2 className="section-title"><PenIcon size={28} /> 复盘 &amp; 月报 <span className="en">Reflection &amp; Report</span></h2>
               <p className="section-desc">每周日花几分钟回顾这一周，月底自动生成你俩的六月总结。</p>
               <div className="retro-grid">
@@ -145,7 +147,7 @@ export default function App() {
             </div>
 
             {/* Time Chart */}
-            <div className="section reveal">
+            <div className="section reveal" id="sec-timechart">
               <TimeChart plannerDay={plannerDay} />
             </div>
           </div>

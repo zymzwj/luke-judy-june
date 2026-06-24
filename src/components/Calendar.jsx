@@ -1,9 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useData } from "../firebase/dataContext.jsx";
 import { CAT_NAMES } from "../data/calendar.js";
 
 const ALL_CATS = ["yuxin", "date", "luke", "special", "growth"];
-const MOOD_OPTIONS = ["😊", "😍", "🥰", "🎉", "✨", "❤️", "🙂", "😐", "😴", "😤", "🥲", "😔"];
+const MOOD_OPTIONS = [
+  "😊", "😍", "🥰", "🎉", "✨", "❤️",
+  "😁", "🤗", "😋", "🥳", "🤩", "😎",
+  "🙂", "😌", "😴", "🤔", "😐", "😶",
+  "😢", "😭", "😤", "😠", "🥲", "😔",
+  "😰", "🤒", "🤯", "💪", "🙏", "💕",
+];
 const DAY_HEADERS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 const DOW_NAMES = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
 const FIRST_DAY = 1; // June 1 2026 = Monday (day-of-week index)
@@ -22,7 +29,7 @@ function parseDow(ds) {
 
 // ---------- Sub-components ----------
 
-function MoodPicker({ date, anchor, onClose }) {
+function MoodPicker({ date, rect, onClose }) {
   const { updateField } = useData();
   const ref = useRef(null);
 
@@ -36,15 +43,16 @@ function MoodPicker({ date, anchor, onClose }) {
     return () => document.removeEventListener("click", onClick);
   }, [onClose]);
 
-  // Position near anchor
   const style = useMemo(() => {
-    if (!anchor) return {};
-    const r = anchor.getBoundingClientRect();
-    return {
-      left: r.left + window.scrollX - 100,
-      top: r.bottom + window.scrollY + 6
-    };
-  }, [anchor]);
+    if (!rect) return {};
+    const pw = 230, ph = 260;
+    let left = rect.left + (rect.right - rect.left) / 2 - pw / 2;
+    let top = rect.bottom + 6;
+    if (left < 8) left = 8;
+    if (left + pw > window.innerWidth - 8) left = window.innerWidth - pw - 8;
+    if (top + ph > window.innerHeight - 10) top = rect.top - ph - 6;
+    return { left, top };
+  }, [rect]);
 
   const pick = async (emoji) => {
     await updateField(`moods.${date}`, emoji);
@@ -65,7 +73,7 @@ function MoodPicker({ date, anchor, onClose }) {
       <button
         id="moodClear"
         onClick={clear}
-        style={{ width: "100%", fontSize: 12, padding: "4px 0", cursor: "pointer", background: "none", border: "none", color: "var(--ink-soft)" }}
+        style={{ gridColumn: "1 / -1", fontSize: 12, padding: "4px 0", cursor: "pointer", background: "none", border: "none", color: "var(--ink-soft)" }}
       >
         清除
       </button>
@@ -73,7 +81,7 @@ function MoodPicker({ date, anchor, onClose }) {
   );
 }
 
-function NotePopup({ date, anchor, onClose }) {
+function NotePopup({ date, rect, onClose }) {
   const { data, updateField } = useData();
   const [text, setText] = useState(data.dateMessages[date] || "");
   const ref = useRef(null);
@@ -94,26 +102,15 @@ function NotePopup({ date, anchor, onClose }) {
     return () => document.removeEventListener("click", onClick);
   }, [onClose]);
 
-  // Position near anchor, keep on-screen
   const style = useMemo(() => {
-    if (!anchor) return {};
-    const r = anchor.getBoundingClientRect();
-    return {
-      left: r.left + window.scrollX,
-      top: r.bottom + window.scrollY + 6
-    };
-  }, [anchor]);
-
-  // Adjust position after render
-  useEffect(() => {
-    if (!ref.current) return;
-    const el = ref.current;
-    const pr = el.getBoundingClientRect();
-    const overflow = pr.right - window.innerWidth + 12;
-    if (overflow > 0) {
-      el.style.left = (parseFloat(el.style.left) - overflow) + "px";
-    }
-  }, []);
+    if (!rect) return {};
+    let left = rect.left;
+    let top = rect.bottom + 6;
+    if (left + 280 > window.innerWidth) left = window.innerWidth - 288;
+    if (left < 8) left = 8;
+    if (top + 180 > window.innerHeight) top = rect.top - 186;
+    return { left, top };
+  }, [rect]);
 
   const save = async () => {
     const trimmed = text.trim();
@@ -238,7 +235,7 @@ function EventModal({ date, onClose }) {
   );
 }
 
-function DayTooltip({ date, anchor, events, moods, dateMessages, activeFilters }) {
+function DayTooltip({ date, rect, events, moods, dateMessages, activeFilters }) {
   const ref = useRef(null);
 
   const dayEvents = useMemo(() =>
@@ -253,19 +250,18 @@ function DayTooltip({ date, anchor, events, moods, dateMessages, activeFilters }
   const label = parseDateLabel(date);
   const dow = parseDow(date);
 
-  // Position to the right of cell, or left if overflows
   const style = useMemo(() => {
-    if (!anchor) return {};
-    const r = anchor.getBoundingClientRect();
+    if (!rect) return {};
     const tw = 260;
-    const scrollY = window.scrollY;
-    let left = r.left + window.scrollX + r.width + 10;
-    if (left + tw > window.scrollX + window.innerWidth - 10) {
-      left = r.left + window.scrollX - tw - 10;
+    let left = rect.right + 10;
+    if (left + tw > window.innerWidth - 10) {
+      left = rect.left - tw - 10;
     }
     if (left < 10) left = 10;
-    return { left, top: r.top + scrollY };
-  }, [anchor]);
+    let top = rect.top;
+    if (top + 200 > window.innerHeight) top = window.innerHeight - 210;
+    return { left, top };
+  }, [rect]);
 
   return (
     <div className="day-tooltip show" ref={ref} style={style}>
@@ -342,9 +338,9 @@ export default function Calendar() {
 
   const [activeFilters, setActiveFilters] = useState(() => new Set(ALL_CATS));
   const [modalDate, setModalDate] = useState(null); // null = closed, string = open for that date
-  const [moodPicker, setMoodPicker] = useState(null); // { date, anchor }
-  const [notePopup, setNotePopup] = useState(null); // { date, anchor }
-  const [tooltip, setTooltip] = useState(null); // { date, anchor }
+  const [moodPicker, setMoodPicker] = useState(null); // { date, rect }
+  const [notePopup, setNotePopup] = useState(null); // { date, rect }
+  const [tooltip, setTooltip] = useState(null); // { date, rect }
 
   // Filter toggle
   const toggleFilter = useCallback((cat) => {
@@ -453,7 +449,7 @@ export default function Calendar() {
                     if (e.target.closest(".mood-btn") || e.target.closest(".msg-btn")) return;
                     setModalDate(cell.date);
                   }}
-                  onMouseEnter={(e) => setTooltip({ date: cell.date, anchor: e.currentTarget })}
+                  onMouseEnter={(e) => { const r = e.currentTarget.getBoundingClientRect(); setTooltip({ date: cell.date, rect: { top: r.top, bottom: r.bottom, left: r.left, right: r.right } }); }}
                   onMouseLeave={() => setTooltip(null)}
                 >
                   <div className="cell-head">
@@ -466,8 +462,10 @@ export default function Calendar() {
                         e.stopPropagation();
                         setNotePopup(null);
                         setTooltip(null);
+                        const cellEl = e.currentTarget.closest(".cal-cell");
+                        const r = cellEl.getBoundingClientRect();
                         setMoodPicker(prev =>
-                          prev?.date === cell.date ? null : { date: cell.date, anchor: e.currentTarget }
+                          prev?.date === cell.date ? null : { date: cell.date, rect: { top: r.top, bottom: r.bottom, left: r.left, right: r.right } }
                         );
                       }}
                     >
@@ -487,8 +485,9 @@ export default function Calendar() {
                       e.stopPropagation();
                       setMoodPicker(null);
                       setTooltip(null);
+                      const r2 = e.currentTarget.getBoundingClientRect();
                       setNotePopup(prev =>
-                        prev?.date === cell.date ? null : { date: cell.date, anchor: e.currentTarget }
+                        prev?.date === cell.date ? null : { date: cell.date, rect: { top: r2.top, bottom: r2.bottom, left: r2.left, right: r2.right } }
                       );
                     }}
                   >
@@ -508,34 +507,37 @@ export default function Calendar() {
         />
       </div>
 
-      {/* Mood Picker Popup */}
-      {moodPicker && (
+      {/* Mood Picker Popup — portal to body to escape transform containing block */}
+      {moodPicker && createPortal(
         <MoodPicker
           date={moodPicker.date}
-          anchor={moodPicker.anchor}
+          rect={moodPicker.rect}
           onClose={() => setMoodPicker(null)}
-        />
+        />,
+        document.body
       )}
 
       {/* Note Popup */}
-      {notePopup && (
+      {notePopup && createPortal(
         <NotePopup
           date={notePopup.date}
-          anchor={notePopup.anchor}
+          rect={notePopup.rect}
           onClose={() => setNotePopup(null)}
-        />
+        />,
+        document.body
       )}
 
       {/* Tooltip */}
-      {tooltip && (
+      {tooltip && createPortal(
         <DayTooltip
           date={tooltip.date}
-          anchor={tooltip.anchor}
+          rect={tooltip.rect}
           events={events}
           moods={moods}
           dateMessages={dateMessages}
           activeFilters={activeFilters}
-        />
+        />,
+        document.body
       )}
 
       {/* Event Modal */}

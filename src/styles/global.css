@@ -3090,13 +3090,13 @@
 
   /* Note popup */
   .note-popup {
-    position: absolute;
-    background: white;
+    position: fixed;
+    background: var(--card);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 12px;
     box-shadow: 0 12px 30px -6px rgba(0,0,0,0.18);
-    z-index: 70;
+    z-index: 100;
     display: none;
     width: 280px;
   }
@@ -3156,17 +3156,17 @@
   .mood-btn:hover { opacity: 1 !important; background: var(--bg-warm); transform: scale(1.1); }
 
   .mood-popup {
-    position: absolute;
-    background: white;
+    position: fixed;
+    background: var(--card);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 6px;
     box-shadow: 0 10px 30px -8px rgba(0,0,0,0.2);
-    z-index: 50;
+    z-index: 100;
     display: none;
     gap: 2px;
   }
-  .mood-popup.show { display: flex; flex-wrap: wrap; max-width: 220px; }
+  .mood-popup.show { display: grid; grid-template-columns: repeat(6, 1fr); max-width: 230px; }
   .mood-opt {
     font-size: 20px;
     padding: 4px 6px;
@@ -3191,14 +3191,14 @@
 
   /* Tooltip */
   .day-tooltip {
-    position: absolute;
+    position: fixed;
     background: var(--ink);
     color: white;
     padding: 10px 14px;
     border-radius: 10px;
     font-size: 12px;
     line-height: 1.5;
-    z-index: 60;
+    z-index: 100;
     max-width: 280px;
     min-width: 180px;
     box-shadow: 0 12px 30px -6px rgba(0,0,0,0.3);
@@ -3407,6 +3407,59 @@
   }
   .legend-mini-item { display: flex; align-items: center; gap: 5px; }
   .legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+
+  /* ========== SECTION NAV (left sidebar) ========== */
+  .section-nav {
+    position: fixed;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 55;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 8px 4px;
+    box-shadow: 0 4px 16px -4px rgba(0,0,0,0.1);
+  }
+  .section-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border: none;
+    background: transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .section-nav-item:hover {
+    background: var(--hover);
+    color: var(--ink);
+  }
+  .section-nav-item.active {
+    background: var(--rose-bg);
+    color: var(--rose);
+    font-weight: 600;
+  }
+  .section-nav-icon { font-size: 14px; flex-shrink: 0; }
+  .section-nav-label { overflow: hidden; max-width: 0; transition: max-width 0.25s ease; }
+  .section-nav:hover .section-nav-label { max-width: 80px; }
+  .section-nav-item.active .section-nav-label { max-width: 80px; }
+
+  @media (max-width: 1400px) {
+    .section-nav { left: 4px; padding: 6px 3px; }
+    .section-nav-item { padding: 5px 8px; }
+  }
+  @media (max-width: 1100px) {
+    .section-nav { display: none; }
+  }
 
   /* ========== DARK MODE TOGGLE ========== */
   .theme-toggle {
