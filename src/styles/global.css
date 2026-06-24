@@ -3320,6 +3320,7 @@
     font-weight: 600;
   }
   .form-row { margin-bottom: 14px; }
+  .form-row-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .form-row label {
     display: block;
     font-size: 11px;

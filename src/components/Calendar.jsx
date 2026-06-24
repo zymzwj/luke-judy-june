@@ -196,20 +196,22 @@ function EventModal({ date, onClose }) {
     <div className="modal-backdrop show" onClick={onBackdropClick}>
       <div className="modal">
         <h3>添加事项</h3>
-        <label>
-          日期
-          <input type="date" value={formDate} onChange={e => setFormDate(e.target.value)} />
-        </label>
-        <label>
-          分类
-          <select value={cat} onChange={e => setCat(e.target.value)}>
-            {ALL_CATS.map(c => (
-              <option key={c} value={c}>{CAT_NAMES[c]}</option>
-            ))}
-          </select>
-        </label>
-        <label>
-          标题
+        <div className="form-row-grid">
+          <div className="form-row">
+            <label>日期</label>
+            <input type="date" value={formDate} onChange={e => setFormDate(e.target.value)} />
+          </div>
+          <div className="form-row">
+            <label>分类</label>
+            <select value={cat} onChange={e => setCat(e.target.value)}>
+              {ALL_CATS.map(c => (
+                <option key={c} value={c}>{CAT_NAMES[c]}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="form-row">
+          <label>标题</label>
           <input
             ref={titleRef}
             type="text"
@@ -217,18 +219,20 @@ function EventModal({ date, onClose }) {
             onChange={e => setTitle(e.target.value)}
             placeholder="事项标题"
           />
-        </label>
-        <label>
-          时间
-          <input type="text" value={time} onChange={e => setTime(e.target.value)} placeholder="如 19:00-20:30" />
-        </label>
-        <label>
-          备注
-          <input type="text" value={note} onChange={e => setNote(e.target.value)} placeholder="可选" />
-        </label>
+        </div>
+        <div className="form-row-grid">
+          <div className="form-row">
+            <label>时间</label>
+            <input type="text" value={time} onChange={e => setTime(e.target.value)} placeholder="如 19:00-20:30" />
+          </div>
+          <div className="form-row">
+            <label>备注</label>
+            <input type="text" value={note} onChange={e => setNote(e.target.value)} placeholder="可选" />
+          </div>
+        </div>
         <div className="modal-actions">
-          <button className="np-btn" onClick={onClose}>取消</button>
-          <button className="np-btn primary" onClick={saveEvent}>保存</button>
+          <button className="btn" onClick={onClose}>取消</button>
+          <button className="btn primary" onClick={saveEvent}>保存</button>
         </div>
       </div>
     </div>
