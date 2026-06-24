@@ -3748,3 +3748,222 @@
     background: var(--ink);
     color: var(--bg);
   }
+
+  /* ========== MOBILE RESPONSIVE (≤ 768px) ========== */
+  @media (max-width: 768px) {
+
+    /* --- Global / Container --- */
+    .container { padding: 16px 10px 80px; }
+    .main-layout { gap: 16px; }
+    .main-col { gap: 20px; }
+    .section { margin-bottom: 20px; }
+
+    /* --- Section Nav → bottom horizontal bar --- */
+    .section-nav {
+      display: flex !important;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      top: auto;
+      transform: none;
+      flex-direction: row;
+      border-radius: 16px 16px 0 0;
+      border-bottom: none;
+      padding: 4px 2px calc(4px + env(safe-area-inset-bottom));
+      gap: 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      justify-content: space-around;
+      box-shadow: 0 -4px 20px -4px rgba(0,0,0,0.1);
+    }
+    .section-nav::-webkit-scrollbar { display: none; }
+    .section-nav-item {
+      flex-direction: column;
+      padding: 4px 2px 2px;
+      gap: 1px;
+      min-width: 0;
+      flex: 1 0 auto;
+    }
+    .section-nav-icon { font-size: 18px; }
+    .section-nav-label {
+      max-width: none !important;
+      font-size: 9px;
+      overflow: visible;
+    }
+
+    /* --- Section headings --- */
+    .section-title { font-size: 22px; gap: 6px; flex-wrap: wrap; }
+    .section-title svg { width: 22px; height: 22px; }
+    .section-title .en { font-size: 13px; display: none; }
+    .section-desc { font-size: 12px; margin-bottom: 14px; }
+
+    /* --- Hero banner --- */
+    .hero { min-height: 220px; border-radius: 14px; margin-bottom: 20px; }
+    .hero-content h1 { font-size: 32px; }
+    .hero-sub { font-size: 12px; }
+    .hero-quote { font-size: 13px; }
+
+    /* --- Quote / Bible verse --- */
+    .quote-card { padding: 18px 14px; border-radius: 12px; }
+    .quote-text { font-size: 17px; }
+
+    /* --- User badge --- */
+    .user-badge {
+      top: 8px; right: 8px;
+      padding: 3px 8px 3px 3px;
+      font-size: 10px;
+    }
+    .user-badge img { width: 22px; height: 22px; }
+    .signout-link { font-size: 10px; }
+
+    /* --- Pixel avatars: hide on mobile --- */
+    .pixel-avatars { display: none !important; }
+
+    /* --- Theme toggle: above bottom nav --- */
+    .theme-toggle {
+      bottom: 60px; left: 10px;
+      width: 36px; height: 36px;
+      font-size: 16px;
+    }
+
+    /* --- Sidebar (date widget + scores) --- */
+    .sidebar {
+      position: static;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .sidebar-section {
+      padding: 12px;
+      border-radius: 12px;
+    }
+    .sidebar-section-title { font-size: 13px; }
+    .score-row .score-num span:first-child { font-size: 26px; }
+
+    /* --- Cards: reduce padding --- */
+    .card { padding: 14px; border-radius: 12px; }
+    .planner-card { padding: 14px 12px 12px; border-radius: 12px; }
+    .spirit-card { padding: 14px 12px; border-radius: 12px; }
+    .bg-card { padding: 14px 12px; border-radius: 12px; }
+    .retro-card, .report-card { padding: 14px 12px; border-radius: 12px; }
+    .wheel-card { padding: 14px 12px 10px; border-radius: 14px; }
+    .med-card { padding: 14px 12px; border-radius: 12px; }
+    .habit-card { padding: 14px 10px; border-radius: 12px; }
+    .insight-card { padding: 14px 12px; border-radius: 12px; }
+    .inbox-card { padding: 14px 12px; border-radius: 12px; }
+    .today-card { padding: 12px; border-radius: 12px; }
+
+    /* --- Med Tracker --- */
+    .med-head { gap: 8px; }
+    .med-grid { gap: 3px; }
+    .med-cell { border-radius: 6px; }
+    .med-cell .med-day { font-size: 9px; }
+    .med-cell .med-date { font-size: 7px; }
+    .med-prompt { font-size: 13px; }
+
+    /* --- Habit Tracker --- */
+    .habit-row { grid-template-columns: 1fr; gap: 6px; padding: 8px 0; }
+    .habit-week { gap: 2px; }
+    .habit-day .dnum { display: none; }
+    .habit-name { font-size: 12px; }
+    .habit-group-title { font-size: 14px; }
+
+    /* --- Calendar --- */
+    .layout { grid-template-columns: 1fr; gap: 14px; }
+    .cal-grid { gap: 2px; }
+    .cal-cell { min-height: 46px; padding: 2px; border-radius: 6px; }
+    .day-num { font-size: 12px; }
+    .cal-head { font-size: 9px; padding: 4px 0; letter-spacing: 0; }
+    .cell-head { margin-bottom: 1px; min-height: 14px; }
+    .dot { height: 3px; }
+    .msg-btn { font-size: 8px; padding: 1px 3px; }
+    .cal-cell .mood-emoji { font-size: 12px; }
+    .card-head h3 { font-size: 18px; }
+    .events { max-height: 300px; }
+    .event { padding: 10px 12px; }
+    .event-title { font-size: 13px; }
+    .event-date { font-size: 10px; }
+    .legend-mini { gap: 8px; font-size: 10px; }
+
+    /* --- Memory Wall --- */
+    .memory-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .memory-card .mem-body { padding: 8px 10px 10px; }
+    .memory-card .mem-date { font-size: 9px; }
+    .memory-card .mem-text { font-size: 12px; }
+    .memory-add-btn { font-size: 12px; padding: 8px 14px; }
+
+    /* --- Inbox --- */
+    .inbox-head { gap: 4px; }
+    .inbox-title { font-size: 17px; }
+    .inbox-tabs { gap: 4px; }
+    .inbox-tab { padding: 4px 10px; font-size: 11px; }
+    .inbox-compose-row { flex-wrap: wrap; }
+    .inbox-compose select { font-size: 11px; }
+    .inbox-msg .im-text { font-size: 13px; }
+
+    /* --- Bucket List + Goals --- */
+    .bg-card .bg-title { font-size: 16px; }
+
+    /* --- Weekly Retro + Report --- */
+    .retro-grid { gap: 14px; }
+
+    /* --- Insights: mood chart + heatmap --- */
+    .heatmap-grid { grid-template-columns: repeat(10, 1fr); gap: 2px; }
+    .mood-chart-wrap { height: 140px; }
+
+    /* --- Time Wheel --- */
+    .wheel-grid { gap: 14px; }
+    .wheel-canvas-wrap { max-width: 160px; }
+    .wc-pct { font-size: 24px !important; }
+    .wheel-legend-item { font-size: 11px; }
+    .wheel-add { font-size: 12px; padding: 8px 10px; }
+
+    /* --- Planner --- */
+    .planner-grid { gap: 12px; }
+    .planner-head { gap: 8px; margin-bottom: 10px; }
+    .planner-title { font-size: 14px; }
+    .plan-item { font-size: 13px; }
+
+    /* --- Today Checklist --- */
+    .today-grid { gap: 10px; }
+    .today-head { gap: 6px; }
+
+    /* --- Modal: full width --- */
+    .modal {
+      width: calc(100% - 20px);
+      max-width: none;
+      padding: 20px 16px;
+      border-radius: 14px;
+    }
+    .modal h3 { font-size: 20px; margin-bottom: 14px; }
+    .form-row-grid { grid-template-columns: 1fr; gap: 10px; }
+
+    /* --- Birthday banner --- */
+    .bd-banner { font-size: 13px; padding: 10px 14px; border-radius: 10px; }
+
+    /* --- Photo carousel controls --- */
+    .carousel-ctrl { padding: 3px 8px; font-size: 11px; }
+    .carousel-nav { gap: 6px; }
+    .carousel-dot { width: 6px; height: 6px; }
+
+    /* --- Postpone menu / dur popup --- */
+    .postpone-menu, .dur-popup { max-width: calc(100vw - 20px); }
+
+    /* --- Scroll reveal: reduce translate distance on mobile --- */
+    .reveal { transform: translateY(10px); }
+  }
+
+  /* Extra-small phones (≤ 380px) */
+  @media (max-width: 380px) {
+    .container { padding: 12px 8px 76px; }
+    .sidebar { grid-template-columns: 1fr; }
+    .section-title { font-size: 20px; }
+    .memory-grid { grid-template-columns: 1fr; }
+    .heatmap-grid { grid-template-columns: repeat(6, 1fr); }
+    .section-nav-label { font-size: 8px; }
+    .section-nav-icon { font-size: 16px; }
+  }
