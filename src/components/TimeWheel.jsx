@@ -146,39 +146,58 @@ export default function TimeWheel({ day }) {
 
   function renderWheel(person, canvasRef) {
     const logs = getMergedLogs(person);
-    const manualCount = getManualLogs(person).length;
     const totalMins = logs.reduce((s, l) => s + l.mins, 0);
     const label = person === "luke" ? "Luke" : "Judy";
-    const totalHours = Math.floor(totalMins / 60);
+    const pct = Math.round((totalMins / (24 * 60)) * 100);
 
     return (
       <div className={`wheel-card ${person}`} key={person}>
         <div className="wheel-head">
           <span className={`wheel-name ${person}`}>{label}</span>
-          <span className="wheel-total">已记录 {fmtHM(totalMins)} / 24h</span>
+          <span className="wheel-total">{fmtHM(totalMins)} / 24h</span>
         </div>
         <div className="wheel-canvas-wrap">
           <canvas ref={canvasRef} />
           <div className="wheel-center">
-            <div className="wc-hours">{totalHours}h</div>
+            <div className="wc-pct">{pct}%</div>
             <div className="wc-label">已记录</div>
           </div>
         </div>
+        {logs.length > 0 && (
+          <div className="wheel-bar-track">
+            {logs.map((l, i) => (
+              <div
+                key={i}
+                className="wheel-bar-seg"
+                style={{
+                  width: `${(l.mins / (24 * 60)) * 100}%`,
+                  background: WHEEL_COLORS[i % WHEEL_COLORS.length],
+                }}
+                title={`${l.activity} ${fmtHM(l.mins)}`}
+              />
+            ))}
+          </div>
+        )}
         {logs.length === 0 ? (
-          <div className="wheel-empty">下面输入一条试试 — 比如 "睡觉 7h"</div>
+          <div className="wheel-empty">
+            <div className="wheel-empty-icon">⏳</div>
+            <div>今天还没有记录</div>
+            <div className="wheel-empty-hint">输入 "睡觉 7h" 开始追踪</div>
+          </div>
         ) : (
           <div className="wheel-legend">
             {logs.map((l, i) => (
               <div className="wheel-legend-item" key={i}>
-                <span className="wl-dot" style={{ background: WHEEL_COLORS[i % WHEEL_COLORS.length] }} />
-                <span className="wl-name">{l.activity}{l.fromPlan ? " ✓" : ""}</span>
+                <span className="wl-bar" style={{ background: WHEEL_COLORS[i % WHEEL_COLORS.length], width: `${Math.max(4, (l.mins / totalMins) * 100)}%` }} />
+                <span className="wl-name">{l.activity}</span>
+                {l.fromPlan && <span className="wl-badge">清单</span>}
                 <span className="wl-time">{fmtHM(l.mins)}</span>
                 {!l.fromPlan && <button className="wl-del" onClick={() => deleteEntry(person, i)}>×</button>}
               </div>
             ))}
           </div>
         )}
-        <input className="wheel-add" placeholder="例: 睡觉 7h / 工作 8h30m" onKeyDown={handleAdd(person)} />
+        <input className="wheel-add" placeholder="+ 添加活动   如: 睡觉 7h / 工作 8h30m" onKeyDown={handleAdd(person)} />
       </div>
     );
   }
