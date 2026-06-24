@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { useData } from "../firebase/dataContext.jsx";
 import { currentJuneDay, dayKey, weekOfJune } from "../utils/date.js";
 import {
@@ -358,14 +359,14 @@ export default function Planner({ onDayChange }) {
       { label: "顺延3天后", offset: 3 },
       { label: "顺延一周后", offset: 7 },
     ];
-    return (
+    return createPortal(
       <div
         ref={postponeRef}
         className="postpone-menu show"
         style={{
           position: "fixed",
           top: anchorRect.bottom + 4,
-          left: anchorRect.left,
+          right: window.innerWidth - anchorRect.right,
           zIndex: 999,
         }}
       >
@@ -397,7 +398,8 @@ export default function Planner({ onDayChange }) {
         >
           选择具体日期…
         </div>
-      </div>
+      </div>,
+      document.body
     );
   };
 
@@ -405,14 +407,14 @@ export default function Planner({ onDayChange }) {
   const renderDurPopup = () => {
     if (!durCtx) return null;
     const { anchorRect } = durCtx;
-    return (
+    return createPortal(
       <div
         ref={durRef}
         className="dur-popup show"
         style={{
           position: "fixed",
           top: anchorRect.bottom + 4,
-          left: anchorRect.left,
+          right: window.innerWidth - anchorRect.right,
           zIndex: 999,
         }}
       >
@@ -451,7 +453,8 @@ export default function Planner({ onDayChange }) {
           </button>
           <button onClick={() => handleDurSave(0)}>清除</button>
         </div>
-      </div>
+      </div>,
+      document.body
     );
   };
 
