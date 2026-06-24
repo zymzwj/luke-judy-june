@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useData } from "../firebase/dataContext.jsx";
+import { getDailyItems } from "../utils/plans.js";
 import { fmtHM } from "../utils/format.js";
 
 const WHEEL_COLORS = [
@@ -43,7 +44,17 @@ export default function TimeWheel({ day }) {
   const dayISO = `2026-06-${String(day).padStart(2, "0")}`;
   const wheelKey = (person) => `${person}-${dayISO}`;
 
-  const getLogs = (person) => (data.timeLogs && data.timeLogs[wheelKey(person)]) || [];
+  const getManualLogs = (person) => (data.timeLogs && data.timeLogs[wheelKey(person)]) || [];
+
+  function getMergedLogs(person) {
+    const manual = getManualLogs(person);
+    const manualNames = new Set(manual.map(l => l.activity.trim().toLowerCase()));
+    const planItems = data.dailyPlans ? getDailyItems(data.dailyPlans, person, day) : [];
+    const fromPlan = planItems
+      .filter(it => it.done && it.duration > 0 && !manualNames.has(it.text.trim().toLowerCase()))
+      .map(it => ({ activity: it.text.trim(), mins: it.duration, fromPlan: true }));
+    return [...manual, ...fromPlan];
+  }
 
   function buildChart(canvasRef, person) {
     const canvas = canvasRef.current;
@@ -54,7 +65,7 @@ export default function TimeWheel({ day }) {
       chartRefs.current[person] = null;
     }
 
-    const logs = getLogs(person);
+    const logs = getMergedLogs(person);
     const totalMins = logs.reduce((s, l) => s + l.mins, 0);
     const remainingHours = Math.max(0, (24 * 60 - totalMins) / 60);
 
@@ -108,11 +119,13 @@ export default function TimeWheel({ day }) {
       if (chartRefs.current.luke) chartRefs.current.luke.destroy();
       if (chartRefs.current.judy) chartRefs.current.judy.destroy();
     };
-  }, [data.timeLogs, day]);
+  }, [data.timeLogs, data.dailyPlans, day]);
 
   function deleteEntry(person, idx) {
-    const logs = getLogs(person);
-    updateField(`timeLogs.${wheelKey(person)}`, logs.filter((_, i) => i !== idx));
+    const manual = getManualLogs(person);
+    if (idx < manual.length) {
+      updateField(`timeLogs.${wheelKey(person)}`, manual.filter((_, i) => i !== idx));
+    }
   }
 
   function handleAdd(person) {
@@ -125,14 +138,15 @@ export default function TimeWheel({ day }) {
         alert("没识别出来。试试格式: 打游戏 1h / 学习 2.5h / 工作 8h30m");
         return;
       }
-      const logs = getLogs(person);
-      updateField(`timeLogs.${wheelKey(person)}`, [...logs, { activity, mins }]);
+      const manual = getManualLogs(person);
+      updateField(`timeLogs.${wheelKey(person)}`, [...manual, { activity, mins }]);
       e.target.value = "";
     };
   }
 
   function renderWheel(person, canvasRef) {
-    const logs = getLogs(person);
+    const logs = getMergedLogs(person);
+    const manualCount = getManualLogs(person).length;
     const totalMins = logs.reduce((s, l) => s + l.mins, 0);
     const label = person === "luke" ? "Luke" : "Judy";
     const totalHours = Math.floor(totalMins / 60);
@@ -157,9 +171,9 @@ export default function TimeWheel({ day }) {
             {logs.map((l, i) => (
               <div className="wheel-legend-item" key={i}>
                 <span className="wl-dot" style={{ background: WHEEL_COLORS[i % WHEEL_COLORS.length] }} />
-                <span className="wl-name">{l.activity}</span>
+                <span className="wl-name">{l.activity}{l.fromPlan ? " ✓" : ""}</span>
                 <span className="wl-time">{fmtHM(l.mins)}</span>
-                <button className="wl-del" onClick={() => deleteEntry(person, i)}>×</button>
+                {!l.fromPlan && <button className="wl-del" onClick={() => deleteEntry(person, i)}>×</button>}
               </div>
             ))}
           </div>

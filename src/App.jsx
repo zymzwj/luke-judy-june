@@ -85,13 +85,6 @@ export default function App() {
               <MedTracker />
             </div>
 
-            {/* Time Wheels */}
-            <div className="section reveal" id="sec-time">
-              <h2 className="section-title"><ChartIcon size={28} /> 今日 24 小时 <span className="en">Time Wheel</span></h2>
-              <p className="section-desc">写下今天每件事花了多少时间（不必都在今日清单里）。支持 "打游戏 1h" / "学习 2.5h" / "工作 8h30m" 这种自然写法。</p>
-              <TimeWheel day={plannerDay} />
-            </div>
-
             {/* Habit Tracker */}
             <div className="section reveal" id="sec-habit">
               <h2 className="section-title">每日打卡 <span className="en">Daily Tracker</span></h2>
@@ -104,6 +97,13 @@ export default function App() {
               <h2 className="section-title"><PenIcon size={28} /> 本周 &amp; 今日计划 <span className="en">Plans</span></h2>
               <p className="section-desc">每周一个方向，每天具体清单。打勾的每一项 +1 分，全部完成 +3 分奖励。</p>
               <Planner onDayChange={setPlannerDay} />
+            </div>
+
+            {/* Time Wheels — below daily plan so completed tasks auto-populate */}
+            <div className="section reveal" id="sec-time">
+              <h2 className="section-title"><ChartIcon size={28} /> 今日 24 小时 <span className="en">Time Wheel</span></h2>
+              <p className="section-desc">已完成的清单任务（有时长）自动计入。额外活动（如睡觉、吃饭）手动输入即可。</p>
+              <TimeWheel day={plannerDay} />
             </div>
 
             {/* Calendar */}
