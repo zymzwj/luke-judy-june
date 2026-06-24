@@ -12,6 +12,11 @@ const GOALS = [
   { icon: "🤝", title: "Networking", meta: "月度 · Judy", color: "sage" },
 ];
 
+const DAILY_STUDY = [
+  { label: "Java 学习", target: 120, keywords: ["java"], color: "#6a92b5" },
+  { label: "金融学习", target: 60, keywords: ["金融", "交易", "trading"], color: "#c8954d" },
+];
+
 export default function Sidebar({ birthdayActive }) {
   const { data } = useData();
   const today = currentJuneDay();
@@ -25,6 +30,16 @@ export default function Sidebar({ birthdayActive }) {
   const judyTodayDone = judyToday.filter(i => i.done).length;
   const lukeTodayPts = computeDayPoints(lukeToday);
   const judyTodayPts = computeDayPoints(judyToday);
+
+  const studyProgress = DAILY_STUDY.map(goal => {
+    let logged = 0;
+    for (const it of lukeToday) {
+      if (it.duration > 0 && goal.keywords.some(k => it.text.toLowerCase().includes(k)))
+        logged += it.duration;
+    }
+    const pct = Math.min(100, Math.round((logged / goal.target) * 100));
+    return { ...goal, logged, pct };
+  });
 
   return (
     <aside className="sidebar" id="sidebar">
@@ -48,6 +63,30 @@ export default function Sidebar({ birthdayActive }) {
           </div>
           <div className="score-today">今日 {judyTodayDone}/{judyToday.length} · {judyTodayPts} pt</div>
           <div className="score-foot">按完成度 0-10 分 · 全勤 +3</div>
+        </div>
+      </div>
+
+      <div className="sidebar-section">
+        <div className="sidebar-section-title">每日学习</div>
+        <div className="study-goals">
+          {studyProgress.map(s => (
+            <div className="study-goal" key={s.label}>
+              <div className="study-goal-head">
+                <span className="study-goal-label">{s.label}</span>
+                <span className="study-goal-stat">
+                  {s.logged >= 60 ? `${Math.floor(s.logged / 60)}h${s.logged % 60 ? s.logged % 60 + "m" : ""}` : s.logged + "m"}
+                  {" / "}
+                  {s.target >= 60 ? `${s.target / 60}h` : s.target + "m"}
+                </span>
+              </div>
+              <div className="study-goal-track">
+                <div
+                  className={`study-goal-fill${s.pct >= 100 ? " done" : ""}`}
+                  style={{ width: `${s.pct}%`, background: s.color }}
+                />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

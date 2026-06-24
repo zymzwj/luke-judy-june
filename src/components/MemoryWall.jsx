@@ -10,9 +10,14 @@ export default function MemoryWall() {
   const fileRef = useRef(null);
 
   const sorted = [...memories].sort((a, b) => {
-    const ta = a.createdAt?.toMillis ? a.createdAt.toMillis() : typeof a.createdAt === "string" ? new Date(a.createdAt).getTime() : 0;
-    const tb = b.createdAt?.toMillis ? b.createdAt.toMillis() : typeof b.createdAt === "string" ? new Date(b.createdAt).getTime() : 0;
-    return ta - tb;
+    const toMs = (v) => {
+      if (!v) return 0;
+      if (v.toMillis) return v.toMillis();
+      if (typeof v === "number") return v;
+      const t = new Date(v).getTime();
+      return isNaN(t) ? 0 : t;
+    };
+    return toMs(b.createdAt) - toMs(a.createdAt);
   });
 
   const handlePhoto = useCallback(async (e) => {
@@ -118,8 +123,8 @@ export default function MemoryWall() {
                 onChange={(e) => setDate(e.target.value)}
               />
               <div className="modal-actions">
-                <button className="np-btn" onClick={() => setShowModal(false)}>取消</button>
-                <button className="np-btn primary" onClick={handleSave}>保存</button>
+                <button className="btn" onClick={() => setShowModal(false)}>取消</button>
+                <button className="btn primary" onClick={handleSave}>保存</button>
               </div>
             </div>
           </div>

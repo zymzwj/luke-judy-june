@@ -558,6 +558,40 @@
     margin-top: 1px;
   }
 
+  .study-goals { display: flex; flex-direction: column; gap: 10px; }
+  .study-goal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 5px;
+  }
+  .study-goal-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .study-goal-stat {
+    font-size: 11px;
+    color: var(--ink-soft);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+  .study-goal-track {
+    height: 8px;
+    border-radius: 4px;
+    background: var(--bg-warm);
+    overflow: hidden;
+  }
+  .study-goal-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    min-width: 0;
+  }
+  .study-goal-fill.done {
+    box-shadow: 0 0 6px rgba(0,0,0,0.12);
+  }
+
   .sidebar-section {
     background: var(--card);
     border: 1px solid var(--border);
