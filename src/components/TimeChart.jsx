@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useData } from "../firebase/dataContext.jsx";
 import { getDailyItems } from "../utils/plans.js";
-import { currentJuneDay } from "../utils/date.js";
+import { currentDay } from "../utils/date.js";
 import { WEEKS } from "../data/calendar.js";
 
-const SCOPE_LABELS = { today: "今日", week: "本周", month: "六月" };
+const SCOPE_LABELS = { today: "今日", week: "本周", month: "七月" };
 
 function rangeForScope(scope) {
-  const t = currentJuneDay();
+  const t = currentDay();
   if (scope === "today") return [t, t];
   if (scope === "week") {
     for (const w of WEEKS) if (t >= w.startDay && t <= w.endDay) return [w.startDay, w.endDay];
@@ -152,7 +152,7 @@ export default function TimeChart() {
       <div className="chart-scope">
         <button className={chartScope === "today" ? "active" : ""} onClick={() => setChartScope("today")}>今日</button>
         <button className={chartScope === "week" ? "active" : ""} onClick={() => setChartScope("week")}>本周</button>
-        <button className={chartScope === "month" ? "active" : ""} onClick={() => setChartScope("month")}>六月</button>
+        <button className={chartScope === "month" ? "active" : ""} onClick={() => setChartScope("month")}>七月</button>
       </div>
       <p className="chart-meta">{metaText}</p>
       <div style={{ minHeight: containerHeight }}>

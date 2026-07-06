@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useData } from "../firebase/dataContext.jsx";
-import { currentJuneDay } from "../utils/date.js";
+import { currentDay, dateStr as makeDateStr } from "../utils/date.js";
+import { MONTH_CONFIG } from "../firebase/config.js";
 
 function fmtDateLabel(day) {
-  const d = new Date(2026, 5, day);
+  const d = new Date(MONTH_CONFIG.year, MONTH_CONFIG.month - 1, day);
   const dow = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"][d.getDay()];
-  return `6月${day}日 · ${dow}`;
+  return `${MONTH_CONFIG.month}月${day}日 · ${dow}`;
 }
 
 // ─── Prayers sub-component ────────────────────────────────────
@@ -121,11 +122,11 @@ function Prayers() {
 function DevotionNotes() {
   const { data, updateField } = useData();
   const devotionNotes = data.devotionNotes || {};
-  const [devoDay, setDevoDay] = useState(() => currentJuneDay());
+  const [devoDay, setDevoDay] = useState(() => currentDay());
   const [saveStatus, setSaveStatus] = useState("—");
   const timerRef = useRef(null);
 
-  const dateStr = `2026-06-${String(devoDay).padStart(2, "0")}`;
+  const dateStr = makeDateStr(devoDay);
   const text = devotionNotes[dateStr] || "";
 
   // Local text state for controlled textarea with debounce
@@ -196,7 +197,7 @@ function DevotionNotes() {
         <span className="devo-date">{fmtDateLabel(devoDay)}</span>
         <button
           className="devo-nav"
-          disabled={devoDay >= 30}
+          disabled={devoDay >= MONTH_CONFIG.daysInMonth}
           onClick={() => setDevoDay((d) => d + 1)}
           title="后一天"
         >

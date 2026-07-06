@@ -1,6 +1,6 @@
 import React from "react";
 import { useData } from "../firebase/dataContext.jsx";
-import { currentJuneDay, todayISO } from "../utils/date.js";
+import { currentDay, todayISO, dateStr } from "../utils/date.js";
 import { computeHabitStreak } from "../utils/plans.js";
 
 const HABIT_GROUPS = [
@@ -42,7 +42,7 @@ const HABIT_GROUPS = [
 export default function HabitTracker() {
   const { data, updateField } = useData();
   const habits = data.habits || {};
-  const today = currentJuneDay();
+  const today = currentDay();
   const todayStr = todayISO();
 
   const toggle = (key) => {
@@ -76,13 +76,13 @@ export default function HabitTracker() {
                   </span>
                 </div>
                 <div className="habit-week" data-habit={row.cat}>
-                  {Array.from({ length: 30 }, (_, i) => {
+                  {Array.from({ length: 31 }, (_, i) => {
                     const d = i + 1;
-                    const ds = `2026-06-${String(d).padStart(2, "0")}`;
+                    const ds = dateStr(d);
                     const key = `${row.cat}-${ds}`;
                     const done = habits[key] ? "done" : "";
                     const future =
-                      ds > todayStr && todayStr.startsWith("2026-06") ? "future" : "";
+                      ds > todayStr && todayStr.startsWith("2026-07") ? "future" : "";
                     return (
                       <div
                         key={d}

@@ -1,4 +1,5 @@
-import { dayKey } from "./date.js";
+import { dayKey, dateStr } from "./date.js";
+import { MONTH_CONFIG } from "../firebase/config.js";
 
 export function getDailyItems(dailyPlans, person, day) {
   const items = dailyPlans[dayKey(person, day)] || [];
@@ -16,7 +17,7 @@ export function computeDayPoints(items) {
 
 export function computeMonthPoints(dailyPlans, person) {
   let total = 0;
-  for (let d = 1; d <= 30; d++) {
+  for (let d = 1; d <= MONTH_CONFIG.daysInMonth; d++) {
     total += computeDayPoints(getDailyItems(dailyPlans, person, d));
   }
   return total;
@@ -71,7 +72,7 @@ export function sumBonuses(bonuses, person) {
 export function computeHabitStreak(habits, habitCat, today) {
   let streak = 0;
   for (let d = today; d >= 1; d--) {
-    const ds = `2026-06-${String(d).padStart(2, "0")}`;
+    const ds = dateStr(d);
     if (habits[`${habitCat}-${ds}`]) streak++;
     else break;
   }

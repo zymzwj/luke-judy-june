@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useData } from "../firebase/dataContext.jsx";
+import { dateStr } from "../utils/date.js";
 
 const MOOD_SCALE = {
   "😔": 1, "🥲": 2, "😴": 2, "😤": 2, "😐": 3,
@@ -28,9 +29,9 @@ export default function MoodChart() {
     const labels = [];
     const values = [];
 
-    for (let d = 1; d <= 30; d++) {
+    for (let d = 1; d <= 31; d++) {
       labels.push(d);
-      const ds = `2026-06-${String(d).padStart(2, "0")}`;
+      const ds = dateStr(d);
       const emoji = moods[ds];
       if (emoji && MOOD_SCALE[emoji] != null) {
         values.push(MOOD_SCALE[emoji]);
@@ -60,7 +61,7 @@ export default function MoodChart() {
         maintainAspectRatio: false,
         scales: {
           x: {
-            title: { display: true, text: "六月" },
+            title: { display: true, text: "七月" },
             ticks: { maxTicksLimit: 15 }
           },
           y: {

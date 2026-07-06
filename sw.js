@@ -1,8 +1,8 @@
-// Service Worker for June 2026 · Luke & Judy
+// Service Worker for July 2026 · Luke & Judy
 // Strategy: network-first for our origin, cache as fallback (offline support).
 // Bypass Firebase / Google APIs so realtime data is never cached.
 
-const CACHE = "luke-judy-v7";
+const CACHE = "luke-judy-v8";
 const STATIC = [
   "./",
   "./index.html",

@@ -1,15 +1,16 @@
 import React from "react";
 import { useData } from "../firebase/dataContext.jsx";
 import { computeMonthPoints, computeDayPoints, getDailyItems, sumBonuses } from "../utils/plans.js";
-import { currentJuneDay } from "../utils/date.js";
+import { currentDay } from "../utils/date.js";
+import { MONTH_CONFIG } from "../firebase/config.js";
 import DateWidget from "./DateWidget.jsx";
 
 const GOALS = [
   { icon: "📖", title: "读经 & 灵修", meta: "每天 · 互监督", color: "rose" },
-  { icon: "💕", title: "约会", meta: "每周一次", color: "plum" },
-  { icon: "☕", title: "咖啡馆学习", meta: "每周两次", color: "gold" },
   { icon: "📈", title: "交易学习", meta: "每天 · Luke", color: "sky" },
   { icon: "🤝", title: "Networking", meta: "月度 · Judy", color: "sage" },
+  { icon: "💌", title: "写甜话", meta: "每周至少一次", color: "gold" },
+  { icon: "📸", title: "今日分享", meta: "每天一张照片", color: "plum" },
 ];
 
 const DAILY_STUDY = [
@@ -17,9 +18,9 @@ const DAILY_STUDY = [
   { label: "金融学习", target: 60, keywords: ["金融", "交易", "trading"], color: "#c8954d" },
 ];
 
-export default function Sidebar({ birthdayActive }) {
+export default function Sidebar() {
   const { data } = useData();
-  const today = currentJuneDay();
+  const today = currentDay();
 
   const lukePts = computeMonthPoints(data.dailyPlans, "luke") + sumBonuses(data.bonuses, "luke");
   const judyPts = computeMonthPoints(data.dailyPlans, "judy") + sumBonuses(data.bonuses, "judy");
@@ -43,14 +44,10 @@ export default function Sidebar({ birthdayActive }) {
 
   return (
     <aside className="sidebar" id="sidebar">
-      <DateWidget
-        replayActive={birthdayActive}
-        replayButtonText={birthdayActive ? "🎂 关闭生日模式" : "🎂 重温生日"}
-        onReplay={() => window.dispatchEvent(new CustomEvent("toggle-birthday-replay"))}
-      />
+      <DateWidget />
 
       <div className="sidebar-section">
-        <div className="sidebar-section-title">六月积分榜</div>
+        <div className="sidebar-section-title">{MONTH_CONFIG.label}积分榜</div>
         <div className="score-panel">
           <div className="score-row luke">
             <span className="score-name luke">Luke</span>
@@ -91,7 +88,7 @@ export default function Sidebar({ birthdayActive }) {
       </div>
 
       <div className="sidebar-section">
-        <div className="sidebar-section-title">循环目标</div>
+        <div className="sidebar-section-title">异地目标</div>
         <div className="sidebar-goals">
           {GOALS.map(g => (
             <div className={`sidegoal ${g.color}`} key={g.title}>

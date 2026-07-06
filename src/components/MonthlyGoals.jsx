@@ -40,7 +40,7 @@ export default function MonthlyGoals() {
 
   return (
     <div className="bg-card goals">
-      <h4>🎯 六月共同目标 <span className="meta">{doneCount}/{goals.length} 完成</span></h4>
+      <h4>🎯 七月共同目标 <span className="meta">{doneCount}/{goals.length} 完成</span></h4>
       <div className="sub">独立于每日任务的月度目标（比如"一起去 3 家新餐厅"）</div>
 
       <div className="goals-list">

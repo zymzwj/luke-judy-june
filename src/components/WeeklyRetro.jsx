@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useData } from "../firebase/dataContext.jsx";
 import { WEEKS } from "../data/calendar.js";
-import { currentJuneDay, weekOfJune } from "../utils/date.js";
+import { currentDay, weekOf } from "../utils/date.js";
 
 const FIELDS = [
   { key: "good", label: "💝 这周最暖心的瞬间", placeholder: "一段对话、一顿饭、一个拥抱..." },
@@ -13,8 +13,8 @@ const FIELDS = [
 
 export default function WeeklyRetro() {
   const { data, updateField } = useData();
-  const today = currentJuneDay();
-  const currentWeek = weekOfJune(today);
+  const today = currentDay();
+  const currentWeek = weekOf(today);
   const [weekIdx, setWeekIdx] = useState(
     WEEKS.findIndex((w) => w.id === currentWeek.id)
   );

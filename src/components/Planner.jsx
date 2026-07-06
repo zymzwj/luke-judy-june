@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useData } from "../firebase/dataContext.jsx";
-import { currentJuneDay, dayKey, weekOfJune } from "../utils/date.js";
+import { currentDay, dayKey, weekOf } from "../utils/date.js";
+import { MONTH_CONFIG } from "../firebase/config.js";
 import {
   getDailyItems,
   sortDailyItems,
@@ -31,8 +32,8 @@ export default function Planner({ onDayChange }) {
   const { data, updateField, saveField } = useData();
 
   // ── Weekly state ──
-  const today = currentJuneDay();
-  const currentWeek = weekOfJune(today);
+  const today = currentDay();
+  const currentWeek = weekOf(today);
   const [plannerWeekIdx, setPlannerWeekIdx] = useState(() =>
     Math.max(0, WEEKS.findIndex((w) => w.id === currentWeek.id))
   );
@@ -71,7 +72,7 @@ export default function Planner({ onDayChange }) {
 
   // ── Daily state ──
   const [plannerDay, setPlannerDay] = useState(today);
-  const dow = DOW_NAMES[new Date(2026, 5, plannerDay).getDay()];
+  const dow = DOW_NAMES[new Date(MONTH_CONFIG.year, MONTH_CONFIG.month - 1, plannerDay).getDay()];
   const isToday = plannerDay === today;
 
   useEffect(() => {
@@ -154,7 +155,7 @@ export default function Planner({ onDayChange }) {
   };
 
   const handlePostpone = async (targetDay) => {
-    if (!postponeCtx || targetDay < 1 || targetDay > 30) return;
+    if (!postponeCtx || targetDay < 1 || targetDay > MONTH_CONFIG.daysInMonth) return;
     const { person, idx } = postponeCtx;
     const srcItems = [...getItems(person)];
     const [moved] = srcItems.splice(idx, 1);
@@ -372,7 +373,7 @@ export default function Planner({ onDayChange }) {
       >
         {options.map(({ label, offset }) => {
           const target = plannerDay + offset;
-          const disabled = target > 30;
+          const disabled = target > MONTH_CONFIG.daysInMonth;
           return (
             <div
               key={offset}
@@ -380,7 +381,7 @@ export default function Planner({ onDayChange }) {
               onClick={() => !disabled && handlePostpone(target)}
             >
               <span>{label}</span>
-              <span className="pm-time">{disabled ? "超出范围" : `6月${target}日`}</span>
+              <span className="pm-time">{disabled ? "超出范围" : `${MONTH_CONFIG.month}月${target}日`}</span>
             </div>
           );
         })}
@@ -388,10 +389,10 @@ export default function Planner({ onDayChange }) {
         <div
           className="pm-item"
           onClick={() => {
-            const input = prompt("输入目标日期 (1-30):");
+            const input = prompt(`输入目标日期 (1-${MONTH_CONFIG.daysInMonth}):`);
             if (!input) return;
             const d = parseInt(input, 10);
-            if (d >= 1 && d <= 30 && d !== plannerDay) {
+            if (d >= 1 && d <= MONTH_CONFIG.daysInMonth && d !== plannerDay) {
               handlePostpone(d);
             }
           }}
@@ -474,7 +475,7 @@ export default function Planner({ onDayChange }) {
           <div className="planner-title">
             <div className="planner-label">本周计划 · 共享</div>
             <div className="planner-range">
-              6月{week.startDay}日 – 6月{week.endDay}日
+              {MONTH_CONFIG.month}月{week.startDay}日 – {MONTH_CONFIG.month}月{week.endDay}日
               {isCurrentWeek && <span className="today-badge">本周</span>}
             </div>
           </div>
@@ -522,11 +523,11 @@ export default function Planner({ onDayChange }) {
           <div className="planner-title">
             <div className="planner-label">今日清单</div>
             <div className="planner-range">
-              6月{plannerDay}日 · {dow}
+              {MONTH_CONFIG.month}月{plannerDay}日 · {dow}
               {isToday && <span className="today-badge">今天</span>}
             </div>
           </div>
-          <button className="planner-nav" disabled={plannerDay >= 30} onClick={() => setPlannerDay((d) => d + 1)}>
+          <button className="planner-nav" disabled={plannerDay >= MONTH_CONFIG.daysInMonth} onClick={() => setPlannerDay((d) => d + 1)}>
             ›
           </button>
         </div>

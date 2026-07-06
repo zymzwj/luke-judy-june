@@ -1,18 +1,25 @@
 import { WEEKS } from "../data/calendar.js";
+import { MONTH_CONFIG, LDR } from "../firebase/config.js";
 
-export function weekOfJune(day) {
+const { year: YEAR, month: MONTH, daysInMonth: DAYS } = MONTH_CONFIG;
+
+export function weekOf(day) {
   for (const w of WEEKS) if (day >= w.startDay && day <= w.endDay) return w;
   return WEEKS[0];
 }
 
-export function currentJuneDay(now = new Date()) {
-  if (now.getFullYear() === 2026 && now.getMonth() === 5) return now.getDate();
-  if (now.getFullYear() < 2026 || (now.getFullYear() === 2026 && now.getMonth() < 5)) return 1;
-  return 30;
+export function currentDay(now = new Date()) {
+  if (now.getFullYear() === YEAR && now.getMonth() === MONTH - 1) return now.getDate();
+  if (now < new Date(YEAR, MONTH - 1, 1)) return 1;
+  return DAYS;
 }
 
 export function dayKey(person, day) {
-  return `${person}-2026-06-${String(day).padStart(2, "0")}`;
+  return `${person}-${YEAR}-${String(MONTH).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+
+export function dateStr(d) {
+  return `${YEAR}-${String(MONTH).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 }
 
 export function daysBetween(d1, d2) {
@@ -35,53 +42,57 @@ export function dayOfYear(date) {
 }
 
 export function getDateWidgetState(today = new Date()) {
-  const year = today.getFullYear();
-  const todayDate = new Date(year, today.getMonth(), today.getDate());
-  const juneStart = new Date(year, 5, 1);
-  const juneEnd = new Date(year, 5, 30);
+  const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const monthStart = new Date(YEAR, MONTH - 1, 1);
+  const monthEnd = new Date(YEAR, MONTH - 1, DAYS);
   const dowNames = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
 
-  let status;
-  let count;
-  let progress;
-  let barLabel;
+  const sepDate = new Date(LDR.separationDate + "T00:00");
+  const sepDays = Math.ceil((todayDate - sepDate) / 86400000);
 
-  if (todayDate < juneStart) {
-    const days = Math.ceil((juneStart - todayDate) / 86400000);
-    status = "距六月开始";
+  let status, count, progress, barLabel;
+
+  if (todayDate < monthStart) {
+    const days = Math.ceil((monthStart - todayDate) / 86400000);
+    status = `距${MONTH_CONFIG.label}开始`;
     count = days;
     progress = 0;
-    barLabel = "六月共 30 天";
-  } else if (todayDate <= juneEnd) {
-    const dayOfJune = today.getDate();
-    const left = 30 - dayOfJune + 1;
-    status = "六月还剩";
+    barLabel = `${MONTH_CONFIG.label}共 ${DAYS} 天`;
+  } else if (todayDate <= monthEnd) {
+    const dayOfMonth = today.getDate();
+    const left = DAYS - dayOfMonth + 1;
+    status = `${MONTH_CONFIG.label}还剩`;
     count = left;
-    progress = ((dayOfJune - 1) / 30) * 100;
-    barLabel = `六月进度 ${Math.round(progress)}%`;
+    progress = ((dayOfMonth - 1) / DAYS) * 100;
+    barLabel = `${MONTH_CONFIG.label}进度 ${Math.round(progress)}%`;
   } else {
-    status = "六月已结束";
+    status = `${MONTH_CONFIG.label}已结束`;
     count = "🎉";
     progress = 100;
-    barLabel = "下次见，七月";
+    barLabel = "下个月见";
   }
 
-  const bday = new Date(year, 5, 22);
-  const diffDays = Math.ceil((bday - todayDate) / 86400000);
-  let birthdayText;
-  let birthdayClassName;
-
-  if (diffDays === 0) {
-    birthdayText = "🎂 今天是 Judy 生日！";
-    birthdayClassName = "dw-bday today";
-  } else if (diffDays > 0) {
-    birthdayText = `🎂 距 Judy 生日 ${diffDays} 天`;
-    birthdayClassName = "dw-bday" + (diffDays <= 7 ? " urgent" : "");
+  let ldrText, ldrClassName;
+  if (sepDays < 0) {
+    ldrText = `✈️ 距异地开始还有 ${-sepDays} 天`;
+    ldrClassName = "dw-ldr";
+  } else if (sepDays === 0) {
+    ldrText = "✈️ 今天开始异地…要加油！";
+    ldrClassName = "dw-ldr today";
   } else {
-    const nextBday = new Date(year + 1, 5, 22);
-    const nextDiff = Math.ceil((nextBday - todayDate) / 86400000);
-    birthdayText = `🎂 距 Judy 下次生日 ${nextDiff} 天`;
-    birthdayClassName = "dw-bday";
+    ldrText = `✈️ 异地第 ${sepDays + 1} 天`;
+    ldrClassName = "dw-ldr";
+  }
+
+  let reunionText = null;
+  if (LDR.reunionDate) {
+    const reunionDate = new Date(LDR.reunionDate + "T00:00");
+    const reunionDays = Math.ceil((reunionDate - todayDate) / 86400000);
+    if (reunionDays > 0) {
+      reunionText = `💕 距下次见面 ${reunionDays} 天`;
+    } else if (reunionDays === 0) {
+      reunionText = "💕 今天见面！";
+    }
   }
 
   return {
@@ -91,7 +102,8 @@ export function getDateWidgetState(today = new Date()) {
     count,
     progress,
     barLabel,
-    birthdayText,
-    birthdayClassName
+    ldrText,
+    ldrClassName,
+    reunionText,
   };
 }

@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { useData } from "../firebase/dataContext.jsx";
-import { currentJuneDay } from "../utils/date.js";
+import { currentDay, dateStr } from "../utils/date.js";
+import { MONTH_CONFIG } from "../firebase/config.js";
 
 const HABIT_CATS = [
   "bible-luke", "bible-yx", "devo-luke", "devo-yx",
@@ -18,13 +19,13 @@ function levelClass(count) {
 
 export default function HabitHeatmap() {
   const { data } = useData();
-  const today = currentJuneDay();
+  const today = currentDay();
   const habits = data.habits || {};
 
   const cells = useMemo(() => {
     const result = [];
-    for (let d = 1; d <= 30; d++) {
-      const ds = `2026-06-${String(d).padStart(2, "0")}`;
+    for (let d = 1; d <= 31; d++) {
+      const ds = dateStr(d);
       let count = 0;
       for (const cat of HABIT_CATS) {
         if (habits[`${cat}-${ds}`]) count++;
@@ -43,7 +44,7 @@ export default function HabitHeatmap() {
           <div
             key={c.day}
             className={`heatmap-cell ${levelClass(c.count)}${c.day === today ? " today" : ""}`}
-            title={`6月${c.day}日: ${c.count}/${HABIT_CATS.length} 习惯`}
+            title={`${MONTH_CONFIG.month}月${c.day}日: ${c.count}/${HABIT_CATS.length} 习惯`}
           >
             <span className="hm-num">{c.day}</span>
           </div>

@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { useData } from "../firebase/dataContext.jsx";
 import { getDailyItems, computeMonthPoints, sumBonuses } from "../utils/plans.js";
 import { fmtHM } from "../utils/format.js";
+import { dateStr } from "../utils/date.js";
 
 const MOOD_SCALE = {
   "😔": 1, "🥲": 2, "😴": 2, "😤": 2, "😐": 3,
@@ -21,7 +22,7 @@ export default function MonthReport() {
     let totalDone = 0;
     let totalTotal = 0;
     for (const person of ["luke", "judy"]) {
-      for (let d = 1; d <= 30; d++) {
+      for (let d = 1; d <= 31; d++) {
         const items = getDailyItems(data.dailyPlans || {}, person, d);
         totalTotal += items.length;
         totalDone += items.filter((i) => i.done).length;
@@ -41,8 +42,8 @@ export default function MonthReport() {
     let habitCount = 0;
     const habits = data.habits || {};
     for (const cat of HABIT_CATS) {
-      for (let d = 1; d <= 30; d++) {
-        const ds = `2026-06-${String(d).padStart(2, "0")}`;
+      for (let d = 1; d <= 31; d++) {
+        const ds = dateStr(d);
         if (habits[`${cat}-${ds}`]) habitCount++;
       }
     }
@@ -105,12 +106,12 @@ export default function MonthReport() {
     };
   }, [data, memories]);
 
-  const headline = `六月完成率 ${stats.completionRate}%，Luke ${stats.lukePoints} 分 / Judy ${stats.judyPoints} 分，共打卡 ${stats.habitCount} 次，记录 ${stats.memoryCount} 条回忆。`;
+  const headline = `七月完成率 ${stats.completionRate}%，Luke ${stats.lukePoints} 分 / Judy ${stats.judyPoints} 分，共打卡 ${stats.habitCount} 次，记录 ${stats.memoryCount} 条回忆。`;
 
   return (
     <div className="report-card">
       <div className="report-head">
-        <h3>📊 六月月报</h3>
+        <h3>📊 七月月报</h3>
       </div>
       <div className="report-stats">
         <Stat label="任务完成率" value={`${stats.completionRate}%`} />

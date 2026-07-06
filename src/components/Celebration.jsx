@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useData } from "../firebase/dataContext.jsx";
-import { currentJuneDay, todayISO } from "../utils/date.js";
+import { currentDay, todayISO, dateStr } from "../utils/date.js";
 
 const CONFETTI_COLORS = ["#c97b8f", "#8d6e9e", "#6a92b5", "#c8954d", "#87a386", "#f5d3dd", "#dfeaf3"];
 const CONFETTI_COUNT = 50;
@@ -22,10 +22,10 @@ const MILESTONES = [
     id: "bible-7",
     check: (data) => {
       const habits = data.habits || {};
-      const today = currentJuneDay();
+      const today = currentDay();
       let streak = 0;
       for (let d = today; d >= 1; d--) {
-        const ds = `2026-06-${String(d).padStart(2, "0")}`;
+        const ds = dateStr(d);
         const lukeKey = `bible-luke-${ds}`;
         const judyKey = `bible-yx-${ds}`;
         if (habits[lukeKey] && habits[judyKey]) {

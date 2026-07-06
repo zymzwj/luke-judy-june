@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useCallback } from "react";
 
 const SECTIONS = [
+  { id: "sec-mood", label: "心情", icon: "💛" },
+  { id: "sec-share", label: "分享", icon: "📸" },
   { id: "sec-spiritual", label: "灵命成长", icon: "📖" },
   { id: "sec-med", label: "吃药打卡", icon: "💊" },
   { id: "sec-habit", label: "每日打卡", icon: "✅" },
   { id: "sec-plan", label: "计划", icon: "📝" },
-  { id: "sec-time", label: "24小时", icon: "⏳" },
   { id: "sec-cal", label: "日历", icon: "📅" },
   { id: "sec-memory", label: "故事", icon: "💕" },
   { id: "sec-inbox", label: "信箱", icon: "💌" },
+  { id: "sec-lists", label: "清单", icon: "📋" },
   { id: "sec-bucket", label: "心愿", icon: "🎯" },
   { id: "sec-retro", label: "复盘", icon: "📊" },
   { id: "sec-timechart", label: "时间图", icon: "📈" },

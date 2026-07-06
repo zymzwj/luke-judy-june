@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useAuth } from "./firebase/context.jsx";
 import { useData } from "./firebase/dataContext.jsx";
 
@@ -7,12 +7,10 @@ import Header from "./components/Header.jsx";
 import SyncStatus from "./components/SyncStatus.jsx";
 import Sidebar from "./components/Sidebar.jsx";
 import PixelAvatars from "./components/PixelAvatars.jsx";
-import BirthdayMode, { BirthdayLetter } from "./components/BirthdayMode.jsx";
 import PhotoCarousel from "./components/PhotoCarousel.jsx";
 import DailyVerse from "./components/DailyVerse.jsx";
 import Spiritual from "./components/Spiritual.jsx";
 import MedTracker from "./components/MedTracker.jsx";
-import TimeWheel from "./components/TimeWheel.jsx";
 import HabitTracker from "./components/HabitTracker.jsx";
 import Planner from "./components/Planner.jsx";
 import TimeChart from "./components/TimeChart.jsx";
@@ -27,16 +25,18 @@ import MoodChart from "./components/MoodChart.jsx";
 import HabitHeatmap from "./components/HabitHeatmap.jsx";
 import ThemeToggle from "./components/ThemeToggle.jsx";
 import Celebration from "./components/Celebration.jsx";
+import MoodCheckin from "./components/MoodCheckin.jsx";
+import SharedLists from "./components/SharedLists.jsx";
+import DailyShare from "./components/DailyShare.jsx";
 import useTimeGradient from "./hooks/useTimeGradient.js";
 import useScrollReveal from "./hooks/useScrollReveal.js";
-import { BookIcon, HeartIcon, PenIcon, CalendarIcon, ChartIcon, CoffeeIcon } from "./components/HandIcons.jsx";
+import { BookIcon, HeartIcon, PenIcon, CalendarIcon, ChartIcon } from "./components/HandIcons.jsx";
 import SectionNav from "./components/SectionNav.jsx";
 
 export default function App() {
   const { user } = useAuth();
   const { loading, syncState } = useData();
   const [plannerDay, setPlannerDay] = useState(null);
-  const [birthdayActive, setBirthdayActive] = useState(false);
 
   useTimeGradient();
   useScrollReveal();
@@ -55,24 +55,35 @@ export default function App() {
 
   return (
     <>
-      <BirthdayMode onReplayStateChange={(state) => setBirthdayActive(state?.active || false)} />
       <SyncStatus state={syncState.state} msg={syncState.msg} />
       <Header />
-      <PixelAvatars birthday={birthdayActive} />
+      <PixelAvatars />
       <ThemeToggle />
       <Celebration />
       <SectionNav />
 
       <div className="container" id="mainContent">
         <PhotoCarousel />
-        <div className="bd-banner">🎂 今天是欣欣的生日 — Happy Birthday Judy 💕</div>
-        <DailyVerse birthdayActive={birthdayActive} />
-        {birthdayActive && <BirthdayLetter />}
+        <DailyVerse />
 
         <div className="main-layout">
-          <Sidebar birthdayActive={birthdayActive} />
+          <Sidebar />
 
           <div className="main-col">
+            {/* Mood Check-in */}
+            <div className="section reveal" id="sec-mood">
+              <h2 className="section-title">💛 今日心情 <span className="en">Mood Check-in</span></h2>
+              <p className="section-desc">每天签到一个心情，看看对方今天怎么样。</p>
+              <MoodCheckin />
+            </div>
+
+            {/* Daily Share */}
+            <div className="section reveal" id="sec-share">
+              <h2 className="section-title">📸 今日分享 <span className="en">Daily Share</span></h2>
+              <p className="section-desc">每天分享一张照片和一句话，记录异地的日常。</p>
+              <DailyShare />
+            </div>
+
             {/* Spiritual Growth */}
             <div className="section reveal" id="sec-spiritual">
               <h2 className="section-title"><BookIcon size={28} /> 灵命成长 <span className="en">Spiritual Life</span></h2>
@@ -99,16 +110,9 @@ export default function App() {
               <Planner onDayChange={setPlannerDay} />
             </div>
 
-            {/* Time Wheels — below daily plan so completed tasks auto-populate */}
-            <div className="section reveal" id="sec-time">
-              <h2 className="section-title"><ChartIcon size={28} /> 今日 24 小时 <span className="en">Time Wheel</span></h2>
-              <p className="section-desc">已完成的清单任务（有时长）自动计入。额外活动（如睡觉、吃饭）手动输入即可。</p>
-              <TimeWheel day={plannerDay} />
-            </div>
-
             {/* Calendar */}
             <div className="section reveal" id="sec-cal">
-              <h2 className="section-title"><CalendarIcon size={28} /> 六月日历 <span className="en">June Calendar</span></h2>
+              <h2 className="section-title"><CalendarIcon size={28} /> 七月日历 <span className="en">July Calendar</span></h2>
               <Calendar />
             </div>
 
@@ -124,6 +128,13 @@ export default function App() {
               <SweetInbox />
             </div>
 
+            {/* Shared Lists */}
+            <div className="section reveal" id="sec-lists">
+              <h2 className="section-title">📋 共同清单 <span className="en">Shared Lists</span></h2>
+              <p className="section-desc">一起看的剧、一起读的书、下次见面要做的事。</p>
+              <SharedLists />
+            </div>
+
             {/* Bucket List + Monthly Goals */}
             <div className="section reveal" id="sec-bucket">
               <div className="bg-grid">
@@ -135,7 +146,7 @@ export default function App() {
             {/* Weekly Retro + Month Report + Insights */}
             <div className="section reveal" id="sec-retro">
               <h2 className="section-title"><PenIcon size={28} /> 复盘 &amp; 月报 <span className="en">Reflection &amp; Report</span></h2>
-              <p className="section-desc">每周日花几分钟回顾这一周，月底自动生成你俩的六月总结。</p>
+              <p className="section-desc">每周日花几分钟回顾这一周，月底自动生成你俩的七月总结。</p>
               <div className="retro-grid">
                 <WeeklyRetro />
                 <MonthReport />
