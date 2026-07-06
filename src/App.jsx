@@ -28,6 +28,7 @@ import Celebration from "./components/Celebration.jsx";
 import MoodCheckin from "./components/MoodCheckin.jsx";
 import SharedLists from "./components/SharedLists.jsx";
 import DailyShare from "./components/DailyShare.jsx";
+import { IS_ARCHIVE, ACTIVE_MONTH, MONTH_CONFIG } from "./firebase/config.js";
 import useTimeGradient from "./hooks/useTimeGradient.js";
 import useScrollReveal from "./hooks/useScrollReveal.js";
 import { BookIcon, HeartIcon, PenIcon, CalendarIcon, ChartIcon } from "./components/HandIcons.jsx";
@@ -55,6 +56,12 @@ export default function App() {
 
   return (
     <>
+      {IS_ARCHIVE && (
+        <div className="archive-banner">
+          📂 正在查看 {MONTH_CONFIG.label} 归档（只读）
+          <a href={window.location.pathname}>← 返回七月</a>
+        </div>
+      )}
       <SyncStatus state={syncState.state} msg={syncState.msg} />
       <Header />
       <PixelAvatars />
@@ -161,6 +168,13 @@ export default function App() {
             <div className="section reveal" id="sec-timechart">
               <TimeChart plannerDay={plannerDay} />
             </div>
+
+            {/* Month Archive Link */}
+            {!IS_ARCHIVE && (
+              <div className="month-archive-link">
+                <a href="?month=june">📂 查看六月回顾</a>
+              </div>
+            )}
           </div>
         </div>
       </div>

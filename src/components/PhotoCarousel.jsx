@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useData } from "../firebase/dataContext.jsx";
+import { MONTH_CONFIG } from "../firebase/config.js";
 
 const MAX_PHOTOS_SIZE = 900 * 1024; // 900KB total for photos in doc
 
@@ -194,7 +195,7 @@ export default function PhotoCarousel() {
         )}
       </div>
       <div className="hero-overlay">
-        <div className="hero-eyebrow">July 2026 · 我们的七月</div>
+        <div className="hero-eyebrow">{MONTH_CONFIG.labelEn} {MONTH_CONFIG.year} · 我们的{MONTH_CONFIG.label}</div>
         <h1 className="hero-title">Luke <span className="ampersand">&</span> Judy</h1>
         <div className="hero-sub">
           "两个人总比一个人好，因为二人劳碌同得美好的果效。"

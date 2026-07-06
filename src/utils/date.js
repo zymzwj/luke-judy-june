@@ -47,9 +47,6 @@ export function getDateWidgetState(today = new Date()) {
   const monthEnd = new Date(YEAR, MONTH - 1, DAYS);
   const dowNames = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
 
-  const sepDate = new Date(LDR.separationDate + "T00:00");
-  const sepDays = Math.ceil((todayDate - sepDate) / 86400000);
-
   let status, count, progress, barLabel;
 
   if (todayDate < monthStart) {
@@ -72,26 +69,28 @@ export function getDateWidgetState(today = new Date()) {
     barLabel = "下个月见";
   }
 
-  let ldrText, ldrClassName;
-  if (sepDays < 0) {
-    ldrText = `✈️ 距异地开始还有 ${-sepDays} 天`;
-    ldrClassName = "dw-ldr";
-  } else if (sepDays === 0) {
-    ldrText = "✈️ 今天开始异地…要加油！";
-    ldrClassName = "dw-ldr today";
-  } else {
-    ldrText = `✈️ 异地第 ${sepDays + 1} 天`;
-    ldrClassName = "dw-ldr";
-  }
-
-  let reunionText = null;
-  if (LDR.reunionDate) {
-    const reunionDate = new Date(LDR.reunionDate + "T00:00");
-    const reunionDays = Math.ceil((reunionDate - todayDate) / 86400000);
-    if (reunionDays > 0) {
-      reunionText = `💕 距下次见面 ${reunionDays} 天`;
-    } else if (reunionDays === 0) {
-      reunionText = "💕 今天见面！";
+  let ldrText = null, ldrClassName = null, reunionText = null;
+  if (LDR) {
+    const sepDate = new Date(LDR.separationDate + "T00:00");
+    const sepDays = Math.ceil((todayDate - sepDate) / 86400000);
+    if (sepDays < 0) {
+      ldrText = `✈️ 距异地开始还有 ${-sepDays} 天`;
+      ldrClassName = "dw-ldr";
+    } else if (sepDays === 0) {
+      ldrText = "✈️ 今天开始异地…要加油！";
+      ldrClassName = "dw-ldr today";
+    } else {
+      ldrText = `✈️ 异地第 ${sepDays + 1} 天`;
+      ldrClassName = "dw-ldr";
+    }
+    if (LDR.reunionDate) {
+      const reunionDate = new Date(LDR.reunionDate + "T00:00");
+      const reunionDays = Math.ceil((reunionDate - todayDate) / 86400000);
+      if (reunionDays > 0) {
+        reunionText = `💕 距下次见面 ${reunionDays} 天`;
+      } else if (reunionDays === 0) {
+        reunionText = "💕 今天见面！";
+      }
     }
   }
 

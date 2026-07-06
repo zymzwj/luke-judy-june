@@ -10,6 +10,8 @@ function DualClock() {
     return () => clearInterval(t);
   }, []);
 
+  if (!LDR) return null;
+
   const fmt = (tz) =>
     now.toLocaleTimeString("zh-CN", { timeZone: tz, hour: "2-digit", minute: "2-digit", hour12: false });
 
@@ -45,7 +47,7 @@ export function DateWidgetView({ state }) {
         <div className="dw-bar-fill" style={{ width: `${state.progress}%` }} />
       </div>
       <div className="dw-bar-label">{state.barLabel}</div>
-      <div className={state.ldrClassName}>{state.ldrText}</div>
+      {state.ldrText && <div className={state.ldrClassName}>{state.ldrText}</div>}
       {state.reunionText && <div className="dw-ldr reunion">{state.reunionText}</div>}
     </div>
   );
