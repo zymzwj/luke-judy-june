@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { useData } from "../firebase/dataContext.jsx";
 import { CAT_NAMES } from "../data/calendar.js";
 import { dateStr } from "../utils/date.js";
+import { MONTH_CONFIG } from "../firebase/config.js";
 
 const ALL_CATS = ["yuxin", "date", "luke", "special", "growth"];
 const MOOD_OPTIONS = [
@@ -14,8 +15,8 @@ const MOOD_OPTIONS = [
 ];
 const DAY_HEADERS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 const DOW_NAMES = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
-const FIRST_DAY = 3; // July 1 2026 = Wednesday (day-of-week index)
-const DAYS_IN_MONTH = 31;
+const FIRST_DAY = MONTH_CONFIG.firstDow;
+const DAYS_IN_MONTH = MONTH_CONFIG.daysInMonth;
 
 function parseDateLabel(ds) {
   const dt = new Date(ds + "T00:00");
@@ -158,7 +159,7 @@ function NotePopup({ date, rect, onClose }) {
 
 function EventModal({ date, onClose }) {
   const { data, saveField } = useData();
-  const [formDate, setFormDate] = useState(date || "2026-07-01");
+  const [formDate, setFormDate] = useState(date || dateStr(1));
   const [cat, setCat] = useState("date");
   const [title, setTitle] = useState("");
   const [time, setTime] = useState("");
@@ -430,7 +431,7 @@ export default function Calendar() {
         <div className="card">
           <div className="card-head">
             <h3>月历视图</h3>
-            <button className="add-btn" onClick={() => setModalDate("2026-07-01")}>+ 添加事项</button>
+            <button className="add-btn" onClick={() => setModalDate(dateStr(1))}>+ 添加事项</button>
           </div>
           <div className="cal-grid" id="calHead">
             {DAY_HEADERS.map(d => (

@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { useData } from "../firebase/dataContext.jsx";
+import { MONTH_CONFIG } from "../firebase/config.js";
 import { getDailyItems, computeMonthPoints, sumBonuses } from "../utils/plans.js";
 import { fmtHM } from "../utils/format.js";
 import { dateStr } from "../utils/date.js";
@@ -106,12 +107,12 @@ export default function MonthReport() {
     };
   }, [data, memories]);
 
-  const headline = `七月完成率 ${stats.completionRate}%，Luke ${stats.lukePoints} 分 / Judy ${stats.judyPoints} 分，共打卡 ${stats.habitCount} 次，记录 ${stats.memoryCount} 条回忆。`;
+  const headline = `${MONTH_CONFIG.label}完成率 ${stats.completionRate}%，Luke ${stats.lukePoints} 分 / Judy ${stats.judyPoints} 分，共打卡 ${stats.habitCount} 次，记录 ${stats.memoryCount} 条回忆。`;
 
   return (
     <div className="report-card">
       <div className="report-head">
-        <h3>📊 七月月报</h3>
+        <h3>📊 {MONTH_CONFIG.label}月报</h3>
       </div>
       <div className="report-stats">
         <Stat label="任务完成率" value={`${stats.completionRate}%`} />

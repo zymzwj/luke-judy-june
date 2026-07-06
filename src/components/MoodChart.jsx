@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useData } from "../firebase/dataContext.jsx";
+import { MONTH_CONFIG } from "../firebase/config.js";
 import { dateStr } from "../utils/date.js";
 
 const MOOD_SCALE = {
@@ -61,7 +62,7 @@ export default function MoodChart() {
         maintainAspectRatio: false,
         scales: {
           x: {
-            title: { display: true, text: "七月" },
+            title: { display: true, text: MONTH_CONFIG.label },
             ticks: { maxTicksLimit: 15 }
           },
           y: {

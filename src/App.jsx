@@ -28,7 +28,7 @@ import Celebration from "./components/Celebration.jsx";
 import MoodCheckin from "./components/MoodCheckin.jsx";
 import SharedLists from "./components/SharedLists.jsx";
 import DailyShare from "./components/DailyShare.jsx";
-import { IS_ARCHIVE, ACTIVE_MONTH, MONTH_CONFIG } from "./firebase/config.js";
+import { IS_CURRENT_MONTH, ACTIVE_MONTH, MONTH_CONFIG, monthUrl, prevMonthKey, nextMonthKey } from "./firebase/config.js";
 import useTimeGradient from "./hooks/useTimeGradient.js";
 import useScrollReveal from "./hooks/useScrollReveal.js";
 import { BookIcon, HeartIcon, PenIcon, CalendarIcon, ChartIcon } from "./components/HandIcons.jsx";
@@ -56,10 +56,10 @@ export default function App() {
 
   return (
     <>
-      {IS_ARCHIVE && (
+      {!IS_CURRENT_MONTH && (
         <div className="archive-banner">
-          📂 正在查看 {MONTH_CONFIG.label} 归档（只读）
-          <a href={window.location.pathname}>← 返回七月</a>
+          📂 正在查看 {MONTH_CONFIG.label} 的数据
+          <a href={window.location.pathname}>← 返回本月</a>
         </div>
       )}
       <SyncStatus state={syncState.state} msg={syncState.msg} />
@@ -119,7 +119,7 @@ export default function App() {
 
             {/* Calendar */}
             <div className="section reveal" id="sec-cal">
-              <h2 className="section-title"><CalendarIcon size={28} /> 七月日历 <span className="en">July Calendar</span></h2>
+              <h2 className="section-title"><CalendarIcon size={28} /> {MONTH_CONFIG.label}日历 <span className="en">{MONTH_CONFIG.labelEn} Calendar</span></h2>
               <Calendar />
             </div>
 
@@ -153,7 +153,7 @@ export default function App() {
             {/* Weekly Retro + Month Report + Insights */}
             <div className="section reveal" id="sec-retro">
               <h2 className="section-title"><PenIcon size={28} /> 复盘 &amp; 月报 <span className="en">Reflection &amp; Report</span></h2>
-              <p className="section-desc">每周日花几分钟回顾这一周，月底自动生成你俩的七月总结。</p>
+              <p className="section-desc">每周日花几分钟回顾这一周，月底自动生成你俩的{MONTH_CONFIG.label}总结。</p>
               <div className="retro-grid">
                 <WeeklyRetro />
                 <MonthReport />
@@ -169,12 +169,12 @@ export default function App() {
               <TimeChart plannerDay={plannerDay} />
             </div>
 
-            {/* Month Archive Link */}
-            {!IS_ARCHIVE && (
-              <div className="month-archive-link">
-                <a href="?month=june">📂 查看六月回顾</a>
-              </div>
-            )}
+            {/* Month Navigation */}
+            <div className="month-nav-footer">
+              <a href={monthUrl(prevMonthKey(ACTIVE_MONTH))}>‹ 上个月</a>
+              <span>{MONTH_CONFIG.year}年{MONTH_CONFIG.label}</span>
+              {!IS_CURRENT_MONTH && <a href={monthUrl(nextMonthKey(ACTIVE_MONTH))}>下个月 ›</a>}
+            </div>
           </div>
         </div>
       </div>

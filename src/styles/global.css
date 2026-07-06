@@ -4302,15 +4302,15 @@
   font-weight: 600; white-space: nowrap;
 }
 
-/* ── Month archive link (footer) ── */
-.month-archive-link {
-  text-align: center; padding: 32px 0 16px;
-  font-family: var(--serif);
+/* ── Month navigation footer ── */
+.month-nav-footer {
+  display: flex; align-items: center; justify-content: center; gap: 20px;
+  padding: 32px 0 16px;
+  font-family: var(--serif); font-size: 14px; color: var(--muted);
 }
-.month-archive-link a {
-  color: var(--muted); font-size: 14px;
-  text-decoration: none; transition: color 0.2s;
+.month-nav-footer a {
+  color: var(--muted); text-decoration: none; transition: color 0.2s;
 }
-.month-archive-link a:hover {
+.month-nav-footer a:hover {
   color: var(--rose); text-decoration: underline;
 }
