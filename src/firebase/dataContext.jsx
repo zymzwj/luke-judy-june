@@ -13,9 +13,8 @@ import {
   updateDoc
 } from "./client.js";
 import { useAuth } from "./context.jsx";
+import { COUPLE_ID } from "./config.js";
 import { DEFAULT_EVENTS } from "../data/calendar.js";
-
-const COUPLE_ID = "luke-judy";
 
 const DataContext = createContext(null);
 
@@ -26,7 +25,8 @@ const EMPTY = {
   bonuses: [], seedsApplied: {}, timeLogs: {},
   prayers: [], devotionNotes: {},
   weeklyRetros: {}, birthdayLetter: "",
-  sweetInbox: [], bucketList: [], monthlyGoals: []
+  sweetInbox: [], bucketList: [], monthlyGoals: [],
+  customHabits: []
 };
 
 export function DataProvider({ children }) {
@@ -77,7 +77,8 @@ export function DataProvider({ children }) {
           birthdayLetter: d.birthdayLetter || "",
           sweetInbox: Array.isArray(d.sweetInbox) ? d.sweetInbox : [],
           bucketList: Array.isArray(d.bucketList) ? d.bucketList : [],
-          monthlyGoals: Array.isArray(d.monthlyGoals) ? d.monthlyGoals : []
+          monthlyGoals: Array.isArray(d.monthlyGoals) ? d.monthlyGoals : [],
+          customHabits: Array.isArray(d.customHabits) ? d.customHabits : []
         });
 
         // One-time migration: memories from main doc to subcollection

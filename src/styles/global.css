@@ -3034,6 +3034,67 @@
   .habit-streak.hot { color: white; background: linear-gradient(135deg, var(--rose), var(--gold)); }
   .habit-streak.zero { color: var(--muted); background: var(--bg-warm); }
 
+  .habit-edit-toggle {
+    margin-left: 12px;
+    padding: 2px 10px;
+    font-size: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-warm);
+    color: var(--muted);
+    cursor: pointer;
+    vertical-align: middle;
+  }
+  .habit-edit-toggle:hover { background: var(--rose-light); color: var(--rose); border-color: var(--rose); }
+
+  .habit-delete-btn {
+    margin-left: 8px;
+    width: 20px; height: 20px;
+    border: none;
+    border-radius: 50%;
+    background: var(--rose-light);
+    color: var(--rose);
+    font-size: 0.7rem;
+    cursor: pointer;
+    line-height: 1;
+    display: inline-flex; align-items: center; justify-content: center;
+    vertical-align: middle;
+    opacity: 0.7;
+  }
+  .habit-delete-btn:hover { opacity: 1; background: var(--rose); color: white; }
+
+  .habit-add-row {
+    display: flex;
+    gap: 8px;
+    padding: 8px 0 4px;
+    align-items: center;
+  }
+  .habit-add-input {
+    flex: 1;
+    padding: 6px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-family: var(--sans);
+    background: var(--card);
+    color: var(--text);
+  }
+  .habit-add-input:focus { border-color: var(--rose); outline: none; }
+  .habit-add-input::placeholder { color: var(--muted); }
+
+  .habit-add-btn {
+    padding: 6px 16px;
+    border: none;
+    border-radius: 8px;
+    background: var(--rose);
+    color: white;
+    font-size: 0.85rem;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .habit-add-btn:disabled { opacity: 0.4; cursor: default; }
+  .habit-add-btn:not(:disabled):hover { background: var(--rose-dark, #c06070); }
+
   /* ========== FILTERS ========== */
   .filters {
     display: flex;
