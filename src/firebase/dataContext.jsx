@@ -121,6 +121,20 @@ export function DataProvider({ children }) {
             });
           } catch(e) { console.warn("seed bonus failed", e); }
         }
+
+        // One-time seed: default custom habits (only if field doesn't exist yet)
+        if (d.customHabits === undefined && !(d.seedsApplied || {}).customHabitsSeeded) {
+          try {
+            await updateDoc(docRef, {
+              customHabits: [
+                { cat: "trade", name: "📈 Luke 交易计划+复盘" },
+                { cat: "cafe", name: "☕ 咖啡馆学习 (一起)" },
+                { cat: "network", name: "🤝 Judy Networking" },
+              ],
+              "seedsApplied.customHabitsSeeded": true
+            });
+          } catch(e) { console.warn("seed custom habits failed", e); }
+        }
       } else {
         const init = { ...EMPTY, events: [...DEFAULT_EVENTS], createdAt: new Date().toISOString() };
         setData(init);

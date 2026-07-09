@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useData } from "../firebase/dataContext.jsx";
 import { MONTH_CONFIG } from "../firebase/config.js";
 import { currentDay, todayISO, dateStr } from "../utils/date.js";
@@ -88,14 +88,6 @@ export default function HabitTracker() {
 
   const [editing, setEditing] = useState(false);
   const [newName, setNewName] = useState("");
-
-  // Auto-seed: if customHabits is empty array and no seed flag, populate with defaults
-  useEffect(() => {
-    if (customHabits && customHabits.length === 0 && !data.seedsApplied?.customHabitsSeeded) {
-      saveField("customHabits", DEFAULT_CUSTOM);
-      updateField("seedsApplied.customHabitsSeeded", true);
-    }
-  }, [customHabits]);
 
   const toggle = (key) => {
     if (habits[key]) {

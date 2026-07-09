@@ -76,11 +76,11 @@ export default function App() {
           <Sidebar />
 
           <div className="main-col">
-            {/* Daily Share */}
-            <div className="section reveal" id="sec-share">
-              <h2 className="section-title">📸 今日分享 <span className="en">Daily Share</span></h2>
-              <p className="section-desc">每天分享一张照片和一句话，记录异地的日常。</p>
-              <DailyShare />
+            {/* Weekly Plan + Daily Plan */}
+            <div className="section reveal" id="sec-plan">
+              <h2 className="section-title"><PenIcon size={28} /> 本周 &amp; 今日计划 <span className="en">Plans</span></h2>
+              <p className="section-desc">每周一个方向，每天具体清单。打勾的每一项 +1 分，全部完成 +3 分奖励。</p>
+              <Planner onDayChange={setPlannerDay} />
             </div>
 
             {/* Medication Tracker */}
@@ -88,18 +88,18 @@ export default function App() {
               <MedTracker />
             </div>
 
+            {/* Daily Share */}
+            <div className="section reveal" id="sec-share">
+              <h2 className="section-title">📸 今日分享 <span className="en">Daily Share</span></h2>
+              <p className="section-desc">每天分享一张照片和一句话，记录异地的日常。</p>
+              <DailyShare />
+            </div>
+
             {/* Habit Tracker */}
             <div className="section reveal" id="sec-habit">
               <h2 className="section-title">每日打卡 <span className="en">Daily Tracker</span></h2>
               <p className="section-desc">点击每个小格子标记完成。颜色代表对应的目标类别。</p>
               <HabitTracker />
-            </div>
-
-            {/* Weekly Plan + Daily Plan */}
-            <div className="section reveal" id="sec-plan">
-              <h2 className="section-title"><PenIcon size={28} /> 本周 &amp; 今日计划 <span className="en">Plans</span></h2>
-              <p className="section-desc">每周一个方向，每天具体清单。打勾的每一项 +1 分，全部完成 +3 分奖励。</p>
-              <Planner onDayChange={setPlannerDay} />
             </div>
 
             {/* Calendar */}
