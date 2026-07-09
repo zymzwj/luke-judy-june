@@ -195,7 +195,7 @@ export default function PhotoCarousel() {
         )}
       </div>
       <div className="hero-overlay">
-        <div className="hero-eyebrow">{MONTH_CONFIG.labelEn} {MONTH_CONFIG.year} · 我们的{MONTH_CONFIG.label}</div>
+        <div className="hero-eyebrow">Vol. {MONTH_CONFIG.month - 5} — {MONTH_CONFIG.labelEn} {MONTH_CONFIG.year}</div>
         <h1 className="hero-title">Luke <span className="ampersand">&</span> Judy</h1>
         <div className="hero-sub">
           "两个人总比一个人好，因为二人劳碌同得美好的果效。"

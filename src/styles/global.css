@@ -1,52 +1,54 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg: #faf6f1;
-    --bg-warm: #f5ede3;
+    --bg: #faf8f5;
+    --bg-warm: #f3efe8;
     --card: #ffffff;
-    --ink: #2a2522;
-    --ink-soft: #6b5f57;
-    --muted: #a89a8e;
-    --border: #ebe2d6;
-    --hover: #f8f1e8;
+    --ink: #1a1a1a;
+    --ink-soft: #555;
+    --muted: #999;
+    --border: #e5e0d8;
+    --hover: #f5f0e8;
 
-    --rose: #c97b8f;
-    --rose-bg: #fbe9ee;
-    --rose-soft: #f5d3dd;
-    --plum: #8d6e9e;
-    --plum-bg: #ede4f2;
-    --sky: #6a92b5;
-    --sky-bg: #dfeaf3;
-    --gold: #c8954d;
-    --gold-bg: #f7ecd6;
+    --rose: #c9a87c;
+    --rose-bg: #f5ede0;
+    --rose-soft: #e8dcc8;
+    --rose-light: #f9f3ea;
+    --rose-dark: #a8895e;
+    --plum: #8b7355;
+    --plum-bg: #ede4d8;
+    --sky: #7a8a7a;
+    --sky-bg: #e8ece8;
+    --gold: #c9a87c;
+    --gold-bg: #f5ede0;
     --sage: #87a386;
     --sage-bg: #e3ece2;
 
     --serif: "Cormorant Garamond", "Noto Serif SC", Georgia, serif;
     --sans: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
 
-    --hero-grad: linear-gradient(135deg, #e8d5c4 0%, #d4b8a8 50%, #c19b87 100%);
+    --hero-grad: linear-gradient(135deg, #d8cbb8 0%, #c4b5a0 50%, #b0a08a 100%);
   }
 
   /* ========== DARK MODE ========== */
   [data-theme="dark"] {
-    --bg: #1a1614;
-    --bg-warm: #231f1c;
-    --card: #2a2522;
-    --ink: #ede5dc;
-    --ink-soft: #b5a99e;
-    --muted: #8a7e74;
-    --border: #3d3530;
-    --hover: #312b27;
+    --bg: #181612;
+    --bg-warm: #211d18;
+    --card: #262220;
+    --ink: #e8e0d5;
+    --ink-soft: #b0a498;
+    --muted: #7a7068;
+    --border: #383028;
+    --hover: #2e2822;
 
-    --rose: #e0909f;
-    --rose-bg: #3a2028;
-    --rose-soft: #4a2a34;
-    --plum: #b08ec3;
-    --plum-bg: #2e2338;
+    --rose: #d4b88a;
+    --rose-bg: #2e2818;
+    --rose-soft: #3a3020;
+    --plum: #a89070;
+    --plum-bg: #2a2418;
     --sky: #8ab0d0;
     --sky-bg: #1e2c3a;
-    --gold: #dba85e;
-    --gold-bg: #3a2e1a;
+    --gold: #d4b88a;
+    --gold-bg: #2e2818;
     --sage: #9bba9a;
     --sage-bg: #1e2a1e;
   }
@@ -65,7 +67,7 @@
   .signin-overlay {
     position: fixed;
     inset: 0;
-    background: linear-gradient(135deg, #f5ede3 0%, #e8d5c4 100%);
+    background: #faf8f5;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -74,7 +76,7 @@
   }
   .signin-card {
     background: var(--card);
-    border-radius: 20px;
+    border-radius: 6px;
     padding: 48px 40px;
     max-width: 420px;
     width: 100%;
@@ -187,9 +189,9 @@
 
   /* ========== MED TRACKER ========== */
   .med-card {
-    background: linear-gradient(135deg, #fff 0%, var(--rose-bg) 100%);
+    background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 4px;
     padding: 22px 24px 20px;
     position: relative;
     overflow: hidden;
@@ -198,8 +200,8 @@
     content: "";
     position: absolute;
     top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--rose), var(--plum));
+    height: 2px;
+    background: var(--rose);
   }
   .med-head {
     display: flex;
@@ -265,7 +267,7 @@
   }
   .med-progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--rose), var(--plum));
+    background: var(--rose);
     border-radius: 4px;
     transition: width 0.5s ease-out;
   }
@@ -435,7 +437,7 @@
   .avatar-card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 4px;
     padding: 14px 10px 12px;
     text-align: center;
     overflow: hidden;
@@ -460,7 +462,7 @@
   .avatar-stage {
     width: 100%;
     aspect-ratio: 1;
-    border-radius: 12px;
+    border-radius: 4px;
     background: linear-gradient(135deg, var(--bg-warm), white);
     display: flex;
     align-items: center;
@@ -522,7 +524,7 @@
   .sidegoal {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 4px;
     padding: 12px 14px;
     display: flex;
     align-items: center;
@@ -595,7 +597,7 @@
   .sidebar-section {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: 4px;
     padding: 16px 14px;
   }
   .sidebar-section-title {
@@ -617,7 +619,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 8px 10px;
-    border-radius: 10px;
+    border-radius: 4px;
     background: var(--bg-warm);
   }
   .score-row.luke { border-left: 3px solid var(--sky); }
@@ -669,7 +671,7 @@
   .today-card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: 4px;
     padding: 16px;
     position: relative;
     overflow: hidden;
@@ -714,8 +716,8 @@
     border-radius: 3px;
     transition: width 0.35s;
   }
-  .today-card.luke .today-bar-fill { background: linear-gradient(90deg, var(--sky), var(--plum)); }
-  .today-card.judy .today-bar-fill { background: linear-gradient(90deg, var(--rose), var(--gold)); }
+  .today-card.luke .today-bar-fill { background: var(--sky); }
+  .today-card.judy .today-bar-fill { background: var(--rose); }
   .today-items {
     display: flex;
     flex-direction: column;
@@ -949,7 +951,7 @@
   .insight-card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 4px;
     padding: 18px 20px;
     position: relative;
     overflow: hidden;
@@ -957,10 +959,10 @@
   .insight-card::before {
     content: "";
     position: absolute;
-    top: 0; left: 0; right: 0; height: 3px;
+    top: 0; left: 0; right: 0; height: 2px;
   }
-  .insight-card.mood::before { background: linear-gradient(90deg, var(--rose), var(--plum)); }
-  .insight-card.heatmap::before { background: linear-gradient(90deg, var(--sky), var(--sage)); }
+  .insight-card.mood::before { background: var(--rose); }
+  .insight-card.heatmap::before { background: var(--sky); }
   .insight-card h4 {
     font-family: var(--serif);
     font-size: 17px;
@@ -987,11 +989,11 @@
     position: relative;
     cursor: default;
   }
-  .heatmap-cell.l1 { background: #fce7f3; }
-  .heatmap-cell.l2 { background: #f5d3dd; }
-  .heatmap-cell.l3 { background: #ec9eb8; }
-  .heatmap-cell.l4 { background: #d4709a; }
-  .heatmap-cell.l5 { background: #c97b8f; }
+  .heatmap-cell.l1 { background: #f5ede0; }
+  .heatmap-cell.l2 { background: #e8d8c0; }
+  .heatmap-cell.l3 { background: #d4bf9a; }
+  .heatmap-cell.l4 { background: #c0a678; }
+  .heatmap-cell.l5 { background: #a8905e; }
   .heatmap-cell.today { box-shadow: 0 0 0 2px var(--gold); }
   .heatmap-cell .hm-num {
     position: absolute;
@@ -1020,9 +1022,9 @@
 
   /* ========== SWEET INBOX ========== */
   .inbox-card {
-    background: linear-gradient(135deg, #fff 0%, #fbe9ee 100%);
+    background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 4px;
     padding: 22px 24px;
     position: relative;
     overflow: hidden;
@@ -1031,7 +1033,7 @@
     content: "";
     position: absolute;
     top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, var(--rose), var(--plum), var(--rose));
+    background: var(--rose);
   }
   .inbox-head {
     display: flex;
@@ -1063,7 +1065,7 @@
   .inbox-tab {
     background: transparent;
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 4px;
     padding: 5px 12px;
     font-size: 11px;
     font-weight: 600;
@@ -1139,7 +1141,7 @@
     letter-spacing: 0.3px;
     background: rgba(201,123,143,0.08);
     border: 1px solid rgba(201,123,143,0.25);
-    border-radius: 12px;
+    border-radius: 4px;
     padding: 2px 10px;
     transition: all 0.2s;
   }
@@ -1183,7 +1185,7 @@
     color: white;
     border: none;
     padding: 6px 14px;
-    border-radius: 16px;
+    border-radius: 4px;
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
@@ -1202,7 +1204,7 @@
   .bg-card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 4px;
     padding: 20px 22px;
     position: relative;
     overflow: hidden;
@@ -1212,8 +1214,8 @@
     position: absolute;
     top: 0; left: 0; right: 0; height: 3px;
   }
-  .bg-card.bucket::before { background: linear-gradient(90deg, var(--gold), var(--rose)); }
-  .bg-card.goals::before { background: linear-gradient(90deg, var(--sky), var(--plum)); }
+  .bg-card.bucket::before { background: var(--gold); }
+  .bg-card.goals::before { background: var(--sky); }
   .bg-card h4 {
     font-family: var(--serif);
     font-size: 20px;
@@ -1324,7 +1326,7 @@
   }
   .goal-item .gi-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--sky), var(--plum));
+    background: var(--sky);
     border-radius: 3px;
     transition: width 0.3s;
   }
@@ -1337,7 +1339,7 @@
   .goal-item .gi-btn {
     background: white;
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 4px;
     padding: 2px 10px;
     font-size: 11px;
     cursor: pointer;
@@ -1382,7 +1384,7 @@
   .birthday-splash {
     position: fixed;
     inset: 0;
-    background: linear-gradient(135deg, #fce7f3 0%, #ede4f2 50%, #f7ecd6 100%);
+    background: var(--card);
     display: none;
     align-items: center;
     justify-content: center;
@@ -1492,9 +1494,9 @@
   /* Birthday letter card */
   .bd-letter-section { padding-top: 4px; }
   .bd-letter-card {
-    background: linear-gradient(135deg, #fff 0%, #fce7f3 100%);
+    background: var(--card);
     border: 1px solid var(--rose-soft);
-    border-radius: 18px;
+    border-radius: 4px;
     padding: 26px 30px 22px;
     position: relative;
     overflow: hidden;
@@ -1504,7 +1506,7 @@
     content: "";
     position: absolute;
     top: 0; left: 0; right: 0; height: 4px;
-    background: linear-gradient(90deg, var(--rose), var(--plum), var(--gold), var(--rose));
+    background: var(--rose);
     background-size: 200% 100%;
     animation: bdShimmer 4s linear infinite;
   }
@@ -1541,7 +1543,7 @@
   .bd-letter-head .bd-edit-btn {
     background: transparent;
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: 4px;
     padding: 4px 12px;
     font-size: 11px;
     font-weight: 600;
@@ -1612,11 +1614,11 @@
 
   /* Special birthday badge above hero */
   .bd-banner {
-    background: linear-gradient(90deg, var(--rose), var(--plum));
+    background: var(--rose);
     color: white;
     text-align: center;
     padding: 12px 16px;
-    border-radius: 14px;
+    border-radius: 4px;
     margin-bottom: 16px;
     font-family: var(--serif);
     font-size: 18px;
@@ -1642,7 +1644,7 @@
   .spirit-card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 4px;
     padding: 20px 22px;
     position: relative;
     overflow: hidden;
@@ -1651,7 +1653,7 @@
     content: "";
     position: absolute;
     top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, var(--rose), var(--plum));
+    background: var(--rose);
   }
   .spirit-card h3 {
     font-family: var(--serif);
@@ -1810,7 +1812,7 @@
   .memory-card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: 4px;
     overflow: hidden;
     transition: transform 0.2s;
     position: relative;
@@ -1910,7 +1912,7 @@
   .retro-card, .report-card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 4px;
     padding: 20px 22px;
     position: relative;
     overflow: hidden;
@@ -1918,14 +1920,14 @@
   .retro-card::before {
     content: "";
     position: absolute;
-    top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, var(--gold), var(--rose));
+    top: 0; left: 0; right: 0; height: 2px;
+    background: var(--gold);
   }
   .report-card::before {
     content: "";
     position: absolute;
-    top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, var(--sky), var(--sage));
+    top: 0; left: 0; right: 0; height: 2px;
+    background: var(--sky);
   }
   .retro-head, .report-head {
     display: flex;
@@ -2041,7 +2043,7 @@
   .wheel-card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 18px;
+    border-radius: 4px;
     padding: 20px 18px 16px;
     position: relative;
     overflow: hidden;
@@ -2222,7 +2224,7 @@
   .chart-card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 4px;
     padding: 20px 22px;
     position: relative;
     overflow: hidden;
@@ -2231,8 +2233,8 @@
     content: "";
     position: absolute;
     top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--sky), var(--rose));
+    height: 2px;
+    background: var(--rose);
   }
   .chart-head {
     display: flex;
@@ -2254,7 +2256,7 @@
   .chart-scope button {
     background: transparent;
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 4px;
     padding: 4px 10px;
     font-size: 11px;
     font-weight: 600;
@@ -2394,7 +2396,7 @@
     width: auto;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 18px;
+    border-radius: 4px;
     padding: 20px 18px;
   }
   .date-widget .dw-today-label {
@@ -2455,7 +2457,7 @@
   }
   .date-widget .dw-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--rose), var(--plum));
+    background: var(--rose);
     border-radius: 2px;
     transition: width 0.5s;
   }
@@ -2515,7 +2517,7 @@
   .planner-card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 4px;
     padding: 22px 22px 18px;
     display: flex;
     flex-direction: column;
@@ -2523,10 +2525,10 @@
     overflow: hidden;
   }
   .planner-card.weekly {
-    background: linear-gradient(135deg, #fff 0%, #fef6f0 100%);
+    background: var(--card);
   }
   .planner-card.daily {
-    background: linear-gradient(135deg, #fff 0%, #f4f0fa 100%);
+    background: var(--card);
   }
   .planner-card::before {
     content: "";
@@ -2534,8 +2536,8 @@
     top: 0; left: 0; right: 0;
     height: 3px;
   }
-  .planner-card.weekly::before { background: linear-gradient(90deg, var(--rose), var(--gold)); }
-  .planner-card.daily::before { background: linear-gradient(90deg, var(--plum), var(--sky)); }
+  .planner-card.weekly::before { background: var(--rose); }
+  .planner-card.daily::before { background: var(--sky); }
   .planner-head {
     display: flex;
     align-items: center;
@@ -2601,7 +2603,7 @@
     min-height: 220px;
     padding: 14px 16px;
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 4px;
     font-family: var(--sans);
     font-size: 14px;
     line-height: 1.7;
@@ -2663,7 +2665,7 @@
   /* ========== HERO ========== */
   .hero {
     position: relative;
-    border-radius: 20px;
+    border-radius: 4px;
     overflow: hidden;
     background: var(--hero-grad);
     min-height: 380px;
@@ -2774,12 +2776,13 @@
     color: white;
   }
   .hero-eyebrow {
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 17px;
-    opacity: 0.85;
-    letter-spacing: 1px;
-    margin-bottom: 6px;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 500;
+    opacity: 0.8;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
   }
   .hero-title {
     font-family: var(--serif);
@@ -2791,16 +2794,17 @@
   }
   .hero-title .ampersand {
     font-style: italic;
-    color: var(--rose-soft);
+    color: var(--rose);
+    opacity: 0.7;
     margin: 0 4px;
   }
   .hero-sub {
     font-family: var(--serif);
     font-style: italic;
-    font-size: 17px;
-    opacity: 0.95;
+    font-size: 16px;
+    opacity: 0.9;
     letter-spacing: 0.3px;
-    line-height: 1.55;
+    line-height: 1.6;
     max-width: 640px;
   }
   .hero-sub .verse-cite {
@@ -2836,10 +2840,14 @@
   #photoInput { display: none; }
 
   /* ========== SECTION HEADINGS ========== */
-  .section { margin-bottom: 36px; }
+  .section {
+    margin-bottom: 36px;
+    border-top: 1px solid var(--border);
+    padding-top: 28px;
+  }
   .section-title {
     font-family: var(--serif);
-    font-size: 30px;
+    font-size: 28px;
     font-weight: 500;
     margin-bottom: 4px;
     display: flex;
@@ -2849,18 +2857,21 @@
   .section-title svg {
     flex-shrink: 0;
     color: var(--rose);
-    opacity: 0.75;
-    stroke-width: 1.6;
+    opacity: 0.65;
+    stroke-width: 1.4;
   }
   .section-title .en {
+    font-family: var(--serif);
     font-style: italic;
     color: var(--muted);
-    font-size: 18px;
-    letter-spacing: 1px;
+    font-size: 15px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
   }
   .section-desc {
-    color: var(--ink-soft);
-    font-size: 14px;
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 0.3px;
     margin-bottom: 20px;
   }
 
@@ -2872,7 +2883,7 @@
   }
   .goal {
     background: var(--card);
-    border-radius: 14px;
+    border-radius: 4px;
     padding: 22px;
     border: 1px solid var(--border);
     position: relative;
@@ -2934,7 +2945,7 @@
   .habit-card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: 4px;
     padding: 22px;
   }
   .habit-row {
@@ -3031,7 +3042,7 @@
     letter-spacing: 0.3px;
     vertical-align: middle;
   }
-  .habit-streak.hot { color: white; background: linear-gradient(135deg, var(--rose), var(--gold)); }
+  .habit-streak.hot { color: white; background: var(--rose); }
   .habit-streak.zero { color: var(--muted); background: var(--bg-warm); }
 
   .habit-edit-toggle {
@@ -3133,7 +3144,7 @@
 
   .card {
     background: var(--card);
-    border-radius: 14px;
+    border-radius: 4px;
     border: 1px solid var(--border);
     padding: 22px;
   }
@@ -3245,7 +3256,7 @@
     position: fixed;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 4px;
     padding: 12px;
     box-shadow: 0 12px 30px -6px rgba(0,0,0,0.18);
     z-index: 100;
@@ -3311,7 +3322,7 @@
     position: fixed;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 4px;
     padding: 6px;
     box-shadow: 0 10px 30px -8px rgba(0,0,0,0.2);
     z-index: 100;
@@ -3460,7 +3471,7 @@
   .modal-backdrop.show { display: flex; }
   .modal {
     background: var(--card);
-    border-radius: 16px;
+    border-radius: 4px;
     padding: 28px;
     width: 90%;
     max-width: 440px;
@@ -3532,8 +3543,8 @@
 
   /* ========== QUOTE ========== */
   .quote-card {
-    background: linear-gradient(135deg, var(--rose-bg) 0%, var(--plum-bg) 100%);
-    border-radius: 14px;
+    background: var(--rose-bg);
+    border-radius: 4px;
     padding: 28px 32px;
     text-align: center;
     border: 1px solid var(--border);
@@ -3573,7 +3584,7 @@
     gap: 2px;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: 4px;
     padding: 8px 4px;
     box-shadow: 0 4px 16px -4px rgba(0,0,0,0.1);
   }
@@ -3704,7 +3715,7 @@
     transform: translate(-50%, -50%) scale(0.8);
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 20px;
+    border-radius: 6px;
     padding: 28px 36px;
     text-align: center;
     z-index: 1000;
@@ -3782,13 +3793,13 @@
     background: rgba(42,37,34,0.92);
   }
   [data-theme="dark"] .inbox-card {
-    background: linear-gradient(135deg, var(--card) 0%, var(--rose-bg) 100%);
+    background: var(--card);
   }
   [data-theme="dark"] .med-card {
-    background: linear-gradient(135deg, var(--card) 0%, var(--rose-bg) 100%);
+    background: var(--card);
   }
   [data-theme="dark"] .quote-card {
-    background: linear-gradient(135deg, var(--rose-bg) 0%, var(--plum-bg) 100%);
+    background: var(--rose-bg);
   }
   [data-theme="dark"] input,
   [data-theme="dark"] textarea,
@@ -3860,13 +3871,13 @@
     .section-desc { font-size: 12px; margin-bottom: 14px; }
 
     /* --- Hero banner --- */
-    .hero { min-height: 220px; border-radius: 14px; margin-bottom: 20px; }
+    .hero { min-height: 220px; border-radius: 4px; margin-bottom: 20px; }
     .hero-content h1 { font-size: 32px; }
     .hero-sub { font-size: 12px; }
     .hero-quote { font-size: 13px; }
 
     /* --- Quote / Bible verse --- */
-    .quote-card { padding: 18px 14px; border-radius: 12px; }
+    .quote-card { padding: 18px 14px; border-radius: 4px; }
     .quote-text { font-size: 17px; }
 
     /* --- User badge --- */
@@ -3897,23 +3908,23 @@
     }
     .sidebar-section {
       padding: 12px;
-      border-radius: 12px;
+      border-radius: 4px;
     }
     .sidebar-section-title { font-size: 13px; }
     .score-row .score-num span:first-child { font-size: 26px; }
 
     /* --- Cards: reduce padding --- */
-    .card { padding: 14px; border-radius: 12px; }
-    .planner-card { padding: 14px 12px 12px; border-radius: 12px; }
-    .spirit-card { padding: 14px 12px; border-radius: 12px; }
-    .bg-card { padding: 14px 12px; border-radius: 12px; }
-    .retro-card, .report-card { padding: 14px 12px; border-radius: 12px; }
-    .wheel-card { padding: 14px 12px 10px; border-radius: 14px; }
-    .med-card { padding: 14px 12px; border-radius: 12px; }
-    .habit-card { padding: 14px 10px; border-radius: 12px; }
-    .insight-card { padding: 14px 12px; border-radius: 12px; }
-    .inbox-card { padding: 14px 12px; border-radius: 12px; }
-    .today-card { padding: 12px; border-radius: 12px; }
+    .card { padding: 14px; border-radius: 4px; }
+    .planner-card { padding: 14px 12px 12px; border-radius: 4px; }
+    .spirit-card { padding: 14px 12px; border-radius: 4px; }
+    .bg-card { padding: 14px 12px; border-radius: 4px; }
+    .retro-card, .report-card { padding: 14px 12px; border-radius: 4px; }
+    .wheel-card { padding: 14px 12px 10px; border-radius: 4px; }
+    .med-card { padding: 14px 12px; border-radius: 4px; }
+    .habit-card { padding: 14px 10px; border-radius: 4px; }
+    .insight-card { padding: 14px 12px; border-radius: 4px; }
+    .inbox-card { padding: 14px 12px; border-radius: 4px; }
+    .today-card { padding: 12px; border-radius: 4px; }
 
     /* --- Med Tracker --- */
     .med-head { gap: 8px; }
@@ -3998,7 +4009,7 @@
       width: calc(100% - 20px);
       max-width: none;
       padding: 20px 16px;
-      border-radius: 14px;
+      border-radius: 4px;
     }
     .modal h3 { font-size: 20px; margin-bottom: 14px; }
     .form-row-grid { grid-template-columns: 1fr; gap: 10px; }
@@ -4070,7 +4081,7 @@
 .mood-checkin-card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 4px;
   padding: 20px;
 }
 .mc-today {
@@ -4152,7 +4163,7 @@
 .sl-card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 4px;
   padding: 16px;
 }
 .sl-head {
@@ -4244,7 +4255,7 @@
 .daily-share-card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 4px;
   padding: 20px;
 }
 .ds-compose {
@@ -4352,7 +4363,7 @@
 /* ── Archive banner ── */
 .archive-banner {
   position: sticky; top: 0; z-index: 900;
-  background: linear-gradient(135deg, #d4a574, #c97b8f);
+  background: var(--ink);
   color: #fff; text-align: center;
   padding: 10px 16px; font-size: 14px;
   font-family: var(--serif);

@@ -78,7 +78,7 @@ export default function TimeChart() {
           {
             label: "Judy",
             data: judyData,
-            backgroundColor: "#c97b8f",
+            backgroundColor: "#c9a87c",
             borderRadius: 4,
           },
         ],

@@ -48,8 +48,8 @@ export default function MoodChart() {
         datasets: [{
           label: "心情趋势",
           data: values,
-          borderColor: "#c97b8f",
-          backgroundColor: "rgba(201,123,143,0.15)",
+          borderColor: "#c9a87c",
+          backgroundColor: "rgba(201,168,124,0.15)",
           fill: true,
           tension: 0.3,
           spanGaps: true,

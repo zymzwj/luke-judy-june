@@ -25,7 +25,6 @@ import MoodChart from "./components/MoodChart.jsx";
 import HabitHeatmap from "./components/HabitHeatmap.jsx";
 import ThemeToggle from "./components/ThemeToggle.jsx";
 import Celebration from "./components/Celebration.jsx";
-import MoodCheckin from "./components/MoodCheckin.jsx";
 import SharedLists from "./components/SharedLists.jsx";
 import DailyShare from "./components/DailyShare.jsx";
 import { IS_CURRENT_MONTH, ACTIVE_MONTH, MONTH_CONFIG, monthUrl, prevMonthKey, nextMonthKey } from "./firebase/config.js";
@@ -77,25 +76,11 @@ export default function App() {
           <Sidebar />
 
           <div className="main-col">
-            {/* Mood Check-in */}
-            <div className="section reveal" id="sec-mood">
-              <h2 className="section-title">💛 今日心情 <span className="en">Mood Check-in</span></h2>
-              <p className="section-desc">每天签到一个心情，看看对方今天怎么样。</p>
-              <MoodCheckin />
-            </div>
-
             {/* Daily Share */}
             <div className="section reveal" id="sec-share">
               <h2 className="section-title">📸 今日分享 <span className="en">Daily Share</span></h2>
               <p className="section-desc">每天分享一张照片和一句话，记录异地的日常。</p>
               <DailyShare />
-            </div>
-
-            {/* Spiritual Growth */}
-            <div className="section reveal" id="sec-spiritual">
-              <h2 className="section-title"><BookIcon size={28} /> 灵命成长 <span className="en">Spiritual Life</span></h2>
-              <p className="section-desc">祷告事项记录 + 每日灵修反思。一起在主里成长。</p>
-              <Spiritual />
             </div>
 
             {/* Medication Tracker */}
@@ -121,6 +106,13 @@ export default function App() {
             <div className="section reveal" id="sec-cal">
               <h2 className="section-title"><CalendarIcon size={28} /> {MONTH_CONFIG.label}日历 <span className="en">{MONTH_CONFIG.labelEn} Calendar</span></h2>
               <Calendar />
+            </div>
+
+            {/* Spiritual Growth */}
+            <div className="section reveal" id="sec-spiritual">
+              <h2 className="section-title"><BookIcon size={28} /> 灵命成长 <span className="en">Spiritual Life</span></h2>
+              <p className="section-desc">祷告事项记录 + 每日灵修反思。一起在主里成长。</p>
+              <Spiritual />
             </div>
 
             {/* Memory Wall */}

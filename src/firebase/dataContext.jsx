@@ -26,7 +26,7 @@ const EMPTY = {
   prayers: [], devotionNotes: {},
   weeklyRetros: {}, birthdayLetter: "",
   sweetInbox: [], bucketList: [], monthlyGoals: [],
-  customHabits: []
+  customHabits: [], dailyShares: {}
 };
 
 export function DataProvider({ children }) {
@@ -78,7 +78,8 @@ export function DataProvider({ children }) {
           sweetInbox: Array.isArray(d.sweetInbox) ? d.sweetInbox : [],
           bucketList: Array.isArray(d.bucketList) ? d.bucketList : [],
           monthlyGoals: Array.isArray(d.monthlyGoals) ? d.monthlyGoals : [],
-          customHabits: Array.isArray(d.customHabits) ? d.customHabits : []
+          customHabits: Array.isArray(d.customHabits) ? d.customHabits : [],
+          dailyShares: d.dailyShares || {}
         });
 
         // One-time migration: memories from main doc to subcollection
