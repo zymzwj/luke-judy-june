@@ -27,6 +27,7 @@ import ThemeToggle from "./components/ThemeToggle.jsx";
 import Celebration from "./components/Celebration.jsx";
 import SharedLists from "./components/SharedLists.jsx";
 import DailyShare from "./components/DailyShare.jsx";
+import Collapsible from "./components/Collapsible.jsx";
 import { IS_CURRENT_MONTH, ACTIVE_MONTH, MONTH_CONFIG, monthUrl, prevMonthKey, nextMonthKey } from "./firebase/config.js";
 import useTimeGradient from "./hooks/useTimeGradient.js";
 import useScrollReveal from "./hooks/useScrollReveal.js";
@@ -76,75 +77,56 @@ export default function App() {
           <Sidebar />
 
           <div className="main-col">
-            {/* Weekly Plan + Daily Plan */}
-            <div className="section reveal" id="sec-plan">
-              <h2 className="section-title"><PenIcon size={28} /> 本周 &amp; 今日计划 <span className="en">Plans</span></h2>
+            <Collapsible id="sec-plan" title={<><PenIcon size={28} /> 本周 &amp; 今日计划</>} desc="Plans" defaultOpen>
               <p className="section-desc">每周一个方向，每天具体清单。打勾的每一项 +1 分，全部完成 +3 分奖励。</p>
               <Planner onDayChange={setPlannerDay} />
-            </div>
+            </Collapsible>
 
-            {/* Medication Tracker */}
-            <div className="section reveal" id="sec-med">
+            <Collapsible id="sec-med" title="💊 吃药打卡" desc="Medication" defaultOpen>
               <MedTracker />
-            </div>
+            </Collapsible>
 
-            {/* Daily Share */}
-            <div className="section reveal" id="sec-share">
-              <h2 className="section-title">📸 今日分享 <span className="en">Daily Share</span></h2>
+            <Collapsible id="sec-share" title="📸 今日分享" desc="Daily Share">
               <p className="section-desc">每天分享一张照片和一句话，记录异地的日常。</p>
               <DailyShare />
-            </div>
+            </Collapsible>
 
-            {/* Habit Tracker */}
-            <div className="section reveal" id="sec-habit">
-              <h2 className="section-title">每日打卡 <span className="en">Daily Tracker</span></h2>
+            <Collapsible id="sec-habit" title="✅ 每日打卡" desc="Daily Tracker" defaultOpen>
               <p className="section-desc">点击每个小格子标记完成。颜色代表对应的目标类别。</p>
               <HabitTracker />
-            </div>
+            </Collapsible>
 
-            {/* Calendar */}
-            <div className="section reveal" id="sec-cal">
-              <h2 className="section-title"><CalendarIcon size={28} /> {MONTH_CONFIG.label}日历 <span className="en">{MONTH_CONFIG.labelEn} Calendar</span></h2>
+            <Collapsible id="sec-cal" title={<><CalendarIcon size={28} /> {MONTH_CONFIG.label}日历</>} desc={`${MONTH_CONFIG.labelEn} Calendar`}>
               <Calendar />
-            </div>
+            </Collapsible>
 
-            {/* Spiritual Growth */}
-            <div className="section reveal" id="sec-spiritual">
-              <h2 className="section-title"><BookIcon size={28} /> 灵命成长 <span className="en">Spiritual Life</span></h2>
+            <Collapsible id="sec-spiritual" title={<><BookIcon size={28} /> 灵命成长</>} desc="Spiritual Life">
               <p className="section-desc">祷告事项记录 + 每日灵修反思。一起在主里成长。</p>
               <Spiritual />
-            </div>
+            </Collapsible>
 
-            {/* Memory Wall */}
-            <div className="section reveal" id="sec-memory">
-              <h2 className="section-title"><HeartIcon size={28} /> 我们的故事 <span className="en">Memory Wall</span></h2>
+            <Collapsible id="sec-memory" title={<><HeartIcon size={28} /> 我们的故事</>} desc="Memory Wall">
               <p className="section-desc">把值得记住的瞬间写下来，配一张照片更好。一年后回看是无价之宝。</p>
               <MemoryWall />
-            </div>
+            </Collapsible>
 
-            {/* Sweet Inbox */}
-            <div className="section reveal" id="sec-inbox">
+            <Collapsible id="sec-inbox" title="💌 甜话收件箱" desc="Sweet Inbox">
               <SweetInbox />
-            </div>
+            </Collapsible>
 
-            {/* Shared Lists */}
-            <div className="section reveal" id="sec-lists">
-              <h2 className="section-title">📋 共同清单 <span className="en">Shared Lists</span></h2>
+            <Collapsible id="sec-lists" title="📋 共同清单" desc="Shared Lists">
               <p className="section-desc">一起看的剧、一起读的书、下次见面要做的事。</p>
               <SharedLists />
-            </div>
+            </Collapsible>
 
-            {/* Bucket List + Monthly Goals */}
-            <div className="section reveal" id="sec-bucket">
+            <Collapsible id="sec-bucket" title="🎯 心愿 &amp; 月度目标" desc="Bucket List &amp; Goals">
               <div className="bg-grid">
                 <BucketList />
                 <MonthlyGoals />
               </div>
-            </div>
+            </Collapsible>
 
-            {/* Weekly Retro + Month Report + Insights */}
-            <div className="section reveal" id="sec-retro">
-              <h2 className="section-title"><PenIcon size={28} /> 复盘 &amp; 月报 <span className="en">Reflection &amp; Report</span></h2>
+            <Collapsible id="sec-retro" title={<><PenIcon size={28} /> 复盘 &amp; 月报</>} desc="Reflection &amp; Report">
               <p className="section-desc">每周日花几分钟回顾这一周，月底自动生成你俩的{MONTH_CONFIG.label}总结。</p>
               <div className="retro-grid">
                 <WeeklyRetro />
@@ -154,12 +136,11 @@ export default function App() {
                 <MoodChart />
                 <HabitHeatmap />
               </div>
-            </div>
+            </Collapsible>
 
-            {/* Time Chart */}
-            <div className="section reveal" id="sec-timechart">
+            <Collapsible id="sec-timechart" title="⏱ 用时统计" desc="Time Chart">
               <TimeChart plannerDay={plannerDay} />
-            </div>
+            </Collapsible>
 
             {/* Month Navigation */}
             <div className="month-nav-footer">

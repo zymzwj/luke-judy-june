@@ -2875,6 +2875,39 @@
     margin-bottom: 20px;
   }
 
+  /* Collapsible sections */
+  .section-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+    color: inherit;
+    font: inherit;
+    margin-bottom: 4px;
+  }
+  .section-toggle:hover { opacity: 0.8; }
+  .section-toggle .section-title { margin-bottom: 0; pointer-events: none; }
+  .section-chevron {
+    font-size: 20px;
+    color: var(--muted);
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background 0.15s;
+  }
+  .section-toggle:hover .section-chevron { background: var(--border); }
+  .collapsible.closed { margin-bottom: 20px; padding-bottom: 0; }
+  .collapsible.closed .section-toggle { margin-bottom: 0; }
+
   /* ========== GOALS GRID ========== */
   .goals {
     display: grid;
@@ -3825,12 +3858,26 @@
   @media (max-width: 768px) {
 
     /* --- Global / Container --- */
-    .container { padding: 16px 10px 80px; }
-    .main-layout { gap: 16px; }
-    .main-col { gap: 20px; }
-    .section { margin-bottom: 20px; }
+    .container { padding: 12px 10px 72px; }
+    .main-layout { gap: 12px; }
+    .main-col { gap: 0; }
+    .section { margin-bottom: 0; border-top: none; padding-top: 0; }
 
-    /* --- Section Nav → bottom horizontal bar --- */
+    /* --- Collapsible sections: compact mobile --- */
+    .collapsible { border-top: 1px solid var(--border); padding: 0; margin-bottom: 0; }
+    .collapsible:first-child { border-top: none; }
+    .section-toggle { min-height: 52px; padding: 14px 0; }
+    .section-toggle .section-title { font-size: 18px; gap: 8px; }
+    .section-chevron {
+      width: 32px; height: 32px; font-size: 18px;
+      background: var(--hover); border-radius: 50%;
+    }
+    .collapsible.closed { padding-bottom: 0; }
+    .collapsible.closed .section-toggle { padding-bottom: 14px; }
+    .collapsible.open .section-body { padding-bottom: 20px; }
+    .section-desc { font-size: 12px; margin-bottom: 12px; }
+
+    /* --- Section Nav → bottom tab bar (top 5 only) --- */
     .section-nav {
       display: flex !important;
       position: fixed;
@@ -3838,47 +3885,49 @@
       top: auto;
       transform: none;
       flex-direction: row;
-      border-radius: 16px 16px 0 0;
+      border-radius: 0;
       border-bottom: none;
-      padding: 4px 2px calc(4px + env(safe-area-inset-bottom));
+      border-left: none;
+      border-right: none;
+      padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
       gap: 0;
       overflow-x: auto;
       overflow-y: hidden;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
       justify-content: space-around;
-      box-shadow: 0 -4px 20px -4px rgba(0,0,0,0.1);
+      box-shadow: 0 -2px 12px -2px rgba(0,0,0,0.08);
     }
     .section-nav::-webkit-scrollbar { display: none; }
     .section-nav-item {
       flex-direction: column;
-      padding: 4px 2px 2px;
-      gap: 1px;
+      padding: 4px 6px 2px;
+      gap: 2px;
       min-width: 0;
-      flex: 1 0 auto;
+      flex: 1 1 0;
     }
-    .section-nav-icon { font-size: 18px; }
+    .section-nav-icon { font-size: 20px; }
     .section-nav-label {
       max-width: none !important;
       font-size: 9px;
       overflow: visible;
     }
+    .section-nav-item.desktop-only { display: none; }
 
     /* --- Section headings --- */
-    .section-title { font-size: 22px; gap: 6px; flex-wrap: wrap; }
-    .section-title svg { width: 22px; height: 22px; }
-    .section-title .en { font-size: 13px; display: none; }
-    .section-desc { font-size: 12px; margin-bottom: 14px; }
+    .section-title { font-size: 18px; gap: 6px; flex-wrap: nowrap; }
+    .section-title svg { width: 20px; height: 20px; }
+    .section-title .en { display: none; }
 
     /* --- Hero banner --- */
-    .hero { min-height: 220px; border-radius: 4px; margin-bottom: 20px; }
-    .hero-content h1 { font-size: 32px; }
-    .hero-sub { font-size: 12px; }
-    .hero-quote { font-size: 13px; }
+    .hero { min-height: 180px; border-radius: 4px; margin-bottom: 14px; }
+    .hero-content h1 { font-size: 28px; }
+    .hero-sub { font-size: 11px; }
+    .hero-quote { font-size: 12px; }
 
     /* --- Quote / Bible verse --- */
-    .quote-card { padding: 18px 14px; border-radius: 4px; }
-    .quote-text { font-size: 17px; }
+    .quote-card { padding: 14px 12px; border-radius: 4px; margin-bottom: 8px; }
+    .quote-text { font-size: 15px; }
 
     /* --- User badge --- */
     .user-badge {
@@ -3904,30 +3953,30 @@
       position: static;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 8px;
     }
     .sidebar-section {
-      padding: 12px;
+      padding: 10px;
       border-radius: 4px;
     }
-    .sidebar-section-title { font-size: 13px; }
-    .score-row .score-num span:first-child { font-size: 26px; }
+    .sidebar-section-title { font-size: 12px; }
+    .score-row .score-num span:first-child { font-size: 24px; }
 
     /* --- Cards: reduce padding --- */
-    .card { padding: 14px; border-radius: 4px; }
-    .planner-card { padding: 14px 12px 12px; border-radius: 4px; }
-    .spirit-card { padding: 14px 12px; border-radius: 4px; }
-    .bg-card { padding: 14px 12px; border-radius: 4px; }
-    .retro-card, .report-card { padding: 14px 12px; border-radius: 4px; }
-    .wheel-card { padding: 14px 12px 10px; border-radius: 4px; }
-    .med-card { padding: 14px 12px; border-radius: 4px; }
-    .habit-card { padding: 14px 10px; border-radius: 4px; }
-    .insight-card { padding: 14px 12px; border-radius: 4px; }
-    .inbox-card { padding: 14px 12px; border-radius: 4px; }
-    .today-card { padding: 12px; border-radius: 4px; }
+    .card { padding: 12px; border-radius: 4px; }
+    .planner-card { padding: 12px 10px 10px; border-radius: 4px; }
+    .spirit-card { padding: 12px 10px; border-radius: 4px; }
+    .bg-card { padding: 12px 10px; border-radius: 4px; }
+    .retro-card, .report-card { padding: 12px 10px; border-radius: 4px; }
+    .wheel-card { padding: 12px 10px 8px; border-radius: 4px; }
+    .med-card { padding: 12px 10px; border-radius: 4px; }
+    .habit-card { padding: 12px 8px; border-radius: 4px; }
+    .insight-card { padding: 12px 10px; border-radius: 4px; }
+    .inbox-card { padding: 12px 10px; border-radius: 4px; }
+    .today-card { padding: 10px; border-radius: 4px; }
 
     /* --- Med Tracker --- */
-    .med-head { gap: 8px; }
+    .med-head { gap: 6px; flex-wrap: wrap; }
     .med-grid { gap: 3px; }
     .med-cell { border-radius: 6px; }
     .med-cell .med-day { font-size: 9px; }
@@ -3935,42 +3984,43 @@
     .med-prompt { font-size: 13px; }
 
     /* --- Habit Tracker --- */
-    .habit-row { grid-template-columns: 1fr; gap: 6px; padding: 8px 0; }
+    .habit-row { grid-template-columns: 1fr; gap: 4px; padding: 6px 0; }
     .habit-week { gap: 2px; }
+    .habit-day { min-width: 0; }
     .habit-day .dnum { display: none; }
     .habit-name { font-size: 12px; }
-    .habit-group-title { font-size: 14px; }
+    .habit-group-title { font-size: 13px; }
 
     /* --- Calendar --- */
-    .layout { grid-template-columns: 1fr; gap: 14px; }
+    .layout { grid-template-columns: 1fr; gap: 12px; }
     .cal-grid { gap: 2px; }
-    .cal-cell { min-height: 46px; padding: 2px; border-radius: 6px; }
-    .day-num { font-size: 12px; }
+    .cal-cell { min-height: 42px; padding: 2px; border-radius: 4px; }
+    .day-num { font-size: 11px; }
     .cal-head { font-size: 9px; padding: 4px 0; letter-spacing: 0; }
     .cell-head { margin-bottom: 1px; min-height: 14px; }
     .dot { height: 3px; }
     .msg-btn { font-size: 8px; padding: 1px 3px; }
-    .cal-cell .mood-emoji { font-size: 12px; }
-    .card-head h3 { font-size: 18px; }
-    .events { max-height: 300px; }
-    .event { padding: 10px 12px; }
-    .event-title { font-size: 13px; }
+    .cal-cell .mood-emoji { font-size: 11px; }
+    .card-head h3 { font-size: 16px; }
+    .events { max-height: 260px; }
+    .event { padding: 8px 10px; }
+    .event-title { font-size: 12px; }
     .event-date { font-size: 10px; }
     .legend-mini { gap: 8px; font-size: 10px; }
 
     /* --- Memory Wall --- */
     .memory-grid {
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 8px;
     }
-    .memory-card .mem-body { padding: 8px 10px 10px; }
+    .memory-card .mem-body { padding: 6px 8px 8px; }
     .memory-card .mem-date { font-size: 9px; }
-    .memory-card .mem-text { font-size: 12px; }
+    .memory-card .mem-text { font-size: 11px; }
     .memory-add-btn { font-size: 12px; padding: 8px 14px; }
 
     /* --- Inbox --- */
     .inbox-head { gap: 4px; }
-    .inbox-title { font-size: 17px; }
+    .inbox-title { font-size: 15px; }
     .inbox-tabs { gap: 4px; }
     .inbox-tab { padding: 4px 10px; font-size: 11px; }
     .inbox-compose-row { flex-wrap: wrap; }
@@ -3978,40 +4028,40 @@
     .inbox-msg .im-text { font-size: 13px; }
 
     /* --- Bucket List + Goals --- */
-    .bg-card .bg-title { font-size: 16px; }
+    .bg-card .bg-title { font-size: 15px; }
 
     /* --- Weekly Retro + Report --- */
-    .retro-grid { gap: 14px; }
+    .retro-grid { gap: 12px; }
 
     /* --- Insights: mood chart + heatmap --- */
     .heatmap-grid { grid-template-columns: repeat(10, 1fr); gap: 2px; }
-    .mood-chart-wrap { height: 140px; }
+    .mood-chart-wrap { height: 130px; }
 
     /* --- Time Wheel --- */
-    .wheel-grid { gap: 14px; }
+    .wheel-grid { gap: 12px; }
     .wheel-canvas-wrap { max-width: 160px; }
     .wc-pct { font-size: 24px !important; }
     .wheel-legend-item { font-size: 11px; }
     .wheel-add { font-size: 12px; padding: 8px 10px; }
 
     /* --- Planner --- */
-    .planner-grid { gap: 12px; }
-    .planner-head { gap: 8px; margin-bottom: 10px; }
-    .planner-title { font-size: 14px; }
+    .planner-grid { gap: 10px; }
+    .planner-head { gap: 6px; margin-bottom: 8px; }
+    .planner-title { font-size: 13px; }
     .plan-item { font-size: 13px; }
 
     /* --- Today Checklist --- */
-    .today-grid { gap: 10px; }
+    .today-grid { gap: 8px; }
     .today-head { gap: 6px; }
 
     /* --- Modal: full width --- */
     .modal {
       width: calc(100% - 20px);
       max-width: none;
-      padding: 20px 16px;
+      padding: 18px 14px;
       border-radius: 4px;
     }
-    .modal h3 { font-size: 20px; margin-bottom: 14px; }
+    .modal h3 { font-size: 18px; margin-bottom: 12px; }
     .form-row-grid { grid-template-columns: 1fr; gap: 10px; }
 
     /* --- Birthday banner --- */
@@ -4025,15 +4075,20 @@
     /* --- Postpone menu / dur popup --- */
     .postpone-menu, .dur-popup { max-width: calc(100vw - 20px); }
 
-    /* --- New LDR components --- */
+    /* --- LDR components --- */
     .shared-lists { grid-template-columns: 1fr; }
     .mc-picker { grid-template-columns: repeat(4, 1fr); gap: 4px; }
     .mc-opt { font-size: 20px; padding: 4px; }
     .mc-picked { font-size: 40px; }
     .dw-clock-time { font-size: 18px; }
 
+    /* --- DailyShare --- */
+    .ds-compose textarea { font-size: 14px; }
+    .ds-send { font-size: 13px; padding: 6px 16px; }
+    .ds-entry-del { opacity: 0.6; font-size: 16px; }
+
     /* --- Scroll reveal: reduce translate distance on mobile --- */
-    .reveal { transform: translateY(10px); }
+    .reveal { transform: translateY(8px); }
   }
 
 /* ========== DUAL CLOCK (LDR) ========== */
@@ -4365,13 +4420,13 @@
 
   /* Extra-small phones (≤ 380px) */
   @media (max-width: 380px) {
-    .container { padding: 12px 8px 76px; }
+    .container { padding: 10px 6px 68px; }
     .sidebar { grid-template-columns: 1fr; }
-    .section-title { font-size: 20px; }
+    .section-toggle .section-title { font-size: 16px; }
     .memory-grid { grid-template-columns: 1fr; }
     .heatmap-grid { grid-template-columns: repeat(6, 1fr); }
     .section-nav-label { font-size: 8px; }
-    .section-nav-icon { font-size: 16px; }
+    .section-nav-icon { font-size: 18px; }
   }
 
 /* ── Archive banner ── */

@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 
 const SECTIONS = [
-  { id: "sec-plan", label: "计划", icon: "📝" },
-  { id: "sec-med", label: "吃药打卡", icon: "💊" },
-  { id: "sec-share", label: "分享", icon: "📸" },
-  { id: "sec-habit", label: "每日打卡", icon: "✅" },
-  { id: "sec-cal", label: "日历", icon: "📅" },
-  { id: "sec-spiritual", label: "灵命成长", icon: "📖" },
-  { id: "sec-memory", label: "故事", icon: "💕" },
+  { id: "sec-plan", label: "计划", icon: "📝", mobile: true },
+  { id: "sec-med", label: "吃药", icon: "💊", mobile: true },
+  { id: "sec-share", label: "分享", icon: "📸", mobile: true },
+  { id: "sec-habit", label: "打卡", icon: "✅", mobile: true },
+  { id: "sec-cal", label: "日历", icon: "📅", mobile: true },
+  { id: "sec-spiritual", label: "灵命", icon: "📖" },
+  { id: "sec-memory", label: "故事", icon: "💕", mobile: true },
   { id: "sec-inbox", label: "信箱", icon: "💌" },
   { id: "sec-lists", label: "清单", icon: "📋" },
   { id: "sec-bucket", label: "心愿", icon: "🎯" },
@@ -48,10 +48,10 @@ export default function SectionNav() {
 
   return (
     <nav className="section-nav">
-      {SECTIONS.map(({ id, label, icon }) => (
+      {SECTIONS.map(({ id, label, icon, mobile }) => (
         <button
           key={id}
-          className={`section-nav-item${activeId === id ? " active" : ""}`}
+          className={`section-nav-item${activeId === id ? " active" : ""}${mobile ? "" : " desktop-only"}`}
           onClick={() => scrollTo(id)}
           title={label}
         >
