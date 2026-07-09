@@ -2905,6 +2905,13 @@
     transition: background 0.15s;
   }
   .section-toggle:hover .section-chevron { background: var(--border); }
+  .section-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease;
+  }
+  .collapsible.open .section-body { grid-template-rows: 1fr; }
+  .section-body-inner { overflow: hidden; }
   .collapsible.closed { margin-bottom: 20px; padding-bottom: 0; }
   .collapsible.closed .section-toggle { margin-bottom: 0; }
 
@@ -3920,9 +3927,16 @@
     .section-title .en { display: none; }
 
     /* --- Hero banner --- */
-    .hero { min-height: 180px; border-radius: 4px; margin-bottom: 14px; }
+    .hero { min-height: 200px; border-radius: 4px; margin-bottom: 14px; }
+    .hero-overlay {
+      padding: 20px 16px 16px;
+      background: linear-gradient(to top, rgba(20,15,12,0.85) 0%, rgba(20,15,12,0.5) 50%, transparent 100%);
+    }
+    .hero-eyebrow { font-size: 9px; letter-spacing: 2px; margin-bottom: 6px; }
+    .hero-title { font-size: 36px; margin-bottom: 4px; }
+    .hero-sub { font-size: 12px; line-height: 1.5; }
+    .hero-sub .verse-cite { font-size: 10px; margin-top: 3px; }
     .hero-content h1 { font-size: 28px; }
-    .hero-sub { font-size: 11px; }
     .hero-quote { font-size: 12px; }
 
     /* --- Quote / Bible verse --- */
@@ -3985,9 +3999,31 @@
 
     /* --- Habit Tracker --- */
     .habit-row { grid-template-columns: 1fr; gap: 4px; padding: 6px 0; }
-    .habit-week { gap: 2px; }
-    .habit-day { min-width: 0; }
-    .habit-day .dnum { display: none; }
+    .habit-week {
+      display: flex;
+      gap: 3px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+    .habit-week::-webkit-scrollbar { display: none; }
+    .habit-day {
+      min-width: 28px;
+      max-width: 28px;
+      height: 28px;
+      aspect-ratio: auto;
+      flex-shrink: 0;
+      border-radius: 6px;
+    }
+    .habit-day .dnum {
+      display: block;
+      font-size: 10px;
+      position: static;
+      transform: none;
+      text-align: center;
+      line-height: 28px;
+    }
     .habit-name { font-size: 12px; }
     .habit-group-title { font-size: 13px; }
 
@@ -4071,6 +4107,8 @@
     .carousel-ctrl { padding: 3px 8px; font-size: 11px; }
     .carousel-nav { gap: 6px; }
     .carousel-dot { width: 6px; height: 6px; }
+    .photo-actions { top: 8px; right: 8px; gap: 4px; }
+    .photo-btn { padding: 4px 8px; font-size: 10px; }
 
     /* --- Postpone menu / dur popup --- */
     .postpone-menu, .dur-popup { max-width: calc(100vw - 20px); }

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 
 const STORAGE_KEY = "lj-collapsed";
 
@@ -15,25 +15,6 @@ function writeState(id, open) {
 export default function Collapsible({ id, title, desc, defaultOpen = false, children }) {
   const stored = readState()[id];
   const [open, setOpen] = useState(stored !== undefined ? stored : defaultOpen);
-  const bodyRef = useRef(null);
-  const [height, setHeight] = useState(open ? "auto" : "0px");
-  const mounted = useRef(false);
-
-  useEffect(() => {
-    if (!mounted.current) {
-      mounted.current = true;
-      return;
-    }
-    if (open) {
-      const h = bodyRef.current.scrollHeight;
-      setHeight(h + "px");
-      const t = setTimeout(() => setHeight("auto"), 300);
-      return () => clearTimeout(t);
-    } else {
-      setHeight(bodyRef.current.scrollHeight + "px");
-      requestAnimationFrame(() => requestAnimationFrame(() => setHeight("0px")));
-    }
-  }, [open]);
 
   const toggle = () => {
     const next = !open;
@@ -49,12 +30,10 @@ export default function Collapsible({ id, title, desc, defaultOpen = false, chil
         </h2>
         <span className="section-chevron">{open ? "−" : "+"}</span>
       </button>
-      <div
-        className="section-body"
-        ref={bodyRef}
-        style={{ maxHeight: height, overflow: "hidden", transition: mounted.current ? "max-height 0.3s ease" : "none" }}
-      >
-        {children}
+      <div className="section-body">
+        <div className="section-body-inner">
+          {children}
+        </div>
       </div>
     </div>
   );
