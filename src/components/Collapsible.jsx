@@ -23,7 +23,7 @@ export default function Collapsible({ id, title, desc, defaultOpen = false, chil
   };
 
   return (
-    <div className={`section reveal collapsible ${open ? "open" : "closed"}`} id={id}>
+    <div className={`section collapsible ${open ? "open" : "closed"}`} id={id}>
       <button className="section-toggle" onClick={toggle} aria-expanded={open}>
         <h2 className="section-title">
           {title} <span className="en">{desc}</span>

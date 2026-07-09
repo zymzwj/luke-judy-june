@@ -3,9 +3,9 @@ import React, { useState, useEffect, useCallback } from "react";
 const SECTIONS = [
   { id: "sec-plan", label: "计划", icon: "📝", mobile: true },
   { id: "sec-med", label: "吃药", icon: "💊", mobile: true },
-  { id: "sec-share", label: "分享", icon: "📸", mobile: true },
   { id: "sec-habit", label: "打卡", icon: "✅", mobile: true },
   { id: "sec-cal", label: "日历", icon: "📅", mobile: true },
+  { id: "sec-share", label: "分享", icon: "📸", mobile: true },
   { id: "sec-spiritual", label: "灵命", icon: "📖" },
   { id: "sec-memory", label: "故事", icon: "💕", mobile: true },
   { id: "sec-inbox", label: "信箱", icon: "💌" },

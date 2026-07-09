@@ -86,11 +86,6 @@ export default function App() {
               <MedTracker />
             </Collapsible>
 
-            <Collapsible id="sec-share" title="📸 今日分享" desc="Daily Share">
-              <p className="section-desc">每天分享一张照片和一句话，记录异地的日常。</p>
-              <DailyShare />
-            </Collapsible>
-
             <Collapsible id="sec-habit" title="✅ 每日打卡" desc="Daily Tracker" defaultOpen>
               <p className="section-desc">点击每个小格子标记完成。颜色代表对应的目标类别。</p>
               <HabitTracker />
@@ -98,6 +93,11 @@ export default function App() {
 
             <Collapsible id="sec-cal" title={<><CalendarIcon size={28} /> {MONTH_CONFIG.label}日历</>} desc={`${MONTH_CONFIG.labelEn} Calendar`}>
               <Calendar />
+            </Collapsible>
+
+            <Collapsible id="sec-share" title="📸 今日分享" desc="Daily Share">
+              <p className="section-desc">每天分享一张照片和一句话，记录异地的日常。</p>
+              <DailyShare />
             </Collapsible>
 
             <Collapsible id="sec-spiritual" title={<><BookIcon size={28} /> 灵命成长</>} desc="Spiritual Life">
