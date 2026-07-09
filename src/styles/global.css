@@ -4341,7 +4341,21 @@
 }
 .ds-entry-text {
   color: var(--ink);
+  flex: 1;
 }
+.ds-entry-del {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0 2px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.ds-entry:hover .ds-entry-del { opacity: 1; }
+.ds-entry-del:hover { color: var(--ink); }
 .ds-empty {
   text-align: center;
   color: var(--muted);

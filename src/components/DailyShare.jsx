@@ -3,36 +3,36 @@ import { useData } from "../firebase/dataContext.jsx";
 import { todayISO } from "../utils/date.js";
 
 export default function DailyShare() {
-  const { data, updateField } = useData();
+  const { data, saveField } = useData();
   const today = todayISO();
-  const shares = data.dailyShares || {};
-  const lukeShare = shares[`luke-${today}`];
-  const judyShare = shares[`judy-${today}`];
+  const shares = Array.isArray(data.dailyShares) ? data.dailyShares : [];
 
   const [person, setPerson] = useState("luke");
   const [text, setText] = useState("");
 
   const handleSubmit = async () => {
     if (!text.trim()) return;
-    await updateField(`dailyShares.${person}-${today}`, {
+    const entry = {
+      id: `${person}-${Date.now()}`,
+      person,
       text: text.trim(),
+      date: today,
       ts: new Date().toISOString(),
-    });
+    };
+    await saveField("dailyShares", [...shares, entry]);
     setText("");
   };
 
-  const recentKeys = Object.keys(shares)
-    .sort((a, b) => b.localeCompare(a))
-    .slice(0, 14);
+  const handleDelete = async (id) => {
+    await saveField("dailyShares", shares.filter(s => s.id !== id));
+  };
 
   const grouped = {};
-  for (const key of recentKeys) {
-    const date = key.replace(/^(luke|judy)-/, "");
-    const who = key.startsWith("luke-") ? "luke" : "judy";
-    if (!grouped[date]) grouped[date] = {};
-    grouped[date][who] = shares[key];
+  for (const s of shares) {
+    const d = s.date || today;
+    if (!grouped[d]) grouped[d] = [];
+    grouped[d].push(s);
   }
-
   const dates = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
 
   return (
@@ -48,33 +48,29 @@ export default function DailyShare() {
         <textarea
           value={text}
           onChange={e => setText(e.target.value)}
+          onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSubmit(); } }}
           placeholder="今天发生了什么有趣的事？"
           rows={2}
         />
-        <button className="ds-send" onClick={handleSubmit}>📸 发布</button>
+        <button className="ds-send" onClick={handleSubmit} disabled={!text.trim()}>发布</button>
       </div>
 
       {dates.length > 0 && (
         <div className="ds-timeline">
           {dates.map(date => {
-            const day = grouped[date];
+            const entries = grouped[date].sort((a, b) => (b.ts || "").localeCompare(a.ts || ""));
             const label = `${parseInt(date.slice(5, 7))}月${parseInt(date.slice(8))}日`;
             return (
               <div key={date} className="ds-day">
                 <div className="ds-day-date">{label}</div>
                 <div className="ds-day-entries">
-                  {day.luke && (
-                    <div className="ds-entry luke">
-                      <span className="ds-entry-name">Luke</span>
-                      <span className="ds-entry-text">{day.luke.text}</span>
+                  {entries.map(entry => (
+                    <div key={entry.id} className={`ds-entry ${entry.person}`}>
+                      <span className="ds-entry-name">{entry.person === "luke" ? "Luke" : "Judy"}</span>
+                      <span className="ds-entry-text">{entry.text}</span>
+                      <button className="ds-entry-del" onClick={() => handleDelete(entry.id)} title="删除">×</button>
                     </div>
-                  )}
-                  {day.judy && (
-                    <div className="ds-entry judy">
-                      <span className="ds-entry-name">Judy</span>
-                      <span className="ds-entry-text">{day.judy.text}</span>
-                    </div>
-                  )}
+                  ))}
                 </div>
               </div>
             );
@@ -83,7 +79,7 @@ export default function DailyShare() {
       )}
 
       {dates.length === 0 && (
-        <div className="ds-empty">还没有分享，写下今天的第一条吧 ✨</div>
+        <div className="ds-empty">还没有分享，写下今天的第一条吧</div>
       )}
     </div>
   );

@@ -26,7 +26,7 @@ const EMPTY = {
   prayers: [], devotionNotes: {},
   weeklyRetros: {}, birthdayLetter: "",
   sweetInbox: [], bucketList: [], monthlyGoals: [],
-  customHabits: [], dailyShares: {}
+  customHabits: [], dailyShares: []
 };
 
 export function DataProvider({ children }) {
@@ -79,7 +79,7 @@ export function DataProvider({ children }) {
           bucketList: Array.isArray(d.bucketList) ? d.bucketList : [],
           monthlyGoals: Array.isArray(d.monthlyGoals) ? d.monthlyGoals : [],
           customHabits: Array.isArray(d.customHabits) ? d.customHabits : [],
-          dailyShares: d.dailyShares || {}
+          dailyShares: Array.isArray(d.dailyShares) ? d.dailyShares : []
         });
 
         // One-time migration: memories from main doc to subcollection
@@ -91,6 +91,20 @@ export function DataProvider({ children }) {
             }
             await updateDoc(docRef, { memories: deleteField(), "seedsApplied.memoriesMigratedV2": true });
           } catch(e) { console.warn("memory migration failed", e); }
+        }
+
+        // One-time migration: dailyShares from object to array
+        if (d.dailyShares && !Array.isArray(d.dailyShares) && !(d.seedsApplied || {}).dailySharesMigrated) {
+          try {
+            const arr = [];
+            for (const [key, val] of Object.entries(d.dailyShares)) {
+              const match = key.match(/^(luke|judy)-(.+)$/);
+              if (match && val) {
+                arr.push({ id: key, person: match[1], text: val.text, date: match[2], ts: val.ts || match[2] });
+              }
+            }
+            await updateDoc(docRef, { dailyShares: arr, "seedsApplied.dailySharesMigrated": true });
+          } catch(e) { console.warn("dailyShares migration failed", e); }
         }
 
         // Auto-seed Judy's birthday bonus
