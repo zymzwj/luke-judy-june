@@ -12,7 +12,7 @@ function writeState(id, open) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
 }
 
-export default function Collapsible({ id, title, desc, defaultOpen = false, children }) {
+export default function Collapsible({ id, title, desc, defaultOpen = false, onOpen, children }) {
   const stored = readState()[id];
   const [open, setOpen] = useState(stored !== undefined ? stored : defaultOpen);
 
@@ -20,6 +20,7 @@ export default function Collapsible({ id, title, desc, defaultOpen = false, chil
     const next = !open;
     setOpen(next);
     writeState(id, next);
+    if (next && onOpen) onOpen();
   };
 
   return (

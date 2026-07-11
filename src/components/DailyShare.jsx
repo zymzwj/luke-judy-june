@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useData } from "../firebase/dataContext.jsx";
 import { todayISO } from "../utils/date.js";
 
-export default function DailyShare() {
+export default function DailyShare({ onPost }) {
   const { data, saveField } = useData();
   const today = todayISO();
   const shares = Array.isArray(data.dailyShares) ? data.dailyShares : [];
@@ -21,6 +21,7 @@ export default function DailyShare() {
     };
     await saveField("dailyShares", [...shares, entry]);
     setText("");
+    if (onPost) onPost();
   };
 
   const handleDelete = async (id) => {

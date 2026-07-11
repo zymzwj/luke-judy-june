@@ -34,6 +34,8 @@ import useScrollReveal from "./hooks/useScrollReveal.js";
 import { BookIcon, HeartIcon, PenIcon, CalendarIcon, ChartIcon } from "./components/HandIcons.jsx";
 import SectionNav from "./components/SectionNav.jsx";
 
+const SHARE_SEEN_KEY = "lj-share-seen";
+
 export default function App() {
   const { user } = useAuth();
   const { loading, syncState } = useData();
@@ -41,6 +43,10 @@ export default function App() {
 
   useTimeGradient();
   useScrollReveal();
+
+  const markShareSeen = () => {
+    localStorage.setItem(SHARE_SEEN_KEY, new Date().toISOString());
+  };
 
   if (user === undefined || (user && loading)) {
     return (
@@ -95,9 +101,9 @@ export default function App() {
               <Calendar />
             </Collapsible>
 
-            <Collapsible id="sec-share" title="📸 今日分享" desc="Daily Share">
+            <Collapsible id="sec-share" title="📸 今日分享" desc="Daily Share" onOpen={markShareSeen}>
               <p className="section-desc">每天分享一张照片和一句话，记录异地的日常。</p>
-              <DailyShare />
+              <DailyShare onPost={markShareSeen} />
             </Collapsible>
 
             <Collapsible id="sec-spiritual" title={<><BookIcon size={28} /> 灵命成长</>} desc="Spiritual Life">

@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useData } from "../firebase/dataContext.jsx";
+
+const SHARE_SEEN_KEY = "lj-share-seen";
 
 const SECTIONS = [
   { id: "sec-plan", label: "计划", icon: "📝", mobile: true },
@@ -17,6 +20,11 @@ const SECTIONS = [
 
 export default function SectionNav() {
   const [activeId, setActiveId] = useState("");
+  const { data } = useData();
+  const shares = Array.isArray(data.dailyShares) ? data.dailyShares : [];
+
+  const lastSeen = localStorage.getItem(SHARE_SEEN_KEY) || "";
+  const hasNewShare = shares.some(s => s.ts && s.ts > lastSeen);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -55,7 +63,10 @@ export default function SectionNav() {
           onClick={() => scrollTo(id)}
           title={label}
         >
-          <span className="section-nav-icon">{icon}</span>
+          <span className="section-nav-icon">
+            {icon}
+            {id === "sec-share" && hasNewShare && <span className="nav-badge" />}
+          </span>
           <span className="section-nav-label">{label}</span>
         </button>
       ))}
