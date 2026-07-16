@@ -1,15 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useData } from "../firebase/dataContext.jsx";
-
-const SHARE_SEEN_KEY = "lj-share-seen";
 
 const SECTIONS = [
-  { id: "sec-plan", label: "计划", icon: "📝", mobile: true },
   { id: "sec-med", label: "吃药", icon: "💊", mobile: true },
+  { id: "sec-plan", label: "计划", icon: "📝", mobile: true },
   { id: "sec-habit", label: "打卡", icon: "✅", mobile: true },
   { id: "sec-cal", label: "日历", icon: "📅", mobile: true },
-  { id: "sec-share", label: "分享", icon: "📸", mobile: true },
-  { id: "sec-spiritual", label: "灵命", icon: "📖" },
   { id: "sec-memory", label: "故事", icon: "💕", mobile: true },
   { id: "sec-inbox", label: "信箱", icon: "💌" },
   { id: "sec-lists", label: "清单", icon: "📋" },
@@ -20,11 +15,6 @@ const SECTIONS = [
 
 export default function SectionNav() {
   const [activeId, setActiveId] = useState("");
-  const { data } = useData();
-  const shares = Array.isArray(data.dailyShares) ? data.dailyShares : [];
-
-  const lastSeen = localStorage.getItem(SHARE_SEEN_KEY) || "";
-  const hasNewShare = shares.some(s => s.ts && s.ts > lastSeen);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -63,10 +53,7 @@ export default function SectionNav() {
           onClick={() => scrollTo(id)}
           title={label}
         >
-          <span className="section-nav-icon">
-            {icon}
-            {id === "sec-share" && hasNewShare && <span className="nav-badge" />}
-          </span>
+          <span className="section-nav-icon">{icon}</span>
           <span className="section-nav-label">{label}</span>
         </button>
       ))}

@@ -9,7 +9,7 @@ import Sidebar from "./components/Sidebar.jsx";
 import PixelAvatars from "./components/PixelAvatars.jsx";
 import PhotoCarousel from "./components/PhotoCarousel.jsx";
 import DailyVerse from "./components/DailyVerse.jsx";
-import Spiritual from "./components/Spiritual.jsx";
+
 import MedTracker from "./components/MedTracker.jsx";
 import HabitTracker from "./components/HabitTracker.jsx";
 import Planner from "./components/Planner.jsx";
@@ -26,15 +26,13 @@ import HabitHeatmap from "./components/HabitHeatmap.jsx";
 import ThemeToggle from "./components/ThemeToggle.jsx";
 import Celebration from "./components/Celebration.jsx";
 import SharedLists from "./components/SharedLists.jsx";
-import DailyShare from "./components/DailyShare.jsx";
+
 import Collapsible from "./components/Collapsible.jsx";
 import { IS_CURRENT_MONTH, ACTIVE_MONTH, MONTH_CONFIG, monthUrl, prevMonthKey, nextMonthKey } from "./firebase/config.js";
 import useTimeGradient from "./hooks/useTimeGradient.js";
 import useScrollReveal from "./hooks/useScrollReveal.js";
-import { BookIcon, HeartIcon, PenIcon, CalendarIcon, ChartIcon } from "./components/HandIcons.jsx";
+import { HeartIcon, PenIcon, CalendarIcon, ChartIcon } from "./components/HandIcons.jsx";
 import SectionNav from "./components/SectionNav.jsx";
-
-const SHARE_SEEN_KEY = "lj-share-seen";
 
 export default function App() {
   const { user } = useAuth();
@@ -43,10 +41,6 @@ export default function App() {
 
   useTimeGradient();
   useScrollReveal();
-
-  const markShareSeen = () => {
-    localStorage.setItem(SHARE_SEEN_KEY, new Date().toISOString());
-  };
 
   if (user === undefined || (user && loading)) {
     return (
@@ -83,13 +77,13 @@ export default function App() {
           <Sidebar />
 
           <div className="main-col">
+            <Collapsible id="sec-med" title="💊 吃药打卡" desc="Medication" defaultOpen>
+              <MedTracker />
+            </Collapsible>
+
             <Collapsible id="sec-plan" title={<><PenIcon size={28} /> 本周 &amp; 今日计划</>} desc="Plans" defaultOpen>
               <p className="section-desc">每周一个方向，每天具体清单。打勾的每一项 +1 分，全部完成 +3 分奖励。</p>
               <Planner onDayChange={setPlannerDay} />
-            </Collapsible>
-
-            <Collapsible id="sec-med" title="💊 吃药打卡" desc="Medication" defaultOpen>
-              <MedTracker />
             </Collapsible>
 
             <Collapsible id="sec-habit" title="✅ 每日打卡" desc="Daily Tracker" defaultOpen>
@@ -99,16 +93,6 @@ export default function App() {
 
             <Collapsible id="sec-cal" title={<><CalendarIcon size={28} /> {MONTH_CONFIG.label}日历</>} desc={`${MONTH_CONFIG.labelEn} Calendar`}>
               <Calendar />
-            </Collapsible>
-
-            <Collapsible id="sec-share" title="📸 今日分享" desc="Daily Share" onOpen={markShareSeen}>
-              <p className="section-desc">每天分享一张照片和一句话，记录异地的日常。</p>
-              <DailyShare onPost={markShareSeen} />
-            </Collapsible>
-
-            <Collapsible id="sec-spiritual" title={<><BookIcon size={28} /> 灵命成长</>} desc="Spiritual Life">
-              <p className="section-desc">祷告事项记录 + 每日灵修反思。一起在主里成长。</p>
-              <Spiritual />
             </Collapsible>
 
             <Collapsible id="sec-memory" title={<><HeartIcon size={28} /> 我们的故事</>} desc="Memory Wall">

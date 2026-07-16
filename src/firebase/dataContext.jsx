@@ -122,6 +122,14 @@ export function DataProvider({ children }) {
           } catch(e) { console.warn("seed bonus failed", e); }
         }
 
+        // One-time migration: convert photos from string[] to object[]
+        if (Array.isArray(d.photos) && d.photos.some(p => typeof p === "string") && !(d.seedsApplied || {}).photosObjMigrated) {
+          try {
+            const migrated = d.photos.map(p => typeof p === "string" ? { url: p } : p);
+            await updateDoc(docRef, { photos: migrated, "seedsApplied.photosObjMigrated": true });
+          } catch(e) { console.warn("photos migration failed", e); }
+        }
+
         // One-time seed: default custom habits (only if field doesn't exist yet)
         if (d.customHabits === undefined && !(d.seedsApplied || {}).customHabitsSeeded) {
           try {

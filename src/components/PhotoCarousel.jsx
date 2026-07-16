@@ -1,8 +1,27 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useData } from "../firebase/dataContext.jsx";
-import { MONTH_CONFIG } from "../firebase/config.js";
+import { COUPLE_ID, MONTH_CONFIG } from "../firebase/config.js";
+import {
+  deleteObject,
+  getDownloadURL,
+  getStorageInstance,
+  storageRef,
+  uploadBytes
+} from "../firebase/client.js";
 
-const MAX_PHOTOS_SIZE = 900 * 1024; // 900KB total for photos in doc
+function normalizePhoto(p) {
+  if (typeof p === "string") return { url: p };
+  return p;
+}
+
+function getUrl(photo) {
+  return normalizePhoto(photo).url;
+}
+
+function getFocal(photo) {
+  const f = normalizePhoto(photo).focal;
+  return f || { x: 50, y: 50 };
+}
 
 async function resizeImage(file, maxDim = 1600, quality = 0.8) {
   let bitmap;
@@ -59,12 +78,26 @@ function resizeImageFallback(file, maxDim, quality) {
   });
 }
 
+async function uploadToStorage(file) {
+  const dataUrl = await resizeImage(file);
+  const resp = await fetch(dataUrl);
+  const blob = await resp.blob();
+  const name = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+  const ref = storageRef(getStorageInstance(), `couples/${COUPLE_ID}/photos/${name}`);
+  await uploadBytes(ref, blob);
+  const url = await getDownloadURL(ref);
+  return { url, storagePath: `couples/${COUPLE_ID}/photos/${name}` };
+}
+
 export default function PhotoCarousel() {
   const { data, saveField } = useData();
   const photos = data.photos || [];
   const [current, setCurrent] = useState(0);
+  const [uploading, setUploading] = useState(false);
+  const [focalMode, setFocalMode] = useState(false);
   const timerRef = useRef(null);
   const fileRef = useRef(null);
+  const carouselRef = useRef(null);
 
   const idx = photos.length === 0 ? 0 : current % photos.length;
 
@@ -78,11 +111,11 @@ export default function PhotoCarousel() {
   }, [photos.length]);
 
   useEffect(() => {
-    startTimer();
+    if (!focalMode) startTimer();
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [startTimer]);
+  }, [startTimer, focalMode]);
 
   useEffect(() => {
     if (current >= photos.length && photos.length > 0) {
@@ -109,18 +142,15 @@ export default function PhotoCarousel() {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
+    setUploading(true);
     const newPhotos = [...photos];
     for (const file of files) {
       try {
-        const dataUrl = await resizeImage(file);
-        const totalSize = newPhotos.reduce((sum, p) => sum + (p ? p.length : 0), 0) + dataUrl.length;
-        if (totalSize > MAX_PHOTOS_SIZE) {
-          alert("照片总大小超过限制，请删除一些旧照片后再试。");
-          break;
-        }
-        newPhotos.push(dataUrl);
+        const { url, storagePath } = await uploadToStorage(file);
+        newPhotos.push({ url, storagePath, focal: { x: 50, y: 50 } });
       } catch (err) {
-        console.error("Photo resize error:", err);
+        console.error("Photo upload error:", err);
+        alert("照片上传失败: " + err.message);
       }
     }
 
@@ -130,17 +160,49 @@ export default function PhotoCarousel() {
       startTimer();
     }
 
+    setUploading(false);
     e.target.value = "";
   };
 
   const handleDelete = async () => {
     if (photos.length === 0) return;
     if (!confirm("确定删除当前照片？")) return;
+    const photo = normalizePhoto(photos[idx]);
+    if (photo.storagePath) {
+      try {
+        await deleteObject(storageRef(getStorageInstance(), photo.storagePath));
+      } catch (e) {
+        console.warn("Failed to delete from storage:", e);
+      }
+    }
     const updated = photos.filter((_, i) => i !== idx);
     await saveField("photos", updated);
   };
 
+  const handleFocalClick = async (e) => {
+    if (!focalMode || photos.length === 0) return;
+    const rect = carouselRef.current.getBoundingClientRect();
+    const x = Math.round(((e.clientX - rect.left) / rect.width) * 100);
+    const y = Math.round(((e.clientY - rect.top) / rect.height) * 100);
+
+    const updated = [...photos];
+    const photo = normalizePhoto(updated[idx]);
+    updated[idx] = { ...photo, focal: { x, y } };
+    await saveField("photos", updated);
+  };
+
+  const toggleFocalMode = () => {
+    if (focalMode) {
+      setFocalMode(false);
+      startTimer();
+    } else {
+      setFocalMode(true);
+      if (timerRef.current) clearInterval(timerRef.current);
+    }
+  };
+
   const hasPhotos = photos.length > 0;
+  const currentFocal = hasPhotos ? getFocal(photos[idx]) : { x: 50, y: 50 };
 
   return (
     <div className="hero">
@@ -154,31 +216,57 @@ export default function PhotoCarousel() {
         style={{ display: "none" }}
       />
       <div className="photo-actions">
-        <button className="photo-btn" onClick={() => fileRef.current?.click()}>
-          📷 添加照片
+        <button className="photo-btn" onClick={() => fileRef.current?.click()} disabled={uploading}>
+          {uploading ? "⏳ 上传中..." : "📷 添加照片"}
         </button>
         {hasPhotos && (
-          <button className="photo-btn" id="deletePhotoBtn" onClick={handleDelete}>
-            🗑 删除当前
-          </button>
+          <>
+            <button className="photo-btn" onClick={toggleFocalMode}>
+              {focalMode ? "✓ 完成" : "📍 焦点"}
+            </button>
+            <button className="photo-btn" id="deletePhotoBtn" onClick={handleDelete}>
+              🗑 删除
+            </button>
+          </>
         )}
       </div>
-      <div className="carousel" id="carousel">
+      <div
+        className={`carousel${focalMode ? " focal-mode" : ""}`}
+        id="carousel"
+        ref={carouselRef}
+        onClick={focalMode ? handleFocalClick : undefined}
+      >
         <div className="carousel-slides" id="carouselSlides">
-          {photos.map((photo, i) => (
-            <div
-              key={i}
-              className={`carousel-slide${i === idx ? " active" : ""}${i === idx ? ` ken-burns-${(i % 3) + 1}` : ""}`}
-              style={{ backgroundImage: `url(${photo})` }}
-            />
-          ))}
+          {photos.map((photo, i) => {
+            const url = getUrl(photo);
+            const focal = getFocal(photo);
+            return (
+              <div
+                key={i}
+                className={`carousel-slide${i === idx ? " active" : ""}${i === idx && !focalMode ? ` ken-burns-${(i % 3) + 1}` : ""}`}
+                style={{
+                  backgroundImage: `url(${url})`,
+                  backgroundPosition: `${focal.x}% ${focal.y}%`
+                }}
+              />
+            );
+          })}
         </div>
+        {focalMode && hasPhotos && (
+          <>
+            <div
+              className="focal-indicator"
+              style={{ left: `${currentFocal.x}%`, top: `${currentFocal.y}%` }}
+            />
+            <div className="focal-hint">点击照片选择焦点位置</div>
+          </>
+        )}
         {!hasPhotos && (
           <div className="carousel-empty" id="carouselEmpty" onClick={() => fileRef.current?.click()}>
             <span>📷 点击上传你和 Judy 的照片<br /><small>支持多张，自动轮播</small></span>
           </div>
         )}
-        {hasPhotos && (
+        {hasPhotos && !focalMode && (
           <>
             <button className="carousel-nav prev" id="carouselPrev" onClick={prev}>‹</button>
             <button className="carousel-nav next" id="carouselNext" onClick={next}>›</button>
