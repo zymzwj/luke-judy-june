@@ -525,15 +525,15 @@ export default function Calendar() {
           </div>
         </div>
 
-        {/* Right column: bubbles + event list */}
-        <div className="cal-right-col">
-          <MessageBubbles dateMessages={dateMessages} />
-          <EventList
-            events={events}
-            activeFilters={activeFilters}
-            onDelete={deleteEvent}
-          />
-        </div>
+        {/* Right card: Event list */}
+        <EventList
+          events={events}
+          activeFilters={activeFilters}
+          onDelete={deleteEvent}
+        />
+
+        {/* Far right: message bubbles */}
+        <MessageBubbles dateMessages={dateMessages} />
       </div>
 
       {/* Mood Picker Popup — portal to body to escape transform containing block */}

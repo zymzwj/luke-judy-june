@@ -3263,9 +3263,10 @@
   /* ========== LAYOUT ========== */
   .layout {
     display: grid;
-    grid-template-columns: 1.6fr 1fr;
+    grid-template-columns: 1.6fr 1fr auto;
     gap: 20px;
   }
+  @media (max-width: 1200px) { .layout { grid-template-columns: 1.6fr 1fr; } }
   @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
 
   .card {
@@ -4594,15 +4595,12 @@
 }
 
 /* ── Message bubbles in calendar right column ── */
-.cal-right-col {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
 .msg-bubbles {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-width: 200px;
+  min-width: 140px;
 }
 .msg-bubbles-title {
   font-family: var(--sans);
