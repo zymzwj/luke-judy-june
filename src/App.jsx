@@ -9,29 +9,16 @@ import Sidebar from "./components/Sidebar.jsx";
 import PixelAvatars from "./components/PixelAvatars.jsx";
 import PhotoCarousel from "./components/PhotoCarousel.jsx";
 import DailyVerse from "./components/DailyVerse.jsx";
-
-import MedTracker from "./components/MedTracker.jsx";
 import HabitTracker from "./components/HabitTracker.jsx";
 import Planner from "./components/Planner.jsx";
-import TimeChart from "./components/TimeChart.jsx";
 import Calendar from "./components/Calendar.jsx";
-import MemoryWall from "./components/MemoryWall.jsx";
-import SweetInbox from "./components/SweetInbox.jsx";
-import BucketList from "./components/BucketList.jsx";
-import MonthlyGoals from "./components/MonthlyGoals.jsx";
-import WeeklyRetro from "./components/WeeklyRetro.jsx";
-import MonthReport from "./components/MonthReport.jsx";
-import MoodChart from "./components/MoodChart.jsx";
-import HabitHeatmap from "./components/HabitHeatmap.jsx";
 import ThemeToggle from "./components/ThemeToggle.jsx";
 import Celebration from "./components/Celebration.jsx";
-import SharedLists from "./components/SharedLists.jsx";
-
 import Collapsible from "./components/Collapsible.jsx";
 import { IS_CURRENT_MONTH, ACTIVE_MONTH, MONTH_CONFIG, monthUrl, prevMonthKey, nextMonthKey } from "./firebase/config.js";
 import useTimeGradient from "./hooks/useTimeGradient.js";
 import useScrollReveal from "./hooks/useScrollReveal.js";
-import { HeartIcon, PenIcon, CalendarIcon, ChartIcon } from "./components/HandIcons.jsx";
+import { PenIcon, CalendarIcon } from "./components/HandIcons.jsx";
 import SectionNav from "./components/SectionNav.jsx";
 
 export default function App() {
@@ -77,10 +64,6 @@ export default function App() {
           <Sidebar />
 
           <div className="main-col">
-            <Collapsible id="sec-med" title="💊 吃药打卡" desc="Medication" defaultOpen>
-              <MedTracker />
-            </Collapsible>
-
             <Collapsible id="sec-plan" title={<><PenIcon size={28} /> 本周 &amp; 今日计划</>} desc="Plans" defaultOpen>
               <p className="section-desc">每周一个方向，每天具体清单。打勾的每一项 +1 分，全部完成 +3 分奖励。</p>
               <Planner onDayChange={setPlannerDay} />
@@ -93,43 +76,6 @@ export default function App() {
 
             <Collapsible id="sec-cal" title={<><CalendarIcon size={28} /> {MONTH_CONFIG.label}日历</>} desc={`${MONTH_CONFIG.labelEn} Calendar`}>
               <Calendar />
-            </Collapsible>
-
-            <Collapsible id="sec-memory" title={<><HeartIcon size={28} /> 我们的故事</>} desc="Memory Wall">
-              <p className="section-desc">把值得记住的瞬间写下来，配一张照片更好。一年后回看是无价之宝。</p>
-              <MemoryWall />
-            </Collapsible>
-
-            <Collapsible id="sec-inbox" title="💌 甜话收件箱" desc="Sweet Inbox">
-              <SweetInbox />
-            </Collapsible>
-
-            <Collapsible id="sec-lists" title="📋 共同清单" desc="Shared Lists">
-              <p className="section-desc">一起看的剧、一起读的书、下次见面要做的事。</p>
-              <SharedLists />
-            </Collapsible>
-
-            <Collapsible id="sec-bucket" title="🎯 心愿 &amp; 月度目标" desc="Bucket List &amp; Goals">
-              <div className="bg-grid">
-                <BucketList />
-                <MonthlyGoals />
-              </div>
-            </Collapsible>
-
-            <Collapsible id="sec-retro" title={<><PenIcon size={28} /> 复盘 &amp; 月报</>} desc="Reflection &amp; Report">
-              <p className="section-desc">每周日花几分钟回顾这一周，月底自动生成你俩的{MONTH_CONFIG.label}总结。</p>
-              <div className="retro-grid">
-                <WeeklyRetro />
-                <MonthReport />
-              </div>
-              <div className="insights-grid">
-                <MoodChart />
-                <HabitHeatmap />
-              </div>
-            </Collapsible>
-
-            <Collapsible id="sec-timechart" title="⏱ 用时统计" desc="Time Chart">
-              <TimeChart plannerDay={plannerDay} />
             </Collapsible>
 
             {/* Month Navigation */}
