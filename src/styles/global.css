@@ -2860,6 +2860,11 @@
     z-index: 3;
     display: flex;
     gap: 8px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .hero:hover .photo-actions {
+    opacity: 1;
   }
   .photo-btn {
     background: rgba(255,255,255,0.9);
