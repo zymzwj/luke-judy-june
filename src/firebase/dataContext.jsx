@@ -13,7 +13,7 @@ import {
   updateDoc
 } from "./client.js";
 import { useAuth } from "./context.jsx";
-import { COUPLE_ID } from "./config.js";
+import { ACTIVE_MONTH, COUPLE_ID } from "./config.js";
 import { DEFAULT_EVENTS } from "../data/calendar.js";
 
 const DataContext = createContext(null);
@@ -105,6 +105,13 @@ export function DataProvider({ children }) {
             }
             await updateDoc(docRef, { dailyShares: arr, "seedsApplied.dailySharesMigrated": true });
           } catch(e) { console.warn("dailyShares migration failed", e); }
+        }
+
+        // Fix: birthday bonus only belongs in June 2026
+        if (ACTIVE_MONTH !== "2026-06" && Array.isArray(d.bonuses) && d.bonuses.some(b => b.id === "judy-birthday-party-2026")) {
+          try {
+            await updateDoc(docRef, { bonuses: d.bonuses.filter(b => b.id !== "judy-birthday-party-2026") });
+          } catch(e) { console.warn("remove stale bonus failed", e); }
         }
 
         // One-time migration: convert photos from string[] to object[]
