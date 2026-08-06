@@ -74,7 +74,7 @@ export default function App() {
 
       <div className="container" id="mainContent">
         <PhotoCarousel />
-        <DailyVerse />
+        {showLegacy && <DailyVerse />}
 
         <div className="main-layout">
           <Sidebar />

@@ -4564,3 +4564,21 @@
 .month-nav-footer a:hover {
   color: var(--rose); text-decoration: underline;
 }
+
+/* Together counter */
+.together-counter {
+  text-align: center;
+  padding: 8px 0 4px;
+}
+.together-days {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--rose);
+  font-family: var(--serif);
+  letter-spacing: 1px;
+}
+.together-label {
+  font-size: 1rem;
+  color: var(--ink-soft);
+  margin-left: 4px;
+}

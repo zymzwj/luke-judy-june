@@ -19,9 +19,21 @@ export default function Sidebar() {
   const lukeTodayPts = computeDayPoints(lukeToday);
   const judyTodayPts = computeDayPoints(judyToday);
 
+  const togetherStart = new Date("2024-02-16");
+  const togetherDays = Math.floor((new Date() - togetherStart) / (1000 * 60 * 60 * 24));
+
   return (
     <aside className="sidebar" id="sidebar">
       <DateWidget />
+
+      <div className="sidebar-section">
+        <div className="sidebar-section-title">💕 在一起</div>
+        <div className="together-counter">
+          <span className="together-days">{togetherDays}</span>
+          <span className="together-label">天</span>
+        </div>
+        <div className="score-foot">从 2024 年 2 月 16 日开始</div>
+      </div>
 
       <div className="sidebar-section">
         <div className="sidebar-section-title">{MONTH_CONFIG.label}积分榜</div>
