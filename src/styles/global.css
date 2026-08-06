@@ -409,6 +409,8 @@
     width: 100%;
     height: auto;
     display: block;
+    border-radius: 50%;
+    border: 2px solid var(--border);
   }
   /* Idle gentle bobbing — slightly different timings so they breathe asynchronously */
   .pixel-avatar:nth-child(1) { animation: avBob 4.2s ease-in-out infinite; }
@@ -418,16 +420,16 @@
     50% { transform: translateY(-5px) rotate(0.3deg); }
   }
   /* Overlap slightly so they feel like they're standing together */
-  .pixel-avatar:nth-child(2) { margin-left: -28px; }
+  .pixel-avatar:nth-child(2) { margin-left: -16px; }
 
   @media (max-width: 1200px) {
     .pixel-avatar { width: 92px; }
-    .pixel-avatar:nth-child(2) { margin-left: -22px; }
+    .pixel-avatar:nth-child(2) { margin-left: -14px; }
   }
   @media (max-width: 900px) {
     .pixel-avatars { right: 8px; bottom: 8px; }
     .pixel-avatar { width: 74px; }
-    .pixel-avatar:nth-child(2) { margin-left: -18px; }
+    .pixel-avatar:nth-child(2) { margin-left: -10px; }
   }
   @media (max-width: 600px) {
     .pixel-avatars { display: none; }
