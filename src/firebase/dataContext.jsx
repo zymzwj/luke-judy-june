@@ -138,7 +138,7 @@ export function DataProvider({ children }) {
       } else {
         const init = { ...EMPTY, events: [...DEFAULT_EVENTS], createdAt: new Date().toISOString() };
         setData(init);
-        await setDoc(docRef, init);
+        await setDoc(docRef, init, { merge: true });
       }
       setLoading(false);
     }, err => {
