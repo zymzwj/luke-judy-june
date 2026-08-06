@@ -1,10 +1,25 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { ACTIVE_MONTH } from "../firebase/config.js";
 
-const SECTIONS = [
+const CORE_SECTIONS = [
+  { id: "sec-med", label: "吃药", icon: "💊", mobile: true },
   { id: "sec-plan", label: "计划", icon: "📝", mobile: true },
   { id: "sec-habit", label: "打卡", icon: "✅", mobile: true },
   { id: "sec-cal", label: "日历", icon: "📅", mobile: true },
 ];
+
+const LEGACY_SECTIONS = [
+  { id: "sec-memory", label: "故事", icon: "💕", mobile: true },
+  { id: "sec-inbox", label: "信箱", icon: "💌" },
+  { id: "sec-lists", label: "清单", icon: "📋" },
+  { id: "sec-bucket", label: "心愿", icon: "🎯" },
+  { id: "sec-retro", label: "复盘", icon: "📊" },
+  { id: "sec-timechart", label: "时间图", icon: "📈" },
+];
+
+const SECTIONS = ACTIVE_MONTH < "2026-08"
+  ? [...CORE_SECTIONS, ...LEGACY_SECTIONS]
+  : CORE_SECTIONS;
 
 export default function SectionNav() {
   const [activeId, setActiveId] = useState("");

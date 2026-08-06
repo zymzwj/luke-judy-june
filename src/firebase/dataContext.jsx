@@ -107,21 +107,6 @@ export function DataProvider({ children }) {
           } catch(e) { console.warn("dailyShares migration failed", e); }
         }
 
-        // Auto-seed Judy's birthday bonus
-        if (!(d.seedsApplied || {}).judyBirthdayBonus) {
-          try {
-            const bonus = {
-              id: "judy-birthday-party-2026", person: "judy", pts: 100,
-              reason: "\u{1F382} 举办了一个超棒的生日 party，准备了很多",
-              at: Date.now()
-            };
-            await updateDoc(docRef, {
-              bonuses: [...(Array.isArray(d.bonuses) ? d.bonuses : []), bonus],
-              "seedsApplied.judyBirthdayBonus": true
-            });
-          } catch(e) { console.warn("seed bonus failed", e); }
-        }
-
         // One-time migration: convert photos from string[] to object[]
         if (Array.isArray(d.photos) && d.photos.some(p => typeof p === "string") && !(d.seedsApplied || {}).photosObjMigrated) {
           try {

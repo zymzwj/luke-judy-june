@@ -4,39 +4,6 @@ import { MONTH_CONFIG } from "../firebase/config.js";
 import { currentDay, todayISO, dateStr } from "../utils/date.js";
 import { computeHabitStreak } from "../utils/plans.js";
 
-const FIXED_GROUPS = [
-  {
-    title: "📖 读经",
-    sub: "互相监督 · 每天",
-    rows: [
-      { cat: "bible-luke", name: "Luke 读经", nameClass: "luke" },
-      { cat: "bible-yx", name: "Judy 读经", nameClass: "yuxin" },
-    ],
-  },
-  {
-    title: "🙏 灵修",
-    sub: "互相监督 · 每天",
-    rows: [
-      { cat: "devo-luke", name: "Luke 灵修", nameClass: "luke" },
-      { cat: "devo-yx", name: "Judy 灵修", nameClass: "yuxin" },
-    ],
-  },
-  {
-    title: "💪 运动",
-    sub: "各自坚持",
-    rows: [
-      { cat: "sport-luke", name: "Luke 运动", nameClass: "luke" },
-      { cat: "sport-yx", name: "Judy 运动", nameClass: "yuxin" },
-    ],
-  },
-];
-
-const DEFAULT_CUSTOM = [
-  { cat: "trade", name: "📈 Luke 交易计划+复盘" },
-  { cat: "cafe", name: "☕ 咖啡馆学习 (一起)" },
-  { cat: "network", name: "🤝 Judy Networking" },
-];
-
 function HabitRow({ row, habits, today, todayStr, toggle, editing, onDelete }) {
   const streak = computeHabitStreak(habits, row.cat, today);
   const streakClass =
@@ -50,7 +17,7 @@ function HabitRow({ row, habits, today, todayStr, toggle, editing, onDelete }) {
         <span className={streakClass}>
           {streak === 0 ? "—" : `🔥 ${streak}`}
         </span>
-        {editing && onDelete && (
+        {editing && (
           <button className="habit-delete-btn" onClick={() => onDelete(row.cat)} title="删除">✕</button>
         )}
       </div>
@@ -82,7 +49,7 @@ function HabitRow({ row, habits, today, todayStr, toggle, editing, onDelete }) {
 export default function HabitTracker() {
   const { data, updateField, saveField } = useData();
   const habits = data.habits || {};
-  const customHabits = data.customHabits;
+  const customHabits = data.customHabits || [];
   const today = currentDay();
   const todayStr = todayISO();
 
@@ -101,44 +68,31 @@ export default function HabitTracker() {
     const name = newName.trim();
     if (!name) return;
     const cat = "custom-" + Date.now();
-    const updated = [...(customHabits || []), { cat, name }];
-    saveField("customHabits", updated);
+    saveField("customHabits", [...customHabits, { cat, name }]);
     setNewName("");
   };
 
   const deleteHabit = (cat) => {
-    const updated = (customHabits || []).filter(h => h.cat !== cat);
-    saveField("customHabits", updated);
+    saveField("customHabits", customHabits.filter(h => h.cat !== cat));
   };
-
-  const personalRows = (customHabits && customHabits.length > 0) ? customHabits : [];
 
   return (
     <div className="habit-card">
-      {FIXED_GROUPS.map((group) => (
-        <div className="habit-group" key={group.title}>
-          <div className="habit-group-title">
-            {group.title}
-            {group.sub && <span> {group.sub}</span>}
-          </div>
-          {group.rows.map((row) => (
-            <HabitRow key={row.cat} row={row} habits={habits} today={today} todayStr={todayStr} toggle={toggle} editing={false} />
-          ))}
-        </div>
-      ))}
-
-      {/* Editable personal goals */}
       <div className="habit-group">
         <div className="habit-group-title">
-          🎯 个人目标
+          🎯 打卡目标
           <button className="habit-edit-toggle" onClick={() => setEditing(!editing)}>
             {editing ? "完成" : "编辑"}
           </button>
         </div>
 
-        {personalRows.map((row) => (
+        {customHabits.map((row) => (
           <HabitRow key={row.cat} row={row} habits={habits} today={today} todayStr={todayStr} toggle={toggle} editing={editing} onDelete={deleteHabit} />
         ))}
+
+        {customHabits.length === 0 && !editing && (
+          <div className="habit-empty">还没有打卡目标，点击「编辑」添加</div>
+        )}
 
         {editing && (
           <div className="habit-add-row">
@@ -147,7 +101,7 @@ export default function HabitTracker() {
               value={newName}
               onChange={e => setNewName(e.target.value)}
               onKeyDown={e => e.key === "Enter" && addHabit()}
-              placeholder="新目标名称，如：📚 每天阅读30分钟"
+              placeholder="新目标，如：📚 每天阅读30分钟"
               className="habit-add-input"
             />
             <button className="habit-add-btn" onClick={addHabit} disabled={!newName.trim()}>添加</button>

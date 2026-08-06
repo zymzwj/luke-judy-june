@@ -3151,6 +3151,13 @@
   }
   .habit-delete-btn:hover { opacity: 1; background: var(--rose); color: white; }
 
+  .habit-empty {
+    padding: 20px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-family: var(--sans);
+  }
   .habit-add-row {
     display: flex;
     gap: 8px;
