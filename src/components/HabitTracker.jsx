@@ -4,16 +4,21 @@ import { MONTH_CONFIG } from "../firebase/config.js";
 import { currentDay, todayISO, dateStr } from "../utils/date.js";
 import { computeHabitStreak } from "../utils/plans.js";
 
+const PERSON_CONFIG = {
+  luke: { label: "Luke", emoji: "👦" },
+  judy: { label: "Judy", emoji: "👧" },
+  both: { label: "一起", emoji: "💑" },
+};
+
 function HabitRow({ row, habits, today, todayStr, toggle, editing, onDelete }) {
   const streak = computeHabitStreak(habits, row.cat, today);
   const streakClass =
     streak === 0 ? "habit-streak zero" : streak >= 7 ? "habit-streak hot" : "habit-streak";
 
   return (
-    <div className="habit-row" key={row.cat}>
+    <div className="habit-row">
       <div className={`habit-name ${row.nameClass || ""}`}>
-        <span className={`who-dot ${row.person || ""}`} />
-        {" " + row.name}
+        {row.name}
         <span className={streakClass}>
           {streak === 0 ? "—" : `🔥 ${streak}`}
         </span>
@@ -77,7 +82,14 @@ export default function HabitTracker() {
     saveField("customHabits", customHabits.filter(h => h.cat !== cat));
   };
 
-  const personLabel = { luke: "Luke", judy: "Judy", both: "一起" };
+  const grouped = { luke: [], judy: [], both: [] };
+  for (const h of customHabits) {
+    const p = h.person || "both";
+    if (grouped[p]) grouped[p].push(h);
+    else grouped.both.push(h);
+  }
+
+  const groupOrder = ["luke", "judy", "both"];
 
   return (
     <div className="habit-card">
@@ -89,9 +101,25 @@ export default function HabitTracker() {
           </button>
         </div>
 
-        {customHabits.map((row) => (
-          <HabitRow key={row.cat} row={row} habits={habits} today={today} todayStr={todayStr} toggle={toggle} editing={editing} onDelete={deleteHabit} />
-        ))}
+        {groupOrder.map(person => {
+          const items = grouped[person];
+          if (items.length === 0 && !editing) return null;
+          const cfg = PERSON_CONFIG[person];
+          return (
+            <div key={person} className={`habit-person-group ${person}`}>
+              <div className="habit-person-header">
+                <span className="habit-person-emoji">{cfg.emoji}</span>
+                <span className="habit-person-label">{cfg.label}</span>
+              </div>
+              {items.map((row) => (
+                <HabitRow key={row.cat} row={row} habits={habits} today={today} todayStr={todayStr} toggle={toggle} editing={editing} onDelete={deleteHabit} />
+              ))}
+              {items.length === 0 && editing && (
+                <div className="habit-empty">暂无目标</div>
+              )}
+            </div>
+          );
+        })}
 
         {customHabits.length === 0 && !editing && (
           <div className="habit-empty">还没有打卡目标，点击「编辑」添加</div>
