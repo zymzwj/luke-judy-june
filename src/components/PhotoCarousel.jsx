@@ -1,13 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useData } from "../firebase/dataContext.jsx";
-import { COUPLE_ID, MONTH_CONFIG } from "../firebase/config.js";
-import {
-  deleteObject,
-  getDownloadURL,
-  getStorageInstance,
-  storageRef,
-  uploadBytes
-} from "../firebase/client.js";
+import { MONTH_CONFIG } from "../firebase/config.js";
 
 function normalizePhoto(p) {
   if (typeof p === "string") return { url: p };
@@ -23,7 +16,7 @@ function getFocal(photo) {
   return f || { x: 50, y: 50 };
 }
 
-async function resizeImage(file, maxDim = 1600, quality = 0.8) {
+async function resizeImage(file, maxDim = 1200, quality = 0.7) {
   let bitmap;
   try {
     bitmap = await createImageBitmap(file);
@@ -76,17 +69,6 @@ function resizeImageFallback(file, maxDim, quality) {
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
-}
-
-async function uploadToStorage(file) {
-  const dataUrl = await resizeImage(file);
-  const resp = await fetch(dataUrl);
-  const blob = await resp.blob();
-  const name = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
-  const ref = storageRef(getStorageInstance(), `couples/${COUPLE_ID}/photos/${name}`);
-  await uploadBytes(ref, blob);
-  const url = await getDownloadURL(ref);
-  return { url, storagePath: `couples/${COUPLE_ID}/photos/${name}` };
 }
 
 export default function PhotoCarousel() {
@@ -146,11 +128,11 @@ export default function PhotoCarousel() {
     const newPhotos = [...photos];
     for (const file of files) {
       try {
-        const { url, storagePath } = await uploadToStorage(file);
-        newPhotos.push({ url, storagePath, focal: { x: 50, y: 50 } });
+        const dataUrl = await resizeImage(file);
+        newPhotos.push({ url: dataUrl, focal: { x: 50, y: 50 } });
       } catch (err) {
-        console.error("Photo upload error:", err);
-        alert("照片上传失败: " + err.message);
+        console.error("Photo resize error:", err);
+        alert("照片处理失败: " + err.message);
       }
     }
 
@@ -167,14 +149,6 @@ export default function PhotoCarousel() {
   const handleDelete = async () => {
     if (photos.length === 0) return;
     if (!confirm("确定删除当前照片？")) return;
-    const photo = normalizePhoto(photos[idx]);
-    if (photo.storagePath) {
-      try {
-        await deleteObject(storageRef(getStorageInstance(), photo.storagePath));
-      } catch (e) {
-        console.warn("Failed to delete from storage:", e);
-      }
-    }
     const updated = photos.filter((_, i) => i !== idx);
     await saveField("photos", updated);
   };
