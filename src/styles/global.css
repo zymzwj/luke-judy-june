@@ -409,6 +409,7 @@
     width: 100%;
     height: auto;
     display: block;
+    mix-blend-mode: multiply;
   }
   /* Idle gentle bobbing — slightly different timings so they breathe asynchronously */
   .pixel-avatar:nth-child(1) { animation: avBob 4.2s ease-in-out infinite; }
