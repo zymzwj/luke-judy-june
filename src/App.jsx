@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "./firebase/context.jsx";
 import { useData } from "./firebase/dataContext.jsx";
 
@@ -41,6 +41,12 @@ export default function App() {
   const { loading, syncState } = useData();
   const [plannerDay, setPlannerDay] = useState(null);
   const showLegacy = ACTIVE_MONTH < LEGACY_CUTOFF;
+
+  useEffect(() => {
+    const era = ACTIVE_MONTH >= LEGACY_CUTOFF ? "y2k" : "editorial";
+    document.documentElement.setAttribute("data-era", era);
+    return () => document.documentElement.removeAttribute("data-era");
+  }, []);
 
   useTimeGradient();
   useScrollReveal();
