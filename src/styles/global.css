@@ -4593,6 +4593,51 @@
   color: var(--rose); text-decoration: underline;
 }
 
+/* ── Message bubbles in calendar right column ── */
+.cal-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.msg-bubbles {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.msg-bubbles-title {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 2px;
+}
+.msg-bubble {
+  background: var(--rose-light, rgba(200, 160, 120, 0.08));
+  border: 1px solid var(--rose-soft, rgba(200, 160, 120, 0.18));
+  border-radius: 16px 16px 16px 4px;
+  padding: 10px 14px;
+  animation: bubble-float 4s ease-in-out infinite;
+}
+.msg-bubble:nth-child(odd) {
+  border-radius: 16px 16px 4px 16px;
+}
+.msg-bubble-date {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-family: var(--sans);
+  margin-bottom: 4px;
+}
+.msg-bubble-text {
+  font-size: 0.88rem;
+  color: var(--ink);
+  line-height: 1.5;
+  font-family: var(--serif);
+}
+@keyframes bubble-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
 /* Together counter */
 .together-counter {
   text-align: center;

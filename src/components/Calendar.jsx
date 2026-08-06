@@ -295,6 +295,29 @@ function DayTooltip({ date, rect, events, moods, dateMessages, activeFilters }) 
   );
 }
 
+function MessageBubbles({ dateMessages }) {
+  const entries = useMemo(() =>
+    Object.entries(dateMessages || {})
+      .filter(([, v]) => v)
+      .sort(([a], [b]) => a.localeCompare(b)),
+    [dateMessages]
+  );
+
+  if (entries.length === 0) return null;
+
+  return (
+    <div className="msg-bubbles">
+      <div className="msg-bubbles-title">💬 日记气泡</div>
+      {entries.map(([date, text], i) => (
+        <div key={date} className="msg-bubble" style={{ animationDelay: `${i * 0.6}s` }}>
+          <div className="msg-bubble-date">{parseDateLabel(date)} · {parseDow(date)}</div>
+          <div className="msg-bubble-text">{text}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function EventList({ events, activeFilters, onDelete }) {
   const filtered = useMemo(() =>
     events
@@ -502,12 +525,15 @@ export default function Calendar() {
           </div>
         </div>
 
-        {/* Right card: Event list */}
-        <EventList
-          events={events}
-          activeFilters={activeFilters}
-          onDelete={deleteEvent}
-        />
+        {/* Right column: bubbles + event list */}
+        <div className="cal-right-col">
+          <MessageBubbles dateMessages={dateMessages} />
+          <EventList
+            events={events}
+            activeFilters={activeFilters}
+            onDelete={deleteEvent}
+          />
+        </div>
       </div>
 
       {/* Mood Picker Popup — portal to body to escape transform containing block */}
