@@ -146,11 +146,11 @@ export default function PixelAvatars({ birthday = false }) {
       id="pixelAvatars"
     >
       <div
-        className="pixel-char judy"
+        className="pixel-avatar judy"
         dangerouslySetInnerHTML={{ __html: judyChibiSVG() }}
       />
       <div
-        className="pixel-char luke"
+        className="pixel-avatar luke"
         dangerouslySetInnerHTML={{ __html: lukeChibiSVG() }}
       />
     </div>

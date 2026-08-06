@@ -3101,7 +3101,9 @@
     vertical-align: middle;
   }
   .who-dot.luke { background: var(--sky); }
+  .who-dot.judy { background: var(--rose); }
   .who-dot.yuxin { background: var(--rose); }
+  .who-dot.both { background: var(--gold); }
   .who-dot.trade { background: var(--sky); }
   .who-dot.cafe { background: var(--gold); }
   .who-dot.network { background: var(--plum); }
@@ -3176,6 +3178,16 @@
   }
   .habit-add-input:focus { border-color: var(--rose); outline: none; }
   .habit-add-input::placeholder { color: var(--muted); }
+  .habit-person-select {
+    padding: 6px 8px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-family: var(--sans);
+    background: var(--card);
+    color: var(--text);
+    cursor: pointer;
+  }
 
   .habit-add-btn {
     padding: 6px 16px;

@@ -12,7 +12,7 @@ function HabitRow({ row, habits, today, todayStr, toggle, editing, onDelete }) {
   return (
     <div className="habit-row" key={row.cat}>
       <div className={`habit-name ${row.nameClass || ""}`}>
-        <span className={`who-dot ${row.nameClass || row.cat}`} />
+        <span className={`who-dot ${row.person || ""}`} />
         {" " + row.name}
         <span className={streakClass}>
           {streak === 0 ? "—" : `🔥 ${streak}`}
@@ -55,6 +55,7 @@ export default function HabitTracker() {
 
   const [editing, setEditing] = useState(false);
   const [newName, setNewName] = useState("");
+  const [newPerson, setNewPerson] = useState("both");
 
   const toggle = (key) => {
     if (habits[key]) {
@@ -68,13 +69,15 @@ export default function HabitTracker() {
     const name = newName.trim();
     if (!name) return;
     const cat = "custom-" + Date.now();
-    saveField("customHabits", [...customHabits, { cat, name }]);
+    saveField("customHabits", [...customHabits, { cat, name, person: newPerson }]);
     setNewName("");
   };
 
   const deleteHabit = (cat) => {
     saveField("customHabits", customHabits.filter(h => h.cat !== cat));
   };
+
+  const personLabel = { luke: "Luke", judy: "Judy", both: "一起" };
 
   return (
     <div className="habit-card">
@@ -96,6 +99,11 @@ export default function HabitTracker() {
 
         {editing && (
           <div className="habit-add-row">
+            <select className="habit-person-select" value={newPerson} onChange={e => setNewPerson(e.target.value)}>
+              <option value="luke">Luke</option>
+              <option value="judy">Judy</option>
+              <option value="both">一起</option>
+            </select>
             <input
               type="text"
               value={newName}
