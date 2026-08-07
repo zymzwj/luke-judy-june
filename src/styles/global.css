@@ -3263,12 +3263,12 @@
   /* ========== LAYOUT ========== */
   .layout {
     display: grid;
-    grid-template-columns: 3fr minmax(180px, 0.7fr) 240px;
+    grid-template-columns: 3fr minmax(180px, 0.7fr);
     gap: 24px;
     margin: 36px auto 0;
     max-width: 1200px;
   }
-  @media (max-width: 1200px) { .layout { grid-template-columns: minmax(0, 1.2fr) minmax(200px, 1fr); } }
+  @media (max-width: 1200px) { .layout { grid-template-columns: 2fr 1fr; } }
   @media (max-width: 900px) { .layout { grid-template-columns: 1fr; margin-top: 20px; } }
 
   .card {
@@ -4598,10 +4598,15 @@
 
 /* ── Message bubbles in calendar right column ── */
 .msg-bubbles {
+  position: fixed;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 100%;
+  width: 240px;
+  z-index: 30;
 }
 .msg-bubbles-title {
   font-family: var(--sans);
@@ -4636,6 +4641,7 @@
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-4px); }
 }
+@media (max-width: 1200px) { .msg-bubbles { display: none; } }
 
 /* Together counter */
 .together-counter {
