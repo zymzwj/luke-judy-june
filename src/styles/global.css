@@ -3265,7 +3265,8 @@
     display: grid;
     grid-template-columns: 3fr minmax(180px, 0.7fr) 240px;
     gap: 24px;
-    margin-top: 36px;
+    margin: 36px auto 0;
+    max-width: 1200px;
   }
   @media (max-width: 1200px) { .layout { grid-template-columns: minmax(0, 1.2fr) minmax(200px, 1fr); } }
   @media (max-width: 900px) { .layout { grid-template-columns: 1fr; margin-top: 20px; } }
