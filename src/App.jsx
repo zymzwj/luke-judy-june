@@ -135,18 +135,18 @@ export default function App() {
               </>
             )}
 
-            {/* Month Navigation */}
-            <div className="month-nav-footer">
-              <a href={monthUrl(prevMonthKey(ACTIVE_MONTH))}>‹ 上个月</a>
-              <span>{MONTH_CONFIG.year}年{MONTH_CONFIG.label}</span>
-              {!IS_CURRENT_MONTH && <a href={monthUrl(nextMonthKey(ACTIVE_MONTH))}>下个月 ›</a>}
-            </div>
           </div>
         </div>
 
         <Collapsible id="sec-cal" title={<><CalendarIcon size={28} /> {MONTH_CONFIG.label}日历</>} desc={`${MONTH_CONFIG.labelEn} Calendar`}>
           <Calendar />
         </Collapsible>
+
+        <div className="month-nav-footer">
+          <a href={monthUrl(prevMonthKey(ACTIVE_MONTH))}>‹ 上个月</a>
+          <span>{MONTH_CONFIG.year}年{MONTH_CONFIG.label}</span>
+          {!IS_CURRENT_MONTH && <a href={monthUrl(nextMonthKey(ACTIVE_MONTH))}>下个月 ›</a>}
+        </div>
       </div>
     </>
   );
