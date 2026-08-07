@@ -94,10 +94,6 @@ export default function App() {
               <HabitTracker />
             </Collapsible>
 
-            <Collapsible id="sec-cal" title={<><CalendarIcon size={28} /> {MONTH_CONFIG.label}日历</>} desc={`${MONTH_CONFIG.labelEn} Calendar`}>
-              <Calendar />
-            </Collapsible>
-
             {showLegacy && (
               <>
                 <Collapsible id="sec-memory" title={<><HeartIcon size={28} /> 我们的故事</>} desc="Memory Wall">
@@ -147,6 +143,10 @@ export default function App() {
             </div>
           </div>
         </div>
+
+        <Collapsible id="sec-cal" title={<><CalendarIcon size={28} /> {MONTH_CONFIG.label}日历</>} desc={`${MONTH_CONFIG.labelEn} Calendar`}>
+          <Calendar />
+        </Collapsible>
       </div>
     </>
   );
