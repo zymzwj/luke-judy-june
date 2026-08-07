@@ -533,7 +533,7 @@ export default function Calendar() {
           onDelete={deleteEvent}
         />
 
-        {/* Far right: message bubbles */}
+        {/* Message bubbles as 3rd column */}
         <MessageBubbles dateMessages={dateMessages} />
       </div>
 

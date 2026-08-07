@@ -3263,10 +3263,9 @@
   /* ========== LAYOUT ========== */
   .layout {
     display: grid;
-    grid-template-columns: 3fr minmax(180px, 0.7fr);
+    grid-template-columns: 3fr minmax(180px, 0.7fr) 230px;
     gap: 24px;
-    margin: 36px auto 0;
-    max-width: 1200px;
+    margin-top: 36px;
   }
   @media (max-width: 1200px) { .layout { grid-template-columns: 2fr 1fr; } }
   @media (max-width: 900px) { .layout { grid-template-columns: 1fr; margin-top: 20px; } }
@@ -4596,45 +4595,63 @@
   color: var(--rose); text-decoration: underline;
 }
 
-/* ── Message bubbles in calendar right column ── */
+/* ── Message bubbles ── */
 .msg-bubbles {
-  position: fixed;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: 240px;
-  z-index: 30;
+  gap: 14px;
+  padding-top: 10px;
 }
 .msg-bubbles-title {
   font-family: var(--sans);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
   color: var(--muted);
   margin-bottom: 2px;
 }
 .msg-bubble {
-  background: var(--rose-light, rgba(200, 160, 120, 0.08));
-  border: 1px solid var(--rose-soft, rgba(200, 160, 120, 0.18));
-  border-radius: 16px 16px 16px 4px;
-  padding: 10px 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px 18px 18px 4px;
+  padding: 12px 16px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   animation: bubble-float 4s ease-in-out infinite;
 }
+.msg-bubble::before {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: 16px;
+  width: 14px;
+  height: 14px;
+  background: var(--card);
+  border-left: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  transform: rotate(45deg);
+}
 .msg-bubble:nth-child(odd) {
-  border-radius: 16px 16px 4px 16px;
+  border-radius: 18px 18px 4px 18px;
+}
+.msg-bubble:nth-child(odd)::before {
+  left: auto;
+  right: -7px;
+  border-left: none;
+  border-bottom: none;
+  border-right: 1px solid var(--border);
+  border-top: 1px solid var(--border);
 }
 .msg-bubble-date {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   color: var(--muted);
   font-family: var(--sans);
   margin-bottom: 4px;
+  letter-spacing: 0.3px;
 }
 .msg-bubble-text {
   font-size: 0.88rem;
   color: var(--ink);
-  line-height: 1.5;
+  line-height: 1.55;
   font-family: var(--serif);
 }
 @keyframes bubble-float {
