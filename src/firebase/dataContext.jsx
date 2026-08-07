@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import {
   addDoc,
   db,
@@ -153,7 +153,7 @@ export function DataProvider({ children }) {
     };
   }, [user]);
 
-  const save = async (fn) => {
+  const save = useCallback(async (fn) => {
     setSyncState({ state: "saving", msg: "保存中..." });
     try {
       await fn();
@@ -163,39 +163,41 @@ export function DataProvider({ children }) {
       setSyncState({ state: "error", msg: "保存失败: " + e.message });
       throw e;
     }
-  };
+  }, []);
 
   // Convenience save methods
-  const saveField = (field, value) => save(() =>
+  const saveField = useCallback((field, value) => save(() =>
     value !== undefined ? setDoc(docRef, { [field]: value }, { merge: true }) : updateDoc(docRef, { [field]: deleteField() })
-  );
+  ), [save]);
 
-  const updateField = (path, value) => save(() =>
+  const updateField = useCallback((path, value) => save(() =>
     value !== undefined && value !== null
       ? updateDoc(docRef, { [path]: value })
       : updateDoc(docRef, { [path]: deleteField() })
-  );
+  ), [save]);
 
-  const saveMerge = (obj) => save(() => setDoc(docRef, obj, { merge: true }));
+  const saveMerge = useCallback((obj) => save(() => setDoc(docRef, obj, { merge: true })), [save]);
 
-  const addMemory = (memData) => save(() => addDoc(memoriesColRef, memData));
+  const addMemory = useCallback((memData) => save(() => addDoc(memoriesColRef, memData)), [save]);
 
-  const deleteMemory = (id) => save(() => deleteDoc(doc(db, "couples", COUPLE_ID, "memories", id)));
+  const deleteMemory = useCallback((id) => save(() => deleteDoc(doc(db, "couples", COUPLE_ID, "memories", id))), [save]);
+
+  const ctxValue = useMemo(() => ({
+    data: data || EMPTY,
+    memories,
+    loading,
+    syncState,
+    save,
+    saveField,
+    updateField,
+    saveMerge,
+    addMemory,
+    deleteMemory,
+    docRef
+  }), [data, memories, loading, syncState, save, saveField, updateField, saveMerge, addMemory, deleteMemory]);
 
   return (
-    <DataContext.Provider value={{
-      data: data || EMPTY,
-      memories,
-      loading,
-      syncState,
-      save,
-      saveField,
-      updateField,
-      saveMerge,
-      addMemory,
-      deleteMemory,
-      docRef
-    }}>
+    <DataContext.Provider value={ctxValue}>
       {children}
     </DataContext.Provider>
   );

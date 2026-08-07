@@ -473,10 +473,11 @@ export default function Calendar() {
                   data-date={cell.date}
                   onClick={(e) => {
                     if (e.target.closest(".mood-btn") || e.target.closest(".msg-btn")) return;
+                    setTooltip(null);
                     setModalDate(cell.date);
                   }}
-                  onMouseEnter={(e) => { const r = e.currentTarget.getBoundingClientRect(); setTooltip({ date: cell.date, rect: { top: r.top, bottom: r.bottom, left: r.left, right: r.right } }); }}
-                  onMouseLeave={() => setTooltip(null)}
+                  onMouseEnter={(e) => { if (modalDate || moodPicker || notePopup) return; const r = e.currentTarget.getBoundingClientRect(); setTooltip({ date: cell.date, rect: { top: r.top, bottom: r.bottom, left: r.left, right: r.right } }); }}
+                  onMouseLeave={() => { if (modalDate || moodPicker || notePopup) return; setTooltip(null); }}
                 >
                   <div className="cell-head">
                     <span className="day-num">{cell.day}</span>
