@@ -13,6 +13,7 @@ import MedTracker from "./components/MedTracker.jsx";
 import HabitTracker from "./components/HabitTracker.jsx";
 import Planner from "./components/Planner.jsx";
 import Calendar from "./components/Calendar.jsx";
+import MonthlyPlan from "./components/MonthlyPlan.jsx";
 import ThemeToggle from "./components/ThemeToggle.jsx";
 import Celebration from "./components/Celebration.jsx";
 import Collapsible from "./components/Collapsible.jsx";
@@ -92,6 +93,10 @@ export default function App() {
             <Collapsible id="sec-habit" title="✅ 每日打卡" desc="Daily Tracker" defaultOpen>
               <p className="section-desc">点击每个小格子标记完成。颜色代表对应的目标类别。</p>
               <HabitTracker />
+            </Collapsible>
+
+            <Collapsible id="sec-monthly-plan" title={`📋 ${MONTH_CONFIG.label}计划`} desc="Monthly Plan" defaultOpen>
+              <MonthlyPlan />
             </Collapsible>
 
             {showLegacy && (

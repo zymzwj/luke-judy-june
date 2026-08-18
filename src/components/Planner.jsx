@@ -13,6 +13,7 @@ import {
 } from "../utils/plans.js";
 import { formatDuration } from "../utils/format.js";
 import { WEEKS } from "../data/calendar.js";
+import DailyTimeline from "./DailyTimeline.jsx";
 
 const DOW_NAMES = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
 const PEOPLE = ["luke", "judy"];
@@ -539,9 +540,7 @@ export default function Planner({ onDayChange }) {
           </div>
         )}
 
-        <div className="today-grid">
-          {PEOPLE.map((p) => renderPersonColumn(p))}
-        </div>
+        <DailyTimeline plannerDay={plannerDay} />
       </div>
 
       {/* ── Popups (portaled to body via fixed positioning) ── */}

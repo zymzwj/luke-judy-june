@@ -26,7 +26,7 @@ const EMPTY = {
   prayers: [], devotionNotes: {},
   weeklyRetros: {}, birthdayLetter: "",
   sweetInbox: [], bucketList: [], monthlyGoals: [],
-  customHabits: [], dailyShares: []
+  monthlyPlan: [], customHabits: [], dailyShares: []
 };
 
 export function DataProvider({ children }) {
@@ -78,6 +78,7 @@ export function DataProvider({ children }) {
           sweetInbox: Array.isArray(d.sweetInbox) ? d.sweetInbox : [],
           bucketList: Array.isArray(d.bucketList) ? d.bucketList : [],
           monthlyGoals: Array.isArray(d.monthlyGoals) ? d.monthlyGoals : [],
+          monthlyPlan: Array.isArray(d.monthlyPlan) ? d.monthlyPlan : [],
           customHabits: Array.isArray(d.customHabits) ? d.customHabits : [],
           dailyShares: Array.isArray(d.dailyShares) ? d.dailyShares : []
         });
