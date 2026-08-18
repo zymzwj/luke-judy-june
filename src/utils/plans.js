@@ -48,13 +48,39 @@ export function parseQuickAdd(raw) {
   let urgent = false;
   let important = false;
   let time = "";
-  const tm = text.match(/@(\d{1,2}):(\d{2})\b/);
-  if (tm) {
-    const h = Math.max(0, Math.min(23, parseInt(tm[1], 10)));
-    const m = Math.max(0, Math.min(59, parseInt(tm[2], 10)));
-    time = String(h).padStart(2, "0") + ":" + String(m).padStart(2, "0");
-    text = text.replace(tm[0], "").trim();
+  let duration = 0;
+
+  // @9:00-11:00 → time range
+  const range = text.match(/@(\d{1,2}):(\d{2})-(\d{1,2}):(\d{2})\b/);
+  if (range) {
+    const h1 = Math.max(0, Math.min(23, parseInt(range[1], 10)));
+    const m1 = Math.max(0, Math.min(59, parseInt(range[2], 10)));
+    const h2 = Math.max(0, Math.min(23, parseInt(range[3], 10)));
+    const m2 = Math.max(0, Math.min(59, parseInt(range[4], 10)));
+    time = String(h1).padStart(2, "0") + ":" + String(m1).padStart(2, "0");
+    duration = Math.max(0, (h2 * 60 + m2) - (h1 * 60 + m1));
+    text = text.replace(range[0], "").trim();
+  } else {
+    // @9:00+90 → start time + duration in minutes
+    const td = text.match(/@(\d{1,2}):(\d{2})\+(\d+)\b/);
+    if (td) {
+      const h = Math.max(0, Math.min(23, parseInt(td[1], 10)));
+      const m = Math.max(0, Math.min(59, parseInt(td[2], 10)));
+      time = String(h).padStart(2, "0") + ":" + String(m).padStart(2, "0");
+      duration = Math.max(0, parseInt(td[3], 10));
+      text = text.replace(td[0], "").trim();
+    } else {
+      // @9:00 → start time only
+      const tm = text.match(/@(\d{1,2}):(\d{2})\b/);
+      if (tm) {
+        const h = Math.max(0, Math.min(23, parseInt(tm[1], 10)));
+        const m = Math.max(0, Math.min(59, parseInt(tm[2], 10)));
+        time = String(h).padStart(2, "0") + ":" + String(m).padStart(2, "0");
+        text = text.replace(tm[0], "").trim();
+      }
+    }
   }
+
   if (/\s!!$/.test(text)) {
     urgent = true;
     text = text.replace(/\s!!$/, "").trim();
@@ -62,7 +88,7 @@ export function parseQuickAdd(raw) {
     important = true;
     text = text.replace(/\s!$/, "").trim();
   }
-  return { text, urgent, important, time };
+  return { text, urgent, important, time, duration };
 }
 
 export function sumBonuses(bonuses, person) {

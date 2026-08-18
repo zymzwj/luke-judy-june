@@ -80,7 +80,7 @@ export default function DailyTimeline({ plannerDay }) {
       urgent: parsed.urgent,
       important: parsed.important,
       time: parsed.time || "",
-      duration: 0,
+      duration: parsed.duration || 0,
     };
     commit(person, [...getItems(person), item]);
     setQuickAdd(prev => ({ ...prev, [person]: "" }));
@@ -288,7 +288,7 @@ export default function DailyTimeline({ plannerDay }) {
               value={quickAdd[p]}
               onChange={(e) => setQuickAdd(prev => ({ ...prev, [p]: e.target.value }))}
               onKeyDown={(e) => { if (e.key === "Enter") handleQuickAdd(p); }}
-              placeholder={`${LABEL[p]} 添加任务 (@9:00 设时间)`}
+              placeholder={`${LABEL[p]} 添加 (@9:00-11:00 或 @9:00+90)`}
             />
           </div>
         ))}
