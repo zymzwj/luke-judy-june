@@ -5026,6 +5026,37 @@
 .tl-block:hover .tl-block-del { opacity: 0.7; }
 .tl-block-del:hover { color: #e74c3c; opacity: 1; background: rgba(231,76,60,0.08); }
 
+/* ── Drag & resize ── */
+.tl-block { cursor: grab; }
+.tl-block.dragging {
+  cursor: grabbing;
+  z-index: 10 !important;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.18) !important;
+  transform: scale(1.03);
+  opacity: 0.92;
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+.tl-block-resize {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 8px;
+  cursor: ns-resize;
+  border-radius: 0 0 10px 10px;
+}
+.tl-block-resize::after {
+  content: "";
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px; height: 3px;
+  border-radius: 2px;
+  background: var(--border);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.tl-block:hover .tl-block-resize::after { opacity: 1; }
+
 /* ── Now indicator ── */
 .tl-now {
   position: absolute;

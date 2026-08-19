@@ -12,6 +12,7 @@ const TOTAL = END - START;
 const TRACK_H = TOTAL * HPX;
 const MIN_BLOCK = 28;
 
+const SNAP = HPX / 4; // 15-minute snap grid
 const PEOPLE = ["luke", "judy"];
 const LABEL = { luke: "Luke", judy: "Judy" };
 
@@ -32,6 +33,7 @@ export default function DailyTimeline({ plannerDay }) {
   const addRef = useRef(null);
   const scrollRef = useRef(null);
   const [nowTime, setNowTime] = useState(new Date());
+  const [dragState, setDragState] = useState(null);
 
   useEffect(() => {
     const id = setInterval(() => setNowTime(new Date()), 60000);
@@ -95,6 +97,112 @@ export default function DailyTimeline({ plannerDay }) {
       setAddSlot({ person, hour });
       setAddText("");
     }
+  };
+
+  const pxToTime = (px) => {
+    const totalMin = Math.round((px / HPX) * 60 / 15) * 15;
+    const cl = Math.max(0, Math.min(TOTAL * 60 - 15, totalMin));
+    const h = Math.floor(cl / 60) + START;
+    const m = cl % 60;
+    return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+  };
+
+  const handleBlockDown = (e, person, idx, blockTop) => {
+    if (e.target.closest(".tl-block-del") || e.target.closest(".tl-block-resize")) return;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    const track = e.currentTarget.closest(".tl-track");
+    const scrollTop = scrollRef.current?.scrollTop || 0;
+    const rect = track.getBoundingClientRect();
+    const offsetY = clientY - rect.top + scrollTop - blockTop;
+    let moved = false;
+    let finalTime = null;
+
+    const onMove = (ev) => {
+      const cy = ev.touches ? ev.touches[0].clientY : ev.clientY;
+      if (!moved && Math.abs(cy - clientY) < 5) return;
+      moved = true;
+      if (ev.cancelable) ev.preventDefault();
+      const r = track.getBoundingClientRect();
+      const st = scrollRef.current?.scrollTop || 0;
+      const rawY = cy - r.top + st - offsetY;
+      const snapped = Math.round(rawY / SNAP) * SNAP;
+      const top = Math.max(0, Math.min(TRACK_H - MIN_BLOCK, snapped));
+      finalTime = pxToTime(top);
+      setDragState({ person, idx, top, time: finalTime });
+    };
+
+    const onEnd = () => {
+      done();
+      if (moved && finalTime) {
+        const items = [...getItems(person)];
+        items[idx] = { ...items[idx], time: finalTime };
+        commit(person, items);
+      } else if (!moved) {
+        toggle(person, idx);
+      }
+      setDragState(null);
+    };
+
+    const done = () => {
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseup", onEnd);
+      document.removeEventListener("touchmove", onMove);
+      document.removeEventListener("touchend", onEnd);
+      document.body.style.userSelect = "";
+      document.body.style.cursor = "";
+    };
+
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onEnd);
+    document.addEventListener("touchmove", onMove, { passive: false });
+    document.addEventListener("touchend", onEnd);
+    document.body.style.userSelect = "none";
+  };
+
+  const handleResizeDown = (e, person, idx, blockTop) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    const track = e.currentTarget.closest(".tl-track");
+    let finalDur = null;
+
+    const onMove = (ev) => {
+      const cy = ev.touches ? ev.touches[0].clientY : ev.clientY;
+      if (ev.cancelable) ev.preventDefault();
+      const r = track.getBoundingClientRect();
+      const st = scrollRef.current?.scrollTop || 0;
+      const rawH = cy - r.top + st - blockTop;
+      const snapped = Math.round(rawH / SNAP) * SNAP;
+      const h = Math.max(SNAP, Math.min(TRACK_H - blockTop, snapped));
+      finalDur = Math.round((h / HPX) * 60);
+      setDragState({ person, idx, top: blockTop, height: h, resizing: true, duration: finalDur });
+    };
+
+    const onEnd = () => {
+      done();
+      if (finalDur && finalDur > 0) {
+        const items = [...getItems(person)];
+        items[idx] = { ...items[idx], duration: finalDur };
+        commit(person, items);
+      }
+      setDragState(null);
+    };
+
+    const done = () => {
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseup", onEnd);
+      document.removeEventListener("touchmove", onMove);
+      document.removeEventListener("touchend", onEnd);
+      document.body.style.userSelect = "";
+      document.body.style.cursor = "";
+    };
+
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onEnd);
+    document.addEventListener("touchmove", onMove, { passive: false });
+    document.addEventListener("touchend", onEnd);
+    document.body.style.userSelect = "none";
+    document.body.style.cursor = "ns-resize";
   };
 
   useEffect(() => {
@@ -220,26 +328,43 @@ export default function DailyTimeline({ plannerDay }) {
               const { scheduled } = categorize(person);
               return (
                 <div key={person} className={`tl-track ${person}`} onClick={(e) => handleTrackClick(person, e)}>
-                  {scheduled.map(({ it, idx, top, height }) => (
-                    <div
-                      key={idx}
-                      className={`tl-block ${person}${it.done ? " done" : ""}${it.urgent ? " urgent" : ""}${it.important ? " imp" : ""}`}
-                      style={{ top, height, animationDelay: `${idx * 60}ms` }}
-                      onClick={(e) => { e.stopPropagation(); toggle(person, idx); }}
-                    >
-                      {it.done && <span className="tl-block-check">✓</span>}
-                      <div className="tl-block-head">
-                        <span className="tl-block-time">{it.time}</span>
-                        {it.duration > 0 && <span className="tl-block-dur">{formatDuration(it.duration)}</span>}
+                  {scheduled.map(({ it, idx, top, height }) => {
+                    const ds = dragState?.person === person && dragState?.idx === idx ? dragState : null;
+                    const isResizing = ds?.resizing;
+                    return (
+                      <div
+                        key={idx}
+                        className={`tl-block ${person}${it.done ? " done" : ""}${it.urgent ? " urgent" : ""}${ds ? " dragging" : ""}`}
+                        style={{
+                          top: ds && !isResizing ? ds.top : top,
+                          height: isResizing ? ds.height : height,
+                          animationDelay: `${idx * 60}ms`,
+                        }}
+                        onMouseDown={(e) => handleBlockDown(e, person, idx, top)}
+                        onTouchStart={(e) => handleBlockDown(e, person, idx, top)}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {it.done && <span className="tl-block-check">✓</span>}
+                        <div className="tl-block-head">
+                          <span className="tl-block-time">{ds && !isResizing ? ds.time : it.time}</span>
+                          <span className="tl-block-dur">
+                            {formatDuration(isResizing ? ds.duration : (it.duration || 60))}
+                          </span>
+                        </div>
+                        <span className="tl-block-text">{it.text}</span>
+                        <div className="tl-block-flags">
+                          {it.urgent && <span className="tl-flag urgent">急</span>}
+                          {it.important && <span className="tl-flag imp">要</span>}
+                        </div>
+                        <button className="tl-block-del" onClick={(e) => { e.stopPropagation(); remove(person, idx); }}>×</button>
+                        <div
+                          className="tl-block-resize"
+                          onMouseDown={(e) => handleResizeDown(e, person, idx, top)}
+                          onTouchStart={(e) => handleResizeDown(e, person, idx, top)}
+                        />
                       </div>
-                      <span className="tl-block-text">{it.text}</span>
-                      <div className="tl-block-flags">
-                        {it.urgent && <span className="tl-flag urgent">急</span>}
-                        {it.important && <span className="tl-flag imp">要</span>}
-                      </div>
-                      <button className="tl-block-del" onClick={(e) => { e.stopPropagation(); remove(person, idx); }}>×</button>
-                    </div>
-                  ))}
+                    );
+                  })}
 
                   {addSlot && addSlot.person === person && (
                     <div
