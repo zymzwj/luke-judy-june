@@ -294,6 +294,14 @@
     color: var(--ink-soft);
   }
   .med-action-text strong { color: var(--ink); font-weight: 600; }
+  .med-next-hint {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--sky);
+    font-weight: 500;
+  }
+  .med-next-hint strong { color: var(--sky); font-weight: 700; font-size: 14px; }
   .med-take-btn {
     background: var(--rose);
     color: white;
