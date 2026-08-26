@@ -4838,8 +4838,6 @@
 
 /* ── Scroll container ── */
 .tl-scroll {
-  max-height: 720px;
-  overflow-y: auto;
   overflow-x: hidden;
   border: 1px solid var(--border);
   border-radius: 0 0 14px 14px;
