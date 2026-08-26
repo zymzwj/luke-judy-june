@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useData } from "../firebase/dataContext.jsx";
 import { dayKey, currentDay } from "../utils/date.js";
-import { getDailyItems, parseQuickAdd } from "../utils/plans.js";
+import { getDailyItems } from "../utils/plans.js";
 import { formatDuration } from "../utils/format.js";
 import { MONTH_CONFIG } from "../firebase/config.js";
 
@@ -29,7 +29,7 @@ export default function DailyTimeline({ plannerDay }) {
   const { data, updateField } = useData();
   const [addSlot, setAddSlot] = useState(null);
   const [addText, setAddText] = useState("");
-  const [quickAdd, setQuickAdd] = useState({ luke: "", judy: "" });
+  const [addModal, setAddModal] = useState(null);
   const addRef = useRef(null);
   const scrollRef = useRef(null);
   const [nowTime, setNowTime] = useState(new Date());
@@ -71,21 +71,19 @@ export default function DailyTimeline({ plannerDay }) {
     setAddSlot(null);
   };
 
-  const handleQuickAdd = (person) => {
-    const raw = quickAdd[person];
-    if (!raw.trim()) return;
-    const parsed = parseQuickAdd(raw);
-    if (!parsed.text) return;
-    const item = {
-      text: parsed.text,
-      done: false,
-      urgent: parsed.urgent,
-      important: parsed.important,
-      time: parsed.time || "",
-      duration: parsed.duration || 0,
-    };
-    commit(person, [...getItems(person), item]);
-    setQuickAdd(prev => ({ ...prev, [person]: "" }));
+  const openAddModal = (person) => {
+    setAddModal({ person, text: "", startH: 9, startM: 0, endH: 10, endM: 0, urgent: false, important: false });
+  };
+
+  const submitAddModal = () => {
+    if (!addModal || !addModal.text.trim()) return;
+    const { person, text, startH, startM, endH, endM, urgent, important } = addModal;
+    const time = `${String(startH).padStart(2, "0")}:${String(startM).padStart(2, "0")}`;
+    const dur = (endH * 60 + endM) - (startH * 60 + startM);
+    commit(person, [...getItems(person), {
+      text: text.trim(), done: false, urgent, important, time, duration: dur > 0 ? dur : 60,
+    }]);
+    setAddModal(null);
   };
 
   const handleTrackClick = (person, e) => {
@@ -403,21 +401,87 @@ export default function DailyTimeline({ plannerDay }) {
         </div>
       </div>
 
-      {/* Add inputs */}
+      {/* Add buttons */}
       <div className="tl-add-bar">
         {PEOPLE.map(p => (
-          <div key={p} className={`tl-add-wrap ${p}`}>
-            <span className="tl-add-icon">+</span>
-            <input
-              type="text"
-              value={quickAdd[p]}
-              onChange={(e) => setQuickAdd(prev => ({ ...prev, [p]: e.target.value }))}
-              onKeyDown={(e) => { if (e.key === "Enter") handleQuickAdd(p); }}
-              placeholder={`${LABEL[p]} 添加 (@9:00-11:00 或 @9:00+90)`}
-            />
-          </div>
+          <button key={p} className={`tl-add-btn ${p}`} onClick={() => openAddModal(p)}>
+            <span className="tl-add-btn-icon">+</span>
+            {LABEL[p]} 添加任务
+          </button>
         ))}
       </div>
+
+      {/* Add modal */}
+      {addModal && (
+        <div className="tl-modal-overlay" onClick={() => setAddModal(null)}>
+          <div className="tl-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="tl-modal-head">
+              <span className={`tl-head-dot ${addModal.person}`} />
+              <span className="tl-modal-title">{LABEL[addModal.person]} · 添加任务</span>
+              <button className="tl-modal-close" onClick={() => setAddModal(null)}>×</button>
+            </div>
+
+            <input
+              className="tl-modal-input"
+              autoFocus
+              placeholder="输入事项名称"
+              value={addModal.text}
+              onChange={(e) => setAddModal(prev => ({ ...prev, text: e.target.value }))}
+              onKeyDown={(e) => { if (e.key === "Enter" && addModal.text.trim()) submitAddModal(); }}
+            />
+
+            <div className="tl-modal-section">
+              <span className="tl-modal-label">时间</span>
+              <div className="tl-modal-time">
+                <select value={addModal.startH} onChange={(e) => {
+                  const h = +e.target.value;
+                  setAddModal(prev => ({ ...prev, startH: h, endH: Math.max(prev.endH, h + 1) }));
+                }}>
+                  {Array.from({ length: END - START }, (_, i) => <option key={i} value={START + i}>{String(START + i).padStart(2, "0")}</option>)}
+                </select>
+                <span className="tl-modal-colon">:</span>
+                <select value={addModal.startM} onChange={(e) => setAddModal(prev => ({ ...prev, startM: +e.target.value }))}>
+                  {[0, 15, 30, 45].map(m => <option key={m} value={m}>{String(m).padStart(2, "0")}</option>)}
+                </select>
+                <span className="tl-modal-arrow">→</span>
+                <select value={addModal.endH} onChange={(e) => setAddModal(prev => ({ ...prev, endH: +e.target.value }))}>
+                  {Array.from({ length: END - START + 1 }, (_, i) => <option key={i} value={START + i}>{String(START + i).padStart(2, "0")}</option>)}
+                </select>
+                <span className="tl-modal-colon">:</span>
+                <select value={addModal.endM} onChange={(e) => setAddModal(prev => ({ ...prev, endM: +e.target.value }))}>
+                  {[0, 15, 30, 45].map(m => <option key={m} value={m}>{String(m).padStart(2, "0")}</option>)}
+                </select>
+              </div>
+            </div>
+
+            <div className="tl-modal-section">
+              <span className="tl-modal-label">优先级</span>
+              <div className="tl-modal-pri">
+                <button className={`tl-pri-btn ui${addModal.urgent && addModal.important ? " on" : ""}`}
+                  onClick={() => setAddModal(prev => ({ ...prev, urgent: true, important: true }))}>
+                  紧急且重要
+                </button>
+                <button className={`tl-pri-btn i${!addModal.urgent && addModal.important ? " on" : ""}`}
+                  onClick={() => setAddModal(prev => ({ ...prev, urgent: false, important: true }))}>
+                  重要不紧急
+                </button>
+                <button className={`tl-pri-btn u${addModal.urgent && !addModal.important ? " on" : ""}`}
+                  onClick={() => setAddModal(prev => ({ ...prev, urgent: true, important: false }))}>
+                  紧急不重要
+                </button>
+                <button className={`tl-pri-btn n${!addModal.urgent && !addModal.important ? " on" : ""}`}
+                  onClick={() => setAddModal(prev => ({ ...prev, urgent: false, important: false }))}>
+                  不紧急不重要
+                </button>
+              </div>
+            </div>
+
+            <button className={`tl-modal-submit ${addModal.person}`} onClick={submitAddModal} disabled={!addModal.text.trim()}>
+              添加任务
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
