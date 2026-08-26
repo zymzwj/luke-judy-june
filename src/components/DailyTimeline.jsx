@@ -325,7 +325,7 @@ export default function DailyTimeline({ plannerDay }) {
             {PEOPLE.map(person => {
               const { scheduled } = categorize(person);
               return (
-                <div key={person} className={`tl-track ${person}`} onClick={(e) => handleTrackClick(person, e)}>
+                <div key={person} className={`tl-track ${person}`} onDoubleClick={(e) => handleTrackClick(person, e)}>
                   {scheduled.map(({ it, idx, top, height }) => {
                     const ds = dragState?.person === person && dragState?.idx === idx ? dragState : null;
                     const isResizing = ds?.resizing;
