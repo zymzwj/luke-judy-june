@@ -5,8 +5,8 @@ import { getDailyItems } from "../utils/plans.js";
 import { formatDuration } from "../utils/format.js";
 import { MONTH_CONFIG } from "../firebase/config.js";
 
-const START = 6;
-const END = 23;
+const START = 7;
+const END = 24;
 const HPX = 64;
 const TOTAL = END - START;
 const TRACK_H = TOTAL * HPX;
@@ -332,7 +332,7 @@ export default function DailyTimeline({ plannerDay }) {
                     return (
                       <div
                         key={idx}
-                        className={`tl-block ${person}${it.done ? " done" : ""}${it.urgent ? " urgent" : ""}${ds ? " dragging" : ""}`}
+                        className={`tl-block ${person}${it.done ? " done" : ""}${it.urgent && it.important ? " pri-ui" : it.important ? " pri-i" : it.urgent ? " pri-u" : " pri-n"}${ds ? " dragging" : ""}`}
                         style={{
                           top: ds && !isResizing ? ds.top : top,
                           height: isResizing ? ds.height : height,
