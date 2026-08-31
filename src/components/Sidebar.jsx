@@ -22,9 +22,6 @@ export default function Sidebar() {
   const togetherStart = new Date("2024-02-16");
   const togetherDays = Math.floor((new Date() - togetherStart) / (1000 * 60 * 60 * 24));
 
-  const reunionDate = new Date("2026-08-13");
-  const reunionDiff = Math.ceil((reunionDate - new Date()) / (1000 * 60 * 60 * 24));
-  const reunionPast = reunionDiff <= 0;
 
   return (
     <aside className="sidebar" id="sidebar">
@@ -37,15 +34,6 @@ export default function Sidebar() {
           <span className="together-label">天</span>
         </div>
         <div className="score-foot">从 2024 年 2 月 16 日开始</div>
-      </div>
-
-      <div className="sidebar-section">
-        <div className="sidebar-section-title">🛬 见面倒计时</div>
-        <div className="together-counter">
-          <span className="together-days">{reunionPast ? "💕" : reunionDiff}</span>
-          <span className="together-label">{reunionPast ? "已见面！" : "天"}</span>
-        </div>
-        <div className="score-foot">8 月 13 日</div>
       </div>
 
       <div className="sidebar-section">
