@@ -5348,6 +5348,24 @@
   min-width: 48px;
 }
 .tl-modal-time select:focus { border-color: var(--ink-soft); }
+.tl-modal-min {
+  padding: 8px 6px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--bg-warm);
+  outline: none;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  width: 48px;
+  -moz-appearance: textfield;
+}
+.tl-modal-min::-webkit-inner-spin-button,
+.tl-modal-min::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.tl-modal-min:focus { border-color: var(--ink-soft); }
 .tl-modal-colon {
   font-size: 14px;
   font-weight: 700;

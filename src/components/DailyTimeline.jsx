@@ -453,17 +453,15 @@ export default function DailyTimeline({ plannerDay }) {
                     {Array.from({ length: END - START }, (_, i) => <option key={i} value={START + i}>{String(START + i).padStart(2, "0")}</option>)}
                   </select>
                   <span className="tl-modal-colon">:</span>
-                  <select value={addModal.startM} onChange={(e) => setAddModal(prev => ({ ...prev, startM: +e.target.value }))}>
-                    {[0, 15, 30, 45].map(m => <option key={m} value={m}>{String(m).padStart(2, "0")}</option>)}
-                  </select>
+                  <input type="number" min="0" max="59" className="tl-modal-min" value={String(addModal.startM).padStart(2, "0")}
+                    onChange={(e) => { const v = Math.max(0, Math.min(59, +e.target.value || 0)); setAddModal(prev => ({ ...prev, startM: v })); }} />
                   <span className="tl-modal-arrow">→</span>
                   <select value={addModal.endH} onChange={(e) => setAddModal(prev => ({ ...prev, endH: +e.target.value }))}>
                     {Array.from({ length: END - START + 1 }, (_, i) => <option key={i} value={START + i}>{String(START + i).padStart(2, "0")}</option>)}
                   </select>
                   <span className="tl-modal-colon">:</span>
-                  <select value={addModal.endM} onChange={(e) => setAddModal(prev => ({ ...prev, endM: +e.target.value }))}>
-                    {[0, 15, 30, 45].map(m => <option key={m} value={m}>{String(m).padStart(2, "0")}</option>)}
-                  </select>
+                  <input type="number" min="0" max="59" className="tl-modal-min" value={String(addModal.endM).padStart(2, "0")}
+                    onChange={(e) => { const v = Math.max(0, Math.min(59, +e.target.value || 0)); setAddModal(prev => ({ ...prev, endM: v })); }} />
                 </div>
               )}
             </div>
