@@ -357,11 +357,11 @@ export default function DailyTimeline({ plannerDay }) {
                         {it.done && <span className="tl-block-check">✓</span>}
                         <div className="tl-block-head">
                           <span className="tl-block-time">{ds && !isResizing ? ds.time : it.time}</span>
+                          <span className="tl-block-text">{it.text}</span>
                           <span className="tl-block-dur">
                             {formatDuration(isResizing ? ds.duration : (it.duration || 60))}
                           </span>
                         </div>
-                        <span className="tl-block-text">{it.text}</span>
                         <div className="tl-block-flags">
                           {it.urgent && <span className="tl-flag urgent">急</span>}
                           {it.important && <span className="tl-flag imp">要</span>}
