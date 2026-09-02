@@ -280,15 +280,21 @@ export default function DailyTimeline({ plannerDay }) {
       {allUnsched.length > 0 && (
         <div className="tl-unsched">
           <div className="tl-unsched-label">未安排的事项</div>
-          <div className="tl-unsched-items">
-            {allUnsched.map(({ it, idx, person }) => (
-              <div key={`${person}-${idx}`} className={`tl-chip ${person}${it.done ? " done" : ""}`}>
-                <button className="tl-chip-chk" onClick={() => toggle(person, idx)} />
-                <span className="tl-chip-text">{it.text}</span>
-                <span className="tl-chip-who">{LABEL[person]}</span>
-                <button className="tl-chip-del" onClick={() => remove(person, idx)}>×</button>
-              </div>
-            ))}
+          <div className="tl-unsched-cols">
+            {PEOPLE.map(person => {
+              const items = allUnsched.filter(u => u.person === person);
+              return (
+                <div key={person} className={`tl-unsched-col ${person}`}>
+                  {items.map(({ it, idx }) => (
+                    <div key={idx} className={`tl-chip ${person}${it.done ? " done" : ""}`}>
+                      <button className="tl-chip-chk" onClick={() => toggle(person, idx)} />
+                      <span className="tl-chip-text">{it.text}</span>
+                      <button className="tl-chip-del" onClick={() => remove(person, idx)}>×</button>
+                    </div>
+                  ))}
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
