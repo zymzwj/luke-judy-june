@@ -5084,6 +5084,12 @@
 
 /* ── Drag & resize ── */
 .tl-block { cursor: grab; }
+.tl-block.hold-ready {
+  transform: scale(1.04);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important;
+  z-index: 10 !important;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
 .tl-block.dragging {
   cursor: grabbing;
   z-index: 10 !important;

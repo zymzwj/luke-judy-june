@@ -113,16 +113,24 @@ export default function DailyTimeline({ plannerDay }) {
 
   const handleBlockDown = (e, person, idx, blockTop) => {
     if (e.target.closest(".tl-block-del") || e.target.closest(".tl-block-resize")) return;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    const isTouch = !!e.touches;
+    const clientY = isTouch ? e.touches[0].clientY : e.clientY;
     const track = e.currentTarget.closest(".tl-track");
     const scrollTop = scrollRef.current?.scrollTop || 0;
     const rect = track.getBoundingClientRect();
     const offsetY = clientY - rect.top + scrollTop - blockTop;
     let moved = false;
     let finalTime = null;
+    let dragEnabled = !isTouch;
+    let holdTimer = null;
+    const block = e.currentTarget;
 
     const onMove = (ev) => {
       const cy = ev.touches ? ev.touches[0].clientY : ev.clientY;
+      if (!dragEnabled) {
+        if (Math.abs(cy - clientY) > 5) { cleanup(); return; }
+        return;
+      }
       if (!moved && Math.abs(cy - clientY) < 5) return;
       moved = true;
       if (ev.cancelable) ev.preventDefault();
@@ -136,18 +144,20 @@ export default function DailyTimeline({ plannerDay }) {
     };
 
     const onEnd = () => {
-      done();
+      cleanup();
       if (moved && finalTime) {
         const items = [...getItems(person)];
         items[idx] = { ...items[idx], time: finalTime };
         commit(person, items);
-      } else if (!moved) {
+      } else if (!moved && dragEnabled) {
         toggle(person, idx);
       }
       setDragState(null);
     };
 
-    const done = () => {
+    const cleanup = () => {
+      if (holdTimer) { clearTimeout(holdTimer); holdTimer = null; }
+      block.classList.remove("hold-ready");
       document.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseup", onEnd);
       document.removeEventListener("touchmove", onMove);
@@ -155,6 +165,14 @@ export default function DailyTimeline({ plannerDay }) {
       document.body.style.userSelect = "";
       document.body.style.cursor = "";
     };
+
+    if (isTouch) {
+      holdTimer = setTimeout(() => {
+        dragEnabled = true;
+        block.classList.add("hold-ready");
+        if (navigator.vibrate) navigator.vibrate(30);
+      }, 400);
+    }
 
     document.addEventListener("mousemove", onMove);
     document.addEventListener("mouseup", onEnd);
