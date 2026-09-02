@@ -2,7 +2,7 @@
 // Strategy: network-first for our origin, cache as fallback (offline support).
 // Bypass Firebase / Google APIs so realtime data is never cached.
 
-const CACHE = "luke-judy-v49";
+const CACHE = "luke-judy-v50";
 const STATIC = [
   "./",
   "./index.html",

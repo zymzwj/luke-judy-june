@@ -5301,6 +5301,21 @@
 .tl-modal-section {
   margin-top: 16px;
 }
+.tl-modal-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.tl-notime-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+}
+.tl-notime-toggle input { margin: 0; cursor: pointer; }
 .tl-modal-label {
   display: block;
   font-family: var(--sans);

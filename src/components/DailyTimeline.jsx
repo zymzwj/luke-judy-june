@@ -72,17 +72,23 @@ export default function DailyTimeline({ plannerDay }) {
   };
 
   const openAddModal = (person) => {
-    setAddModal({ person, text: "", startH: 9, startM: 0, endH: 10, endM: 0, urgent: false, important: false });
+    setAddModal({ person, text: "", startH: 9, startM: 0, endH: 10, endM: 0, urgent: false, important: false, noTime: false });
   };
 
   const submitAddModal = () => {
     if (!addModal || !addModal.text.trim()) return;
-    const { person, text, startH, startM, endH, endM, urgent, important } = addModal;
-    const time = `${String(startH).padStart(2, "0")}:${String(startM).padStart(2, "0")}`;
-    const dur = (endH * 60 + endM) - (startH * 60 + startM);
-    commit(person, [...getItems(person), {
-      text: text.trim(), done: false, urgent, important, time, duration: dur > 0 ? dur : 60,
-    }]);
+    const { person, text, startH, startM, endH, endM, urgent, important, noTime } = addModal;
+    if (noTime) {
+      commit(person, [...getItems(person), {
+        text: text.trim(), done: false, urgent, important, time: null, duration: null,
+      }]);
+    } else {
+      const time = `${String(startH).padStart(2, "0")}:${String(startM).padStart(2, "0")}`;
+      const dur = (endH * 60 + endM) - (startH * 60 + startM);
+      commit(person, [...getItems(person), {
+        text: text.trim(), done: false, urgent, important, time, duration: dur > 0 ? dur : 60,
+      }]);
+    }
     setAddModal(null);
   };
 
@@ -431,27 +437,35 @@ export default function DailyTimeline({ plannerDay }) {
             />
 
             <div className="tl-modal-section">
-              <span className="tl-modal-label">时间</span>
-              <div className="tl-modal-time">
-                <select value={addModal.startH} onChange={(e) => {
-                  const h = +e.target.value;
-                  setAddModal(prev => ({ ...prev, startH: h, endH: Math.max(prev.endH, h + 1) }));
-                }}>
-                  {Array.from({ length: END - START }, (_, i) => <option key={i} value={START + i}>{String(START + i).padStart(2, "0")}</option>)}
-                </select>
-                <span className="tl-modal-colon">:</span>
-                <select value={addModal.startM} onChange={(e) => setAddModal(prev => ({ ...prev, startM: +e.target.value }))}>
-                  {[0, 15, 30, 45].map(m => <option key={m} value={m}>{String(m).padStart(2, "0")}</option>)}
-                </select>
-                <span className="tl-modal-arrow">→</span>
-                <select value={addModal.endH} onChange={(e) => setAddModal(prev => ({ ...prev, endH: +e.target.value }))}>
-                  {Array.from({ length: END - START + 1 }, (_, i) => <option key={i} value={START + i}>{String(START + i).padStart(2, "0")}</option>)}
-                </select>
-                <span className="tl-modal-colon">:</span>
-                <select value={addModal.endM} onChange={(e) => setAddModal(prev => ({ ...prev, endM: +e.target.value }))}>
-                  {[0, 15, 30, 45].map(m => <option key={m} value={m}>{String(m).padStart(2, "0")}</option>)}
-                </select>
+              <div className="tl-modal-label-row">
+                <span className="tl-modal-label">时间</span>
+                <label className="tl-notime-toggle">
+                  <input type="checkbox" checked={addModal.noTime} onChange={(e) => setAddModal(prev => ({ ...prev, noTime: e.target.checked }))} />
+                  <span>不安排时间</span>
+                </label>
               </div>
+              {!addModal.noTime && (
+                <div className="tl-modal-time">
+                  <select value={addModal.startH} onChange={(e) => {
+                    const h = +e.target.value;
+                    setAddModal(prev => ({ ...prev, startH: h, endH: Math.max(prev.endH, h + 1) }));
+                  }}>
+                    {Array.from({ length: END - START }, (_, i) => <option key={i} value={START + i}>{String(START + i).padStart(2, "0")}</option>)}
+                  </select>
+                  <span className="tl-modal-colon">:</span>
+                  <select value={addModal.startM} onChange={(e) => setAddModal(prev => ({ ...prev, startM: +e.target.value }))}>
+                    {[0, 15, 30, 45].map(m => <option key={m} value={m}>{String(m).padStart(2, "0")}</option>)}
+                  </select>
+                  <span className="tl-modal-arrow">→</span>
+                  <select value={addModal.endH} onChange={(e) => setAddModal(prev => ({ ...prev, endH: +e.target.value }))}>
+                    {Array.from({ length: END - START + 1 }, (_, i) => <option key={i} value={START + i}>{String(START + i).padStart(2, "0")}</option>)}
+                  </select>
+                  <span className="tl-modal-colon">:</span>
+                  <select value={addModal.endM} onChange={(e) => setAddModal(prev => ({ ...prev, endM: +e.target.value }))}>
+                    {[0, 15, 30, 45].map(m => <option key={m} value={m}>{String(m).padStart(2, "0")}</option>)}
+                  </select>
+                </div>
+              )}
             </div>
 
             <div className="tl-modal-section">
