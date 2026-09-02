@@ -10,8 +10,8 @@ export default function MonthlyPlan() {
   const sorted = [...items.filter(i => !i.done), ...items.filter(i => i.done)];
   const doneCount = items.filter(i => i.done).length;
 
-  const handleAdd = async (e) => {
-    if (e.key !== "Enter" || !input.trim()) return;
+  const handleAdd = async () => {
+    if (!input.trim()) return;
     const item = { id: Date.now().toString(), text: input.trim(), done: false, completedAt: null };
     await saveMerge({ monthlyPlan: [...items, item] });
     setInput("");
@@ -49,7 +49,8 @@ export default function MonthlyPlan() {
       </div>
 
       <div className="add-row">
-        <input type="text" value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleAdd} placeholder="+ 加一条计划... (Enter 提交)" />
+        <input type="text" value={input} onChange={e => setInput(e.target.value)} placeholder="+ 加一条计划..." />
+        <button className="add-row-btn" onClick={handleAdd} disabled={!input.trim()}>添加</button>
       </div>
     </div>
   );

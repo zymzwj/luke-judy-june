@@ -1381,6 +1381,20 @@
     text-align: center;
   }
   .add-row input::placeholder { color: var(--muted); font-style: italic; }
+  .add-row-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: inherit;
+    font-weight: 600;
+    background: var(--bg-warm);
+    color: var(--ink-soft);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .add-row-btn:hover:not(:disabled) { background: var(--card); border-color: var(--ink-soft); }
+  .add-row-btn:disabled { opacity: 0.4; cursor: default; }
   .bg-empty {
     color: var(--muted);
     font-style: italic;
