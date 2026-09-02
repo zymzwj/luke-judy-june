@@ -5248,7 +5248,7 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  animation: tl-fade-in 0.15s ease;
+  animation: tl-fade-in 0.15s ease both;
 }
 @keyframes tl-fade-in { from { opacity: 0; } to { opacity: 1; } }
 .tl-modal {
@@ -5258,7 +5258,7 @@
   max-width: 380px;
   padding: 22px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-  animation: tl-modal-in 0.2s cubic-bezier(.4,0,.2,1);
+  animation: tl-modal-in 0.2s cubic-bezier(.4,0,.2,1) both;
 }
 @keyframes tl-modal-in {
   from { opacity: 0; transform: translateY(12px) scale(0.97); }
@@ -5390,7 +5390,7 @@
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
   border: 2px solid var(--border);
   background: transparent;
   color: var(--ink-soft);
