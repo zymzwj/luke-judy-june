@@ -31,31 +31,24 @@ export default function MedTracker() {
     btnDone = false;
   } else if (currentDay > 21) {
     const allDone = takenCount === 21;
-    if (allDone) {
-      const nextStart = new Date(startD);
-      nextStart.setDate(startD.getDate() + 28);
-      const daysLeft = daysBetween(today, nextStart);
-      actionText = daysLeft > 0 ? (
-        <>
-          <strong>🎉 21 天疗程已全部完成！</strong>
-          <span className="med-next-hint">💊 距下次吃药还有 <strong>{daysLeft}</strong> 天</span>
-        </>
-      ) : daysLeft === 0 ? (
-        <>
-          <strong>🎉 疗程完成！</strong>
-          <span className="med-next-hint">💊 今天开始新的疗程啦！</span>
-        </>
-      ) : (
-        <>
-          <strong>🎉 疗程完成！</strong>
-          <span className="med-next-hint">💊 新疗程已开始，记得设置新的开始日期哦</span>
-        </>
-      );
-    } else {
-      actionText = (
-        <>疗程已结束 — 完成 <strong>{takenCount} / 21</strong></>
-      );
-    }
+    const nextStart = new Date(startD);
+    nextStart.setDate(startD.getDate() + 28);
+    const daysLeft = daysBetween(today, nextStart);
+    const nextDateStr = `${nextStart.getMonth() + 1}月${nextStart.getDate()}日`;
+
+    const statusLine = allDone
+      ? <strong>🎉 21 天疗程已全部完成！</strong>
+      : <>疗程已结束 — 完成 <strong>{takenCount} / 21</strong></>;
+
+    const hintLine = daysLeft > 0 ? (
+      <span className="med-next-hint">💊 距下次吃药还有 <strong>{daysLeft}</strong> 天（{nextDateStr}开始）</span>
+    ) : daysLeft === 0 ? (
+      <span className="med-next-hint">💊 今天（{nextDateStr}）开始新的疗程啦！记得设置新的开始日期</span>
+    ) : (
+      <span className="med-next-hint">💊 新疗程应于 <strong>{nextDateStr}</strong> 开始，记得设置新的开始日期哦</span>
+    );
+
+    actionText = <>{statusLine}{hintLine}</>;
     btnText = allDone ? "✓ 全部完成" : "已结束";
     btnDisabled = true;
     btnDone = true;
