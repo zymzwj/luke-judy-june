@@ -53,7 +53,8 @@ export default function MedTracker() {
   const offset = hasStart ? daysBetween(startD, today) : -1;
   const currentDay = offset + 1;
   const takenCount = Object.values(taken).filter(Boolean).length;
-  const pct = Math.round((takenCount / 21) * 100);
+  const daysClamped = hasStart ? Math.min(Math.max(currentDay, 0), 21) : 0;
+  const barPct = Math.round((daysClamped / 21) * 100);
 
   let actionText, btnText, btnDisabled, btnDone;
   if (!hasStart) {
@@ -165,12 +166,12 @@ export default function MedTracker() {
 
       <div className="med-progress-row">
         <span className="med-progress-text">
-          Day {hasStart ? Math.min(Math.max(currentDay, 0), 21) : 0} / 21
+          Day {daysClamped} / 21
         </span>
         <div className="med-progress-bar">
-          <div className="med-progress-fill" style={{ width: pct + "%" }} />
+          <div className="med-progress-fill" style={{ width: barPct + "%" }} />
         </div>
-        <span className="med-progress-pct">{pct}%</span>
+        <span className="med-progress-pct">{takenCount}/21</span>
       </div>
 
       <div className="med-action">
