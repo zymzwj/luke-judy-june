@@ -13,6 +13,7 @@ import {
   deleteDoc,
   deleteField,
   doc,
+  getDoc,
   getFirestore,
   onSnapshot,
   setDoc,
@@ -32,6 +33,7 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const docRef = doc(db, "couples", COUPLE_ID);
+export const medsDocRef = doc(db, "couples", "luke-judy-meds");
 export const memoriesColRef = collection(db, "couples", COUPLE_ID, "memories");
 export const heroPhotosColRef = collection(db, "couples", COUPLE_ID, "heroPhotos");
 
@@ -49,6 +51,7 @@ export {
   deleteField,
   deleteObject,
   doc,
+  getDoc,
   getDownloadURL,
   GoogleAuthProvider,
   onAuthStateChanged,

@@ -1,21 +1,60 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { db, medsDocRef, onSnapshot, setDoc, updateDoc, deleteField, getDoc, doc } from "../firebase/client.js";
 import { useData } from "../firebase/dataContext.jsx";
 import { daysBetween, todayDateObj } from "../utils/date.js";
+import { ACTIVE_MONTH, prevMonthKey } from "../firebase/config.js";
+
+const LEGACY_IDS = { "2026-06": "luke-judy", "2026-07": "luke-judy-july" };
+function coupleIdFor(key) { return LEGACY_IDS[key] || `luke-judy-${key}`; }
 
 export default function MedTracker() {
-  const { data, updateField } = useData();
-  const meds = data.meds || { startDate: "", taken: {} };
-  const taken = meds.taken || {};
+  const { save } = useData();
+  const [meds, setMeds] = useState(null);
 
+  useEffect(() => {
+    const unsub = onSnapshot(medsDocRef, async (snap) => {
+      if (snap.exists()) {
+        const d = snap.data();
+        setMeds({ startDate: d.startDate || "", taken: d.taken || {} });
+      } else {
+        const keysToTry = [ACTIVE_MONTH, prevMonthKey(ACTIVE_MONTH)];
+        let migrated = null;
+        for (const key of keysToTry) {
+          try {
+            const ref = doc(db, "couples", coupleIdFor(key));
+            const monthSnap = await getDoc(ref);
+            if (monthSnap.exists()) {
+              const m = monthSnap.data().meds;
+              if (m && m.startDate) {
+                migrated = { startDate: m.startDate, taken: m.taken || {} };
+                break;
+              }
+            }
+          } catch (e) { console.warn("meds migration", e); }
+        }
+        await setDoc(medsDocRef, migrated || { startDate: "", taken: {} });
+      }
+    });
+    return unsub;
+  }, []);
+
+  const saveMed = useCallback((path, value) => save(() =>
+    value !== undefined && value !== null
+      ? updateDoc(medsDocRef, { [path]: value })
+      : updateDoc(medsDocRef, { [path]: deleteField() })
+  ), [save]);
+
+  if (!meds) return null;
+
+  const taken = meds.taken || {};
   const today = todayDateObj();
   const hasStart = !!meds.startDate;
   const startD = hasStart ? new Date(meds.startDate + "T00:00") : null;
   const offset = hasStart ? daysBetween(startD, today) : -1;
-  const currentDay = offset + 1; // 1-indexed
+  const currentDay = offset + 1;
   const takenCount = Object.values(taken).filter(Boolean).length;
   const pct = Math.round((takenCount / 21) * 100);
 
-  // Action row state
   let actionText, btnText, btnDisabled, btnDone;
   if (!hasStart) {
     actionText = "设置开始日期后开启 21 天打卡";
@@ -73,24 +112,15 @@ export default function MedTracker() {
 
   const toggleCell = (day) => {
     const key = String(day);
-    if (taken[key]) {
-      updateField(`meds.taken.${key}`, null);
-    } else {
-      updateField(`meds.taken.${key}`, true);
-    }
+    saveMed(`taken.${key}`, taken[key] ? null : true);
   };
 
   const handleTakeToday = () => {
     if (!hasStart || currentDay < 1 || currentDay > 21) return;
     const key = String(currentDay);
-    if (taken[key]) {
-      updateField(`meds.taken.${key}`, null);
-    } else {
-      updateField(`meds.taken.${key}`, true);
-    }
+    saveMed(`taken.${key}`, taken[key] ? null : true);
   };
 
-  // Footer
   let footerText = "点击格子可手动补打卡或撤销";
   let footerClass = "med-footer";
   if (takenCount === 21) {
@@ -128,7 +158,7 @@ export default function MedTracker() {
             min="2026-01-01"
             max="2027-12-31"
             value={meds.startDate || ""}
-            onChange={(e) => updateField("meds.startDate", e.target.value)}
+            onChange={(e) => saveMed("startDate", e.target.value)}
           />
         </label>
       </div>
