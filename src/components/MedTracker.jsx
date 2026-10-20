@@ -159,7 +159,7 @@ export default function MedTracker() {
             min="2026-01-01"
             max="2027-12-31"
             value={meds.startDate || ""}
-            onChange={(e) => saveMed("startDate", e.target.value)}
+            onChange={(e) => save(() => setDoc(medsDocRef, { startDate: e.target.value, taken: {} }))}
           />
         </label>
       </div>
